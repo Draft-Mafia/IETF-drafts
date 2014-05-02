@@ -1,0 +1,741 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>DNS over DTLS (DNSoD)</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Relationship to TCP Queries and to DNSSEC"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Terminology"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Incremental Deployment"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Demultiplexing, Polling, Port Usage, and Discovery"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 Performance Considerations"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 In-Band Signaling"/>
+<link href="#rfc.section.8" rel="Chapter" title="8 Authenticating a DNS Server"/>
+<link href="#rfc.section.9" rel="Chapter" title="9 Established sessions"/>
+<link href="#rfc.section.10" rel="Chapter" title="10 IANA Considerations"/>
+<link href="#rfc.section.11" rel="Chapter" title="11 Security Considerations"/>
+<link href="#rfc.section.12" rel="Chapter" title="12 Acknowledgements"/>
+<link href="#rfc.references" rel="Chapter" title="13 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="13.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="13.2 Informative References"/>
+<link href="#rfc.authors" rel="Chapter"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.4.5 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Reddy, T., Wing, D., and P. Patil" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-wing-dnsop-dnsodtls-00" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-4-22" />
+  <meta name="dct.abstract" content="DNS queries and responses are visible to network elements on the path between the DNS client and its server.  These queries and responses can contain privacy-sensitive information which is valuable to protect.  An active attacker can send bogus responses causing misdirection of the subsequent connection." />
+  <meta name="description" content="DNS queries and responses are visible to network elements on the path between the DNS client and its server.  These queries and responses can contain privacy-sensitive information which is valuable to protect.  An active attacker can send bogus responses causing misdirection of the subsequent connection." />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">DNSOP Working Group</td>
+  <td class="right">T. Reddy</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">D. Wing</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Standards Track</td>
+  <td class="right">P. Patil</td>
+</tr>
+<tr>
+  <td class="left">Expires: October 24, 2014</td>
+  <td class="right">Cisco</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">April 22, 2014</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">DNS over DTLS (DNSoD)<br />
+  <span class="filename">draft-wing-dnsop-dnsodtls-00</span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>DNS queries and responses are visible to network elements on the path between the DNS client and its server.  These queries and responses can contain privacy-sensitive information which is valuable to protect.  An active attacker can send bogus responses causing misdirection of the subsequent connection.</p>
+<p>To counter passive listening and active attacks, this document proposes the use of Datagram Transport Layer Security (DTLS) for DNS, to protect against passive listeners and certain active attacks.  As DNS needs to remain fast, this proposal also discusses mechanisms to reduce DTLS round trips and reduce DTLS handshake size.  The proposed mechanism runs over the default DNS port and can also run over an alternate port.</p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on October 24, 2014.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2014 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<li>2.   <a href="#rfc.section.2">Relationship to TCP Queries and to DNSSEC</a></li>
+<li>3.   <a href="#rfc.section.3">Terminology</a></li>
+<li>4.   <a href="#rfc.section.4">Incremental Deployment</a></li>
+<li>5.   <a href="#rfc.section.5">Demultiplexing, Polling, Port Usage, and Discovery</a></li>
+<li>6.   <a href="#rfc.section.6">Performance Considerations</a></li>
+<li>7.   <a href="#rfc.section.7">In-Band Signaling</a></li>
+<li>8.   <a href="#rfc.section.8">Authenticating a DNS Server</a></li>
+<li>9.   <a href="#rfc.section.9">Established sessions</a></li>
+<li>10.   <a href="#rfc.section.10">IANA Considerations</a></li>
+<li>11.   <a href="#rfc.section.11">Security Considerations</a></li>
+<li>12.   <a href="#rfc.section.12">Acknowledgements</a></li>
+<li>13.   <a href="#rfc.references">References</a></li>
+<li>13.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>13.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li><a href="#rfc.authors">Authors' Addresses</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
+<p id="rfc.section.1.p.1">The Domain Name System is specified in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a>. DNS queries and responses are normally exchanged unencrypted and are thus vulnerable to eavesdropping.  Such eavesdropping can result in an undesired entity learning domains that a host wishes to access, thus resulting in privacy leakage. DNS privacy problem is further discussed in <a href="#I-D.bortzmeyer-dnsop-dns-privacy">[I-D.bortzmeyer-dnsop-dns-privacy]</a>.</p>
+<p id="rfc.section.1.p.2">Active attackers have long been successful at injecting bogus responses, causing cache poisoning and causing misdirection of the subsequent connection (if attacking A or AAAA records).  A popular mitigation against that attack is to use ephemeral and random source ports for DNS queries.</p>
+<p id="rfc.section.1.p.3">This document defines DNS over DTLS (DNSoD, pronounced "dee-enn-sod") which provides confidential DNS communication for stub resolvers, recursive resolvers, iterative resolvers and authoritative servers.</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> Relationship to TCP Queries and to DNSSEC</h1>
+<p id="rfc.section.2.p.1">DNS queries can be sent over UDP or TCP.  This document scope is only UDP.  DNS over TCP could be protected with TLS, such as described by <a href="#I-D.hzhwm-start-tls-for-dns">[I-D.hzhwm-start-tls-for-dns]</a>.  Alternatively, a shim protocol could be defined between DTLS and DNS, allowing large responses to be sent over DTLS itself, see <a href="#performance">Section 6</a>.</p>
+<p id="rfc.section.2.p.2">DNS Security Extensions (<a href="#RFC4033">DNSSEC</a> <cite title="NONE">[RFC4033]</cite>) provides object integrity of DNS resource records, allowing end-users (or their resolver) to verify legitimacy of responses.  However, DNSSEC does not protect privacy of DNS requests or responses. DNSoD works in conjunction with DNSSEC, but DNSoD does not replace the need or value of DNSSEC.</p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#term" id="term">Terminology</a></h1>
+<p id="rfc.section.3.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#problem_stmt" id="problem_stmt">Incremental Deployment</a></h1>
+<p id="rfc.section.4.p.1">DNSoD can be deployed incrementally by the Internet Service Provider or as an Internet service.</p>
+<p id="rfc.section.4.p.2">If the ISP's DNS resolver supports DNSoD, then DNS queries are protected from passive listening and from many active attacks along that path.</p>
+<p id="rfc.section.4.p.3">DNSoD can be offered as an Internet service, and a stub resolver or DNS resolver can be configured to point to that DNSoD server (rather than to the ISP-provided DNS server).</p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#demux" id="demux">Demultiplexing, Polling, Port Usage, and Discovery</a></h1>
+<p id="rfc.section.5.p.1">[Note - This section requires further discussion]</p>
+<p id="rfc.section.5.p.2">Many modern operating systems already detect if a web proxy is interfering with Internet communications, using proprietary mechanisms that are out of scope of this document.  After that mechanism has run (and detected Internet connectivity is working), the DNSoD procedure described in this document should commence.  This timing avoids delays in joining the network (and displaying an icon indicating successful Internet connection), at the risk that those initial DNS queries will be sent without protection afforded by DNSoD.</p>
+<p id="rfc.section.5.p.3">DNSoD can run over standard UDP port 53 as defined in <a href="#RFC1035">[RFC1035]</a>.  A DNS client or server that does not implement this specification will not respond to the incoming DTLS packets because they don't parse as DNS packets (the DNS Opcode would be 15, which is undefined).  A DNS client or server that does implement this specification can demultiplex DNS and DTLS packets by examining the third octet.  For TLS 1.2, which is what is defined by this specification, a DTLS packet will contain 253 in the third octet, whereas a DNS packet will never contain 253 in the third octet.</p>
+<p id="rfc.section.5.p.4">There has been some concern with sending DNSoD traffic over the same port as normal, un-encrypted DNS traffic.  The intent of this section is to show that DNSoD could successfully be sent over port 53.  Further analysis and testing on the Internet may be valuable to determine if multiplexing on port 53, using a separate port, or some fallback between a separate port and port 53 brings the most success.</p>
+<p id="rfc.section.5.p.5">After performing the above steps, the host should determine if the DNS server supports DNSoD by sending a DTLS ClientHello message.  A DNS server that does not support DNSoD will not respond to ClientHello messages sent by the client, because they are not valid DNS requests (specifically, the DNS Opcode is invalid).  The client MUST use timer values defined in Section 4.2.4.1 of <a href="#RFC6347">[RFC6347]</a> for retransmission of ClientHello message and if no response is received from the DNS server.  After 15 seconds, it MUST cease attempts to re-transmit its ClientHello.  Thereafter, the client MAY repeat that procedure in the event the DNS server has been upgraded to support DNSoD, but such probing SHOULD NOT be done more frequently than every 24 hours and MUST NOT be done more frequently than every 15 minutes.  This mechanism requires no additional signaling between the client and server.</p>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#performance" id="performance">Performance Considerations</a></h1>
+<p id="rfc.section.6.p.1">To reduce number of octets of the DTLS handshake, especially the size of the certificate in the ServerHello (which can be several kilobytes), we should consider using plain public keys <a href="#I-D.ietf-tls-oob-pubkey">[I-D.ietf-tls-oob-pubkey]</a>.  Considering that to authorize a certain DNS server the client already needs explicit configuration of the DNS servers it trusts, maybe the public key configuration problem is really no worse than the configuration problem of those whitelisted certificates?</p>
+<p id="rfc.section.6.p.2">Multiple DNS queries can be sent over a single DNSoD security association. The existing QueryID allows multiple requests and responses to be interleaved in whatever order they can be fulfilled by the DNS server.  This means DNSoD reduces the consumption of UDP port numbers, and because DTLS protects the communication between the DNS client and its server, the resolver SHOULD NOT use random ephemeral source ports (Section 9.2 of <a href="#RFC5452">[RFC5452]</a>) because such source port use would incur additional, unnecessary DTLS load on the DNSoD server.</p>
+<p id="rfc.section.6.p.3">It is highly advantageous to avoid server-side DTLS state and reduce the number of new DTLS security associations on the server which can be done with <a href="#RFC5077">[RFC5077]</a>.  This also eliminates a round-trip for subsequent DNSoD queries, because with <a href="#RFC5077">[RFC5077]</a> the DTLS security association does not need to be re-established.  Note: with the shim (described below) perhaps we could send the query and the restore server-side state in the ClientHello packet.</p>
+<p id="rfc.section.6.p.4">Compared to normal DNS, DTLS adds at least 13 octets of header, plus cipher and authentication overhead to every query and every response.  This reduces the size of the DNS payload that can be carried.  Certain DNS responses are large (e.g., many AAAA records, TXT, SRV) and don't fit into a single UDP packet, causing a partial response with the truncation (TC) bit set.  The client is then expected to repeat the query over TCP, which causes additional name resolution delay.  We have considered two ideas, one that reduces the need to switch to TCP and another that eliminates the need to switch to TCP: </p>
+
+<ul>
+  <li>Path MTU can be determined using <a href="#RFC4821">Packetization Layer Path MTU Discovery</a> <cite title="NONE">[RFC4821]</cite> using DTLS heartbeat.  <a href="#RFC4821">[RFC4821]</a> does not rely on ICMP or ICMPv6, and would not affect DNS state or responsiveness on the client or server.  However, it would be additional chattiness.</li>
+  <li>To avoid IP fragmentation, DTLS handshake messages incorporate their own fragment offset and fragment length.  We might utilize a similar mechanism in a shim layer between DTLS and DNS, so that large DNS messages could be carried without causing IP fragmentation.</li>
+</ul>
+<p id="rfc.section.6.p.5">DNSoD puts an additional computational load on servers.  The largest gain for privacy is to protect the communication between the DNS client (the end user's machine) and its caching resolver.  Because of the load imposed, and because of the infrequency of queries to root servers means the DTLS overhead is unlikely to be amoritized over the DNS queries sent over that DTLS connection, implementing DNSoD on root servers is NOT RECOMMENDED.</p>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#in_band_signaling" id="in_band_signaling">In-Band Signaling</a></h1>
+<p id="rfc.section.7.p.1">Probing with DTLS ClientHello packets to determine if a DNS server supports DNSoD is somewhat inefficient, as it requires multiple probe packets to each DNS server.  It may well be preferable to have a method of determining, within the DNS protocol itself, if a certain DNS server supports DNSoD. Two approaches are discussed below, one using DNS SRV query or <a href="#RFC4892">Name Server Instance</a> <cite title="NONE">[RFC4892]</cite> query, and another extending the EDNS0 OPT meta-RR <a href="#I-D.hzhwm-start-tls-for-dns">[I-D.hzhwm-start-tls-for-dns]</a> to describe DNSoD support.</p>
+<p id="rfc.section.7.p.2">To use <a href="#RFC4892">Name Server Instance</a> <cite title="NONE">[RFC4892]</cite> query, we would define a new CHAOS class resource record.  The name is not significant, so let's pretend it would be called "DNSoD".  Note: we might to indicate an alternate port, querying a CHAOS SRV resource record is probably most ideal.</p>
+<p id="rfc.section.7.p.3">To extend the EDNS0 OPT meta-RR defined in <a href="#I-D.hzhwm-start-tls-for-dns">[I-D.hzhwm-start-tls-for-dns]</a>, we can add another bit indicating support for DNSoD, denoted as "SO".  Clients and servers indicate their support for, and desire to use, DNSoD by setting a bit in the Flags field of the EDNS0 <a href="#RFC6891">[RFC6891]</a> OPT meta-RR. The "DTLS OK" (SO) bit is defined as the third bit of the third and fourth bytes of the "extended RCODE and flags" portion of the EDNS0 OPT meta-RR, immediately adjacent to the "TLS OK" (TO) bit defined in <a href="#I-D.hzhwm-start-tls-for-dns">[I-D.hzhwm-start-tls-for-dns]</a>, as shown below:</p>
+<pre>
+           +0 (MSB)                +1 (LSB)
+   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+0: |   EXTENDED-RCODE      |       VERSION         |
+   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+2: |DO|TO|SO|            Must be zero              |
+   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</pre>
+<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> Authenticating a DNS Server</h1>
+<p id="rfc.section.8.p.1">As DTLS provides integrity protection, some protection from on-path attackers sending bogus responses is provided by simply using DTLS.  That is, a device on the path between a DNS client and its DNS server cannot simply inject a bogus DNS response, as could be done with normal DNS.  However, that protection is not terribly strong, because that attacker could intercept the DTLS handshake itself and pretend to be the actual DNS server.  To prevent that, we need to resolve two problems: identifying the trusted servers and determining an appropriate action when no trusted servers are available.</p>
+<p id="rfc.section.8.p.2">The first problem, of identifying the legitimate server, requires extending the host configuration.  This is because DNS clients have their DNS servers configured by IP address (from DHCP or from a local configuration file such as /etc/resolv.conf), but certificates have a DNS name in the SubjectAltName field.  We can't change how certificates are issued, but we already have to modify the DNS client to support DNSoD.  With that in mind, the DNS client would have a list of SubjectAltNames it trusts, configured by the user.  That could be configured in the resolv.conf file itself, as shown below, or could be maintained in a separate file.</p>
+<pre>nameserver 192.0.2.1    dns.example.net
+nameserver 198.51.100.1 dns.example.com</pre>
+<p id="rfc.section.8.p.3">The second problem is determining an appropriate action when no trusted servers are available.  Although the DNS client could still use DNSoD with an un-trusted server which still provides protection from on-path passive listeners and from on- and off-path active attackers, this use does not protect from a malicious server returning bogus responses.  While DNSSEC can protect against bogus responses (lies), DNSSEC cannot protect against a server that simply does not return certain answers.  </p>
+
+<ul class="empty">
+  <li>[[Editor's Note: Is there more we could do?  Trust certain responses (like for my enterprise VPN or other sites where I will be doing a TLS handshake)?  Keep in mind that with web portals at hotels/airports, we won't have access to a trusted DNS server on initial connect at all.]] </li>
+</ul>
+<h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#DTLS" id="DTLS">Established sessions</a></h1>
+<p id="rfc.section.9.p.1">In DTLS, all data is protected using the same record encoding and mechanisms. When the mechanism described in this document is in effect, DNS messages are encrypted using the standard DTLS record encoding. When a user of DTLS wishes to send an DNS message, it delivers it to the DTLS implementation as an ordinary application data write (e.g., SSL_write()). A single DTLS session can be used to receive multiple DNS requests and generate DNS multiple responses.</p>
+<pre>
+   Client                                          Server
+   ------                                          ------
+
+   ClientHello             --------&gt;  
+                         
+
+                           &lt;-------    HelloVerifyRequest  
+                                         (contains cookie)    
+
+   ClientHello             --------&gt;     
+   (contains cookie)                      
+   (empty SessionTicket extension)
+                                              ServerHello  
+                                  (empty SessionTicket extension)  
+                                             Certificate*    
+                                       ServerKeyExchange*      
+                                      CertificateRequest*     
+                           &lt;--------      ServerHelloDone    
+
+   Certificate*                                             
+   ClientKeyExchange                                          
+   CertificateVerify*                                          
+   [ChangeCipherSpec]                                         
+   Finished                --------&gt;                         
+                                         NewSessionTicket
+                                       [ChangeCipherSpec]    
+                           &lt;--------             Finished    
+
+  
+   DNS Request             ---------&gt;
+
+                           &lt;---------  DNS Response
+
+</pre>
+<p class="figure">Message Flow for Full Handshake Issuing New Session Ticket</p>
+<h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> IANA Considerations</h1>
+<p id="rfc.section.10.p.1">This document defines a new bit ("SO") in the Flags field of the EDNS0 OPT meta-RR. At the time of approval of this draft in the standards track, as per the IANA Considerations of <a href="#RFC6891">[RFC6891]</a>, IANA is requested to reserve the third leftmost bit of the flags as the SO bit, immediately adjacent to the DNSSEC SO bit, as shown in <a href="#in_band_signaling">Section 7</a>.</p>
+<p id="rfc.section.10.p.2">If demultiplexing DTLS and DNS (using the third octet, <a href="#demux">Section 5</a>) is useful, we should reserve DNS Opcode 15 to ensure DNS always has a 0 bit where DTLS always has a 1 bit.</p>
+<h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#security" id="security">Security Considerations</a></h1>
+<p id="rfc.section.11.p.1">Once a DNSoD client has established a security association with a particular DNS server, and outstanding normal DNS queries with that server (if any) have been received, the DNSoD client MUST ignore any subsequent normal DNS responses from that server, as all subsequent responses should be inside DNSoD.  This behavior mitigates all (?) attacks described in <a href="#RFC5452">Measures for Making DNS More Resilient against Forged Answers</a> <cite title="NONE">[RFC5452]</cite>.</p>
+<p id="rfc.section.11.p.2">Security considerations discussed in <a href="#RFC6347">DTLS</a> <cite title="NONE">[RFC6347]</cite> also apply to this document.</p>
+<h1 id="rfc.section.12"><a href="#rfc.section.12">12.</a> <a href="#ack" id="ack">Acknowledgements</a></h1>
+<p id="rfc.section.12.p.1">The EDNS0 OPT meta-RR described in <a href="#in_band_signaling">Section 7</a> are an extension of the technique described in <a href="#I-D.hzhwm-start-tls-for-dns">Starting TLS over DNS</a> <cite title="NONE">[I-D.hzhwm-start-tls-for-dns]</cite>.</p>
+<p id="rfc.section.12.p.2">Thanks to Phil Hedrick for his review comments on TCP and to Josh Littlefield for pointing out DNSoD load on busy servers (most notably root servers).</p>
+<h1 id="rfc.references"><a href="#rfc.references">13.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">13.1.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC1034">[RFC1034]</b>
+      </td>
+      <td class="top"><a title="Information Sciences Institute (ISI)">Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1034">Domain names - concepts and facilities</a>", STD 13, RFC 1034, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1035">[RFC1035]</b>
+      </td>
+      <td class="top"><a title="USC/ISI">Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1035">Domain names - implementation and specification</a>", STD 13, RFC 1035, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC4033">[RFC4033]</b>
+      </td>
+      <td class="top"><a>Arends, R.</a>, <a>Austein, R.</a>, <a>Larson, M.</a>, <a>Massey, D.</a> and <a>S. Rose</a>, "<a href="http://tools.ietf.org/html/rfc4033">DNS Security Introduction and Requirements</a>", RFC 4033, March 2005.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5077">[RFC5077]</b>
+      </td>
+      <td class="top"><a>Salowey, J.</a>, <a>Zhou, H.</a>, <a>Eronen, P.</a> and <a>H. Tschofenig</a>, "<a href="http://tools.ietf.org/html/rfc5077">Transport Layer Security (TLS) Session Resumption without Server-Side State</a>", RFC 5077, January 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5452">[RFC5452]</b>
+      </td>
+      <td class="top"><a>Hubert, A.</a> and <a>R. van Mook</a>, "<a href="http://tools.ietf.org/html/rfc5452">Measures for Making DNS More Resilient against Forged Answers</a>", RFC 5452, January 2009.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6347">[RFC6347]</b>
+      </td>
+      <td class="top"><a>Rescorla, E.</a> and <a>N. Modadugu</a>, "<a href="http://tools.ietf.org/html/rfc6347">Datagram Transport Layer Security Version 1.2</a>", RFC 6347, January 2012.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6891">[RFC6891]</b>
+      </td>
+      <td class="top"><a>Damas, J.</a>, <a>Graff, M.</a> and <a>P. Vixie</a>, "<a href="http://tools.ietf.org/html/rfc6891">Extension Mechanisms for DNS (EDNS(0))</a>", STD 75, RFC 6891, April 2013.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">13.2.</a> Informative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="I-D.bortzmeyer-dnsop-dns-privacy">[I-D.bortzmeyer-dnsop-dns-privacy]</b>
+      </td>
+      <td class="top"><a>Bortzmeyer, S.</a>, "<a href="http://tools.ietf.org/html/draft-bortzmeyer-dnsop-dns-privacy-02">DNS privacy considerations</a>", Internet-Draft draft-bortzmeyer-dnsop-dns-privacy-02, April 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.hzhwm-start-tls-for-dns">[I-D.hzhwm-start-tls-for-dns]</b>
+      </td>
+      <td class="top"><a>Zi, Z.</a>, <a>Zhu, L.</a>, <a>Heidemann, J.</a>, <a>Mankin, A.</a> and <a>D. Wessels</a>, "<a href="http://tools.ietf.org/html/draft-hzhwm-start-tls-for-dns-00">Starting TLS over DNS</a>", Internet-Draft draft-hzhwm-start-tls-for-dns-00, February 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.ietf-tls-oob-pubkey">[I-D.ietf-tls-oob-pubkey]</b>
+      </td>
+      <td class="top"><a>Wouters, P.</a>, <a>Tschofenig, H.</a>, <a>Gilmore, J.</a>, <a>Weiler, S.</a> and <a>T. Kivinen</a>, "<a href="http://tools.ietf.org/html/draft-ietf-tls-oob-pubkey-11">Using Raw Public Keys in Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)</a>", Internet-Draft draft-ietf-tls-oob-pubkey-11, January 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC4821">[RFC4821]</b>
+      </td>
+      <td class="top"><a>Mathis, M.</a> and <a>J. Heffner</a>, "<a href="http://tools.ietf.org/html/rfc4821">Packetization Layer Path MTU Discovery</a>", RFC 4821, March 2007.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC4892">[RFC4892]</b>
+      </td>
+      <td class="top"><a>Woolf, S.</a> and <a>D. Conrad</a>, "<a href="http://tools.ietf.org/html/rfc4892">Requirements for a Mechanism Identifying a Name Server Instance</a>", RFC 4892, June 2007.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Authors' Addresses</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Tirumaleswar Reddy</span> 
+	  <span class="n hidden">
+		<span class="family-name">Reddy</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park, Varthur Hobli</span>
+<span class="vcardline">Sarjapur Marathalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:tireddy@cisco.com">tireddy@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Dan Wing</span> 
+	  <span class="n hidden">
+		<span class="family-name">Wing</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">170 West Tasman Drive</span>
+
+	  <span class="vcardline">
+		<span class="locality">San Jose</span>,  
+		<span class="region">California</span> 
+		<span class="code">95134</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:dwing@cisco.com">dwing@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Prashanth Patil</span> 
+	  <span class="n hidden">
+		<span class="family-name">Patil</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:praspati@cisco.com">praspati@cisco.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>

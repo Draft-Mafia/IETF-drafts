@@ -5,7 +5,7 @@
 Internet Engineering Task Force                                 C. Eckel
 Internet-Draft                                                  T. Reddy
 Intended status: Informational                       Cisco Systems, Inc.
-Expires: September 9, 2014                                 March 8, 2014
+Expires: November 3, 2014                                    May 2, 2014
 
 
 Application Enabled Open Networking: Problem Statement and Requirements
@@ -14,17 +14,22 @@ Application Enabled Open Networking: Problem Statement and Requirements
 Abstract
 
    Identification and treatment of application flows are important to
-   many network operators.  They often rely on these capabilites to
+   many network operators.  They often rely on these capabilities to
    deploy and/or support a wide range of applications that run on their
-   networks.  Historically, this functionality has been accomplished to
-   the extent possible using heuristics, which inspect and infer flow
-   characteristics.  Heuristics may be based on port ranges, network
-   separation, or deep packet inspection (DPI).  But many application
-   flows in current usages are dynamic, time-bound (short lived for some
-   of them), possibly encrypted (TLS for signaling), peer-to-peer,
-   possibly asymmetric, and used on non-dedicated devices, any
-   combination of which renders such techniques less effective or
-   results in compromises to application security or user privacy.
+   networks.  These applications, and the packet flows they generate and
+   consume, may have specific connectivity requirements that can be met
+   if made known to the network.  Historically, this functionality has
+   been implemented to the extent possible using heuristics, which
+   inspect and infer flow characteristics.  Heuristics may be based on
+   port ranges, network separation (e.g. subnets or VLANS, or Deep
+   Packet Inspection (DPI).  But many application flows in current
+   usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer,
+   asymmetric, used on multipurpose devices, and have different
+   priorities depending on network conditions, direction, time of the
+   day, dynamic user preferences and other factors.  Any combination of
+   these properties renders heuristic based techniques less effective
+   and may result in compromises to application security or user
+   privacy.
 
 Status of This Memo
 
@@ -41,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 9, 2014.
+   This Internet-Draft will expire on November 3, 2014.
 
 Copyright Notice
 
@@ -61,11 +66,15 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Typical Workflows
-   3.  Limitations of Existing Solutions
-   4.  Efforts in Progress
-   5.  Requirements
-   6.  Acknowledgements
+   2.  Definitions and Terminology
+     2.1.  Types of Signaling
+   3.  Typical Workflows
+   4.  Limitations of Heuristic Based Solutions
+   5.  Limitations of Existing Signaling Mechanisms
+   6.  Efforts in Progress
+   7.  Requirements
+   8.  Acknowledgements
+   9.  Informative References
    Authors' Addresses
 
 1.  Introduction
@@ -75,33 +84,52 @@ Table of Contents
    channels for creating and consuming rich media are deployed at a
    rapid pace.  Pervasive video and access on demand are becoming second
    nature to consumers.  Communication applications make extensive use
-   of rich media, placing unprecedented quality of experience demands on
-   the network.
+   of rich media, placing unprecedented quality of experience
+   expectation on the underlying network.  These trends present
+   challenges for network forecast and planning operations.
 
    Now more so than ever before, identification and treatment of
    application flows are critical for the successful deployment and
-   operation of applications.  These applications are based on wide
-   range of signaling protocols and deployed by a diverse set of
-   application providers that is not necessarily affiliated with the
-   network providers across which the applications are used.
+   operation of a growing number of business and household applications.
+   These applications are based on wide range of signaling protocols and
+   deployed by a diverse set of application providers that is not
+   necessarily affiliated with the network providers across which the
+   applications are used.
 
    Historically, identification of application flows has been
    accomplished using heuristics, which inspect and infer flow
-   characteristics.  Heuristics may be based on port ranges, network
-   separation, or deep packet inspection (DPI).  Each of these
-   techniques suffers from a set of limitations, particularly in the
-   face of challenges on the network outlined previously.
+   characteristics based on port ranges, network separation, or DPI.
+   Each of these techniques suffers from a set of limitations,
+   particularly in the face of challenges on the network outlined
+   previously.
 
-   Port based solutions suffer from port overloading and inconsistent
-   port usage.  Network separation techniques like IP subnetting are
-   error prone and increase network management complexity.  DPI is
-   computationally expensive and becomes a greater challenge with the
-   wider adoption of encrypted signaling and secured media.  An
-   additional drawback of DPI is that any insights are not available, or
-   need to be recomputed, at network nodes further down the application
-   flow path.
+   Heuristic-based approaches may not be efficient and require
+   continuous updates of application signatures.  Port based solutions
+   suffer from port overloading and inconsistent port usage.  Network
+   separation techniques like IP subnetting are error prone and increase
+   network management complexity.  DPI is computationally expensive and
+   becomes a greater challenge with the wider adoption of encrypted
+   signaling and secured media.  An additional drawback of DPI is that
+   any insights are not available, or need to be recomputed, at network
+   nodes further down the application flow path.
 
-2.  Typical Workflows
+2.  Definitions and Terminology
+
+2.1.  Types of Signaling
+
+   The following terms describe the relationship between signaling and
+   the media to which it is associated.
+
+   o  off-path: signaling along a different network path than the media
+      flow
+
+   o  on-path: signaling along the same network path as the media flow
+
+      *  in-band: signaling on the same port as the media flow
+
+      *  out-of-band: signaling on a different port than the media flow
+
+3.  Typical Workflows
 
    Various heuristic based approaches are used prevalently and
    successfully for two types of work flows:
@@ -109,15 +137,16 @@ Table of Contents
    1.  Provide network operators with visibility into traffic for
        troubleshooting, capacity planning, accounting and billing, and
        other off network work flows.  This is done by exporting observed
-       traffic analysis via protocols such as IPFIX and SNMP.
+       traffic analysis via protocols such as IPFIX [RFC7011]and SNMP
+       [RFC3416].
 
    2.  Provide differentiated network services for specific traffic
-       according to network operator defined rule sets, including
-       policing and shaping of traffic, providing admission control,
-       impacting routing, and permitting passage of specific traffic
-       (e.g. firewall functions).
+       according to network operator defined policies, including traffic
+       classification, policing and shaping (e.g. [RFC2475]), providing
+       admission control (e.g. [RFC6601]), impacting routing, and
+       permitting passage of specific traffic (e.g. firewall functions).
 
-3.  Limitations of Existing Solutions
+4.  Limitations of Heuristic Based Solutions
 
    These typical work flows, visibility and differentiated network
    services, are critical in many networks.  However, their reliance on
@@ -129,10 +158,10 @@ Table of Contents
       (i.e. ports used by applications other than those claiming the
       port with IANA).
 
-   o  More and more traffic is encrypted, rendering DPI impossible, or
-      much more complex, and sometimes at the expense of privacy or
-      security (e.g. need to share encryption keys with intermediary
-      performing DPI).
+   o  More and more traffic is encrypted, rendering DPI impossible,
+      inefficient, or much more complex, and sometimes at the expense of
+      privacy or security (e.g. need to share encryption keys with
+      intermediary performing DPI).
 
    o  Visibility generally requires inspecting the signaling traffic of
       applications.  This traffic may flow through a different network
@@ -148,60 +177,82 @@ Table of Contents
       lost opportunity for the application to gain insight and adjust
       its operation accordingly.
 
-4.  Efforts in Progress
+5.  Limitations of Existing Signaling Mechanisms
 
-   There are a variety of existing and evolving signaling options that
-   can provide explicit application to network signaling and serve the
-   visibility and differentiated network services work flows where
-   heuristics are currently being used.  It seems clear that there will
-   be no single one-protocol-fits-all solution.  Every protocol is
-   currently defined in its own silo, creating duplicate or inconsistent
-   information models.  This results in duplicate work, more operational
-   complexity and an inability to easily convert information between
-   protocols to easily leverage the best protocol option for each
-   specific use case.  Examples of existing and evolving signaling
-   options include the following:
+   The IETF has standardized several mechanisms involving explicit
+   signaling between applications and the network that may be used to
+   support visibility and differentiated network services work flows.
+   Unfortunately, none of these has experienced widespread deployment
+   success, nor are they well suited for the applications usages
+   described previously.  Existing signaling options include the
+   following:
 
-   o  RSVP is the original on path signaling protocol standardized by
-      the IETF.  It operates on path out-of-band and could support any
-      transport protocol traffic (it currently supports TCP and UDP).
-      Its original goal was to provide admission control.  Arguably, its
-      success was impacted by its reliance on router-alert because this
-      often leads to RSVP packets being filtered by intervening
-      networks.  To date, more lightweight signaling work flows
-      utilizing RSVP have not been standardized within the IETF.
+   o  RSVP [RFC2205]is the original on-path signaling protocol
+      standardized by the IETF.  It is transported out-of-band and could
+      be used to signal information about any transport protocol traffic
+      (it currently supports TCP and UDP).  Its original goal was to
+      provide admission control.  Its requirement for explicit
+      reservation of resources end to end proved too heavy for most
+      network environments.  Its success was further impacted by its
+      reliance on router-alert, which often leads to RSVP packets being
+      filtered by intervening networks, and by its requirement for
+      access to a raw socket, something that is generally not available
+      to applications running in user space.  To date, more lightweight
+      signaling work flows utilizing RSVP have not been standardized
+      within the IETF.
 
-   o  NSIS (next Steps in Signaling) is the next iteration of RSVP-like
-      signaling defined by the IETF.  Because it focused on the same
-      fundamental work flow as RSVP admission control as its main
-      driver, and because it did not provide significant enough use-case
-      benefits over RSVP, it has seen even less adoption than RSVP.
+   o  NSIS (next Steps in Signaling) [RFC5978]is the next iteration of
+      RSVP-like signaling defined by the IETF.  Because it focused on
+      the same fundamental work flow as RSVP admission control as its
+      main driver, and because it did not provide significant enough
+      use-case benefits over RSVP, it has seen even less adoption than
+      RSVP.
 
-   o  DiffServ style packet marking can help provide QoS in some
-      environments but DSCP markings are often modified or removed at
-      various points in the network or when crossing network boundaries.
+   o  DiffServ style packet marking [RFC4594]can help provide QoS in
+      some environments but DSCP markings are often modified or removed
+      at various points in the network or when crossing network
+      boundaries.  There are additional limitations when using DiffServ
+      with real-time communications applications, and the DART working
+      group has been chartered to write a document that explains the
+      limitations that exist with DiffServ when used with RTP in general
+      as well in the specific RTCWeb cases.
 
-   o  STUN is an on path, in-band signaling protocol that could easily
-      be extended to provide signaling to on path network devices
-      because it provides an easily inspected packet signature, at least
-      for transport protocols such as UDP.  Through its extensions TURN
-      and ICE, it is becoming quite popular in application signaling
-      driven by the initial use-case of providing NAT and firewall
-      traversal capabilities and determining the best local and remote
-      addresses for peer-to-peer connectivity (ICE).
+6.  Efforts in Progress
 
-   o  Port Control Protocol (PCP) provides a mechanism to describe a
-      flow to the network.  The primary driver for PCP has been creating
-      port mappings on NAT and firewall devices.  When doing this, PCP
-      pushes flow information from the host into the network
+   There are a variety of evolving signaling options proposals for
+   identification and differentiated treatment of application flows to
+   fill where heuristic based approached or not sufficient.s are
+   currently being used.  It seems clear that there will be not be a
+   one-protocol-fits-all solution.  Every protocol is currently defined
+   in its own silo, creating duplicate or inconsistent information
+   models.  This results in duplicate work, more operational complexity
+   and an inability to convert information between protocols to leverage
+   the best protocol option for each specific use case.  Examples of
+   evolving signaling options include the following:
+
+   o  STUN [RFC5389] is an on-path, in-band signaling protocol that
+      could be extended to provide signaling to on-path network devices.
+      It provides an easily inspected packet signature, at least for
+      transport protocols such as UDP.  Through its extensions TURN
+      [RFC5766] and ICE [RFC5245], it is becoming prevalent in
+      application signaling driven by the initial use-case of providing
+      NAT and firewall traversal capabilities and determining the best
+      local and remote addresses for peer-to-peer connectivity.  The
+      TRAM working group is chartered to update TURN and STUN to make
+      them more suitable for WebRTC.
+
+   o  Port Control Protocol (PCP) [RFC6887] provides a mechanism to
+      describe a flow to the network.  The primary driver for PCP is
+      creating port mappings on NAT and firewall devices.  When doing
+      this, PCP pushes flow information from the host into the network
       (specifically to the network's NAT or firewall device), and
       receives information back from the network (from the NAT or
-      firewall device).  Unlike the prior protocols, it is not meant to
-      be used on path end-to-end but rather independently on one "edge"
-      of a traffic flow.  It is therefore an attractive alternative
-      because it allows the introduction of application to network
-      signaling without relying on the remote peer.  This is especially
-      useful in multi-domain communications.
+      firewall device).  It is not meant to be used end-to-end but
+      rather independently on one "edge" of a traffic flow.  It is
+      therefore an attractive alternative because it allows the
+      introduction of application to network signaling without relying
+      on the remote peer.  This is especially useful in multi-domain
+      communications.
 
    o  Interface to the Routing System (I2RS) is a working group
       chartered to provide interfaces for management applications,
@@ -216,14 +267,42 @@ Table of Contents
 
    o  Prefix coloring has been proposed for use in HOMENET and 6MAN
       working groups to provide differentiated services to applications
-      based on its IP address.
+      based on IP address.
 
-5.  Requirements
+   o  RTP Media Congestion Avoidance Techniques (RMCAT) has been
+      chartered to address the lack of generally accepted congestion
+      control mechanisms for interactive real-time media, which is often
+      carried via sets of flows using RTP over UDP.  Explicit exchanges
+      of flow characteristics and congestion information between
+      applications and the network could play an important role in such
+      mechanisms.
+
+   o  Transport Services (TAPS) is an effort to create a working group
+      to define transport services that are exposed to internet
+      applications.  A TAP enabled application identifies its needs of
+      the locally available transports services via an API.  Some of the
+      information provided is the same as what AEON proposes to have the
+      application communicate to the network.  Furthermore, the
+      transport services of TAPS could benefit from this communication
+      with the network.
+
+   o  Service Function Chaining (SFC) is a working group chartered to
+      address issues associated with the deployment of service functions
+      (e.g. firewalls, load balancers) in large-scale environments.
+      Service function chaining is the definition and instantiation of
+      an ordered set of instances of such service functions, and the
+      subsequent "steering" of traffic flows through those service
+      functions.  Flow characteristics communicated via AEON could be
+      used as input into the an SFC classifier and it could be
+      transported as SFC metadata.
+
+7.  Requirements
 
    Rather than encourage independent, protocol specific solutions to
-   this problem, this draft calls for a protocol and application
-   independent solution that can be applied in a consistent fashion
-   across a variety of protocols.  The requirements are:
+   this problem, this document calls for a protocol and application
+   independent information model and individual data models that can be
+   applied in a consistent fashion across a variety of protocols.  The
+   requirements are:
 
    Req-1:  Allow applications to explicitly signal their flow
       characteristics to the network.
@@ -245,13 +324,63 @@ Table of Contents
    Req-7:  Provide mechanism to authenticate and authorize endpoints/
       applications to signal flow characteristics.
 
-   Req-8:  Provide mechanism for integrity and replay protection of
-      messages exchanged between the application and the network.
+   Req-8:  Provide mechanism for integrity protection and replay
+      protection of messages exchanged between the application and the
+      network.
 
-6.  Acknowledgements
+8.  Acknowledgements
 
    The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine
-   Choukir, and Paul Jones for their contributions to this draft.
+   Choukir, Paul Jones, and Mohamed Boucadair for their contributions to
+   this document.
+
+9.  Informative References
+
+   [RFC2205]  Braden, B., Zhang, L., Berson, S., Herzog, S., and S.
+              Jamin, "Resource ReSerVation Protocol (RSVP) -- Version 1
+              Functional Specification", RFC 2205, September 1997.
+
+   [RFC2475]  Blake, S., Black, D., Carlson, M., Davies, E., Wang, Z.,
+              and W. Weiss, "An Architecture for Differentiated
+              Services", RFC 2475, December 1998.
+
+   [RFC3416]  Presuhn, R., "Version 2 of the Protocol Operations for the
+              Simple Network Management Protocol (SNMP)", STD 62, RFC
+              3416, December 2002.
+
+   [RFC4594]  Babiarz, J., Chan, K., and F. Baker, "Configuration
+              Guidelines for DiffServ Service Classes", RFC 4594, August
+              2006.
+
+   [RFC5245]  Rosenberg, J., "Interactive Connectivity Establishment
+              (ICE): A Protocol for Network Address Translator (NAT)
+              Traversal for Offer/Answer Protocols", RFC 5245, April
+              2010.
+
+   [RFC5389]  Rosenberg, J., Mahy, R., Matthews, P., and D. Wing,
+              "Session Traversal Utilities for NAT (STUN)", RFC 5389,
+              October 2008.
+
+   [RFC5766]  Mahy, R., Matthews, P., and J. Rosenberg, "Traversal Using
+              Relays around NAT (TURN): Relay Extensions to Session
+              Traversal Utilities for NAT (STUN)", RFC 5766, April 2010.
+
+   [RFC5978]  Manner, J., Bless, R., Loughney, J., and E. Davies, "Using
+              and Extending the NSIS Protocol Family", RFC 5978, October
+              2010.
+
+   [RFC6601]  Ash, G. and D. McDysan, "Generic Connection Admission
+              Control (GCAC) Algorithm Specification for IP/MPLS
+              Networks", RFC 6601, April 2012.
+
+   [RFC6887]  Wing, D., Cheshire, S., Boucadair, M., Penno, R., and P.
+              Selkirk, "Port Control Protocol (PCP)", RFC 6887, April
+              2013.
+
+   [RFC7011]  Claise, B., Trammell, B., and P. Aitken, "Specification of
+              the IP Flow Information Export (IPFIX) Protocol for the
+              Exchange of Flow Information", STD 77, RFC 7011, September
+              2013.
 
 Authors' Addresses
 

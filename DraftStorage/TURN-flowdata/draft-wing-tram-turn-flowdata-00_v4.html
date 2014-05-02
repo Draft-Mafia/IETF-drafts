@@ -1,0 +1,824 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>TURN extension to convey flow characteristics</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Terminology"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Design considerations"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Solution Overview"/>
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 Sending a ChannelBind Request"/>
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Receiving a ChannelBind Request"/>
+<link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 Conflict Resolution"/>
+<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Receiving a ChannelBind Response"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 FLOWDATA format"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 Security Considerations"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 IANA Considerations"/>
+<link href="#rfc.section.8" rel="Chapter" title="8 Acknowledgement"/>
+<link href="#rfc.references" rel="Chapter" title="9 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="9.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="9.2 Informative References"/>
+<link href="#rfc.authors" rel="Chapter"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.4.5 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Wing, D., Reddy, T., Williams, B., and R. Ravindranath" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-wing-tram-turn-flowdata-00" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-4-23" />
+  <meta name="dct.abstract" content="There exists no mechanism for the TURN client to communicate flow characteristics to the TURN server. This document defines such a mechanism to communicate flow characteristics from the TURN client to its TURN server, which the TURN server uses to enhance packet delivery for the traffic on both client-to-server and server-to-peer legs." />
+  <meta name="description" content="There exists no mechanism for the TURN client to communicate flow characteristics to the TURN server. This document defines such a mechanism to communicate flow characteristics from the TURN client to its TURN server, which the TURN server uses to enhance packet delivery for the traffic on both client-to-server and server-to-peer legs." />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">TRAM</td>
+  <td class="right">D. Wing</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">T. Reddy</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Standards Track</td>
+  <td class="right">Cisco Systems</td>
+</tr>
+<tr>
+  <td class="left">Expires: October 25, 2014</td>
+  <td class="right">B. Williams</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">Akamai, Inc.</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">R. Ravindranath</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">Cisco Systems</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">April 23, 2014</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">TURN extension to convey flow characteristics<br />
+  <span class="filename">draft-wing-tram-turn-flowdata-00</span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>There exists no mechanism for the TURN client to communicate flow characteristics to the TURN server. This document defines such a mechanism to communicate flow characteristics from the TURN client to its TURN server, which the TURN server uses to enhance packet delivery for the traffic on both client-to-server and server-to-peer legs.</p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on October 25, 2014.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2014 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<li>2.   <a href="#rfc.section.2">Terminology</a></li>
+<li>3.   <a href="#rfc.section.3">Design considerations</a></li>
+<li>4.   <a href="#rfc.section.4">Solution Overview</a></li>
+<li>4.1.   <a href="#rfc.section.4.1">Sending a ChannelBind Request</a></li>
+<li>4.2.   <a href="#rfc.section.4.2">Receiving a ChannelBind Request</a></li>
+<li>4.2.1.   <a href="#rfc.section.4.2.1">Conflict Resolution</a></li>
+<li>4.3.   <a href="#rfc.section.4.3">Receiving a ChannelBind Response</a></li>
+<li>5.   <a href="#rfc.section.5">FLOWDATA format</a></li>
+<li>6.   <a href="#rfc.section.6">Security Considerations</a></li>
+<li>7.   <a href="#rfc.section.7">IANA Considerations</a></li>
+<li>8.   <a href="#rfc.section.8">Acknowledgement</a></li>
+<li>9.   <a href="#rfc.references">References</a></li>
+<li>9.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>9.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li><a href="#rfc.authors">Authors' Addresses</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
+<p id="rfc.section.1.p.1">Traversal Using Relay NAT (TURN) <a href="#RFC5766">[RFC5766]</a> is a protocol that is often used to improve the connectivity of P2P applications. TURN ensures that a connection can be established even when one or both sides is incapable of a direct P2P connection. A TURN server could be provided by an enterprise network, an access network, an application service provider or a third party provider. A TURN server and the network in which it is hosted need a mechanism to identify and provide differentiated service to flows relayed through the TURN server.  </p>
+<p id="rfc.section.1.p.2">This specification provides a mechanism for the client to signal the flow characteristics of a relay channel to the TURN server, so that certain relay channels can receive service that is differentiated from others. The TURN server authorizes the request and signals back to the client that it can (fully or partially) accommodate the flow. The proposed mechanism is applicable to channels and not for Send and Data methods. This sort of signaling will be useful for long-lived flows such as media streams, WebRTC data channels <a href="#I-D.ietf-rtcweb-overview">[I-D.ietf-rtcweb-overview]</a> etc traversing through the TURN server. The TURN server can further communicate the flow information to a number of on-path devices in its network using a Policy decision Point (e.g. SDN controller). This way the network hosting the TURN server can accommodate the flow. With this mechanism, a TURN client can request the TURN server to provide certain characteristics for the relayed channel on both legs (client-to-server, server-to-peer).  Applications using TURN as a communication relay would benefit from such an arrangement as it would improve the Quality of Experience (QOE) of the end user.</p>
+<p id="rfc.section.1.p.3">DSCP style markings can also help provide QOS, but has the following limitations:</p>
+<p/>
+
+<ul>
+  <li>DiffServ style packet marking can help provide QoS in some environments but DSCP markings are often modified or removed at various points in the network or when crossing network boundaries.  DSCP markings set by the client may be modified or removed by the intervening network(s) before it reaches the TURN server.</li>
+  <li>DSCP values are site specific, with each site selecting its own code points for each QoS level, hence it may not work across domains. However <a href="#I-D.ietf-tsvwg-rtcweb-qos">[I-D.ietf-tsvwg-rtcweb-qos]</a> recommends default set of DSCP values for browsers when there is no site specific information.</li>
+  <li>TURN client may not be able to set DSCP values for outgoing packets because of OS limitations.</li>
+  <li>DSCP provides differentiated service only in the outgoing direction of a flow.</li>
+</ul>
+<p id="rfc.section.1.p.5">The mechanism described in this document has the following useful properties and none of the above limitations:</p>
+<p/>
+
+<ul>
+  <li>Usable at the application level to the TURN client, without needing operating system support.</li>
+  <li>Robust metadata support, to convey sufficient information to the TURN server about the flow.</li>
+</ul>
+<p id="rfc.section.1.p.7">Note, it is not the intent of this document to advocate in favor of prioritizing relayed candidates over host, server-reflexive candidates, but to highlight the proposed mechanism only when TURN server is selected for various reasons like privacy, ICE connectivity checks with local host/server-reflexive candidates have failed etc.</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#sec-term" id="sec-term">Terminology</a></h1>
+<p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#design" id="design">Design considerations</a></h1>
+<p id="rfc.section.3.p.1">TURN client can choose to either use Send and Data methods or channels to exchange data with its peer. For bandwidth intensive applications (like video, audio, WebRTC data channels) a Send indication or Data indication (which adds 36 bytes overhead) can increase the bandwidth required between the client and the server. Hence channels are commonly used for bandwidth intensive applications to exchange data. In this specification we will focus on conveying the flow characteristics only in ChannelBind request.</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Solution Overview</h1>
+<p id="rfc.section.4.p.1">When a channel binding is initiated by the client, it may also indicate certain characteristics of its flow to the TURN server. The TURN server uses that information to prioritize the flow in its network and signals back to the client that it can (fully or partially) accommodate the flow.</p>
+<p id="rfc.section.4.p.2">This specification defines one new comprehension-optional STUN attribute: FLOWDATA. If a TURN client wishes to signal the flow characteristics of the relay channel it MUST insert this attribute in ChannelBind request. This attribute if used MUST be sent only in the ChannelBind request. Other specifications in future may extend this attribute to be used in other STUN methods. The TURN server determines if it can accommodate that flow, making configuration changes if necessary to accommodate the flow, and returns information in the FLOWDATA attribute indicating its ability to accommodate the described flow.</p>
+<h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> Sending a ChannelBind Request</h1>
+<p id="rfc.section.4.1.p.1">The TURN client sends ChannelBind request with the FLOWDATA STUN attribute to signal the flow characteristics of the relay channel to the TURN server. If the flow characteristics of a relay channel change then the client MAY send ChannelBind request with an updated FLOWDATA STUN attribute to refresh the binding. Similarly if the binding is refreshed using ChannelBind request then the client can also signal updated FLOWDATA STUN attribute if the flow characteristics of the relay channel have changed.</p>
+<h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> Receiving a ChannelBind Request</h1>
+<p id="rfc.section.4.2.p.1">When a TURN server receives a ChannelBind request that includes a FLOWDATA attribute, it processes the request as per the TURN specification <a href="#RFC5766">[RFC5766]</a> plus the specific rules mentioned below.</p>
+<p id="rfc.section.4.2.p.2">The TURN server will determine if it can provide the flow resources requested by the client. If the TURN server determines the flow can only be partially accommodated, it returns values in the FLOWDATA fields that it can accommodate or returns 0 in those FLOWDATA fields where it has no information. In other words if the request indicated a low tolerance for delay but the TURN server determines that only high delay is available, the FLOWDATA response indicates high delay is available. The same sort of processing occurs on all of the FLOWDATA fields of the response (upstream and downstream delay tolerance, loss tolerance, jitter tolerance, minimum bandwidth, maximum bandwidth). If the TURN server determines the flow can only be partially accommodated and the client has also signaled CHECK- ALTERNATE attribute <a href="#I-D.williams-peer-redirect">[I-D.williams-peer-redirect]</a> then the TURN server MAY re-direct the client to an alternate TURN server that could accommodate the flow characteristics conveyed by the client.</p>
+<p id="rfc.section.4.2.p.3">If the TURN server can accommodate the flow as described in the FLOWDATA attribute, it sends a success response and includes the FLOWDATA attribute filled in according to <a href="#FLOWDATA">Section 5</a>. The TURN server SHOULD include the FLOWDATA attribute in ChannelBind response only when the client had signaled FLOWDATA attribute in ChannelBind request.</p>
+<h1 id="rfc.section.4.2.1"><a href="#rfc.section.4.2.1">4.2.1.</a> Conflict Resolution</h1>
+<p id="rfc.section.4.2.1.p.1">It is possible that two hosts send requests with different thresholds for delay or jitter in each direction for the same flow, and their requests arrive at the same TURN server. If this occurs, it is RECOMMENDED that the TURN server use the stricter delay/loss tolerance (that is, the lower tolerance to delay or jitter). The diagram below depicts a conflict message flow.</p>
+<div id="rfc.figure.1"/>
+<div id="conflict"/>
+<pre>   TURN Client A      TURN server           TURN Client B
+     |                         |                       |
+     |-loss=med, delay=med----&gt;|&lt;-loss=hi, delay=hi----|
+     |                         |                       |
+     |                    (conflict!)                  |
+     |                         |                       |
+     |                         |--loss=med, delay=med-&gt;|
+     |                         |                       |
+     |&lt;--loss=med, delay=med---|                       |
+
+</pre>
+<p class="figure">Figure 1: Message diagram, resolving conflict</p>
+<p/>
+<h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> Receiving a ChannelBind Response</h1>
+<p id="rfc.section.4.3.p.1">When the client receives a ChannelBind success response, it proceeds with processing the response according to the TURN specification <a href="#RFC5766">[RFC5766]</a>. If the message does not include an FLOWDATA attribute, no additional processing is required.  The returned FLOWDATA attribute, if present, indicates the accommodation of this flow the TURN server will perform. This document does not define what the TURN client might do with that information, but it could choose among several TURN servers or use it for other purposes.</p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#FLOWDATA" id="FLOWDATA">FLOWDATA format</a></h1>
+<p id="rfc.section.5.p.1">This section describes the format of the new STUN attribute FLOWDATA.  FLOWDATA will have a type TBD-CA and length of 4 bytes. The FLOWDATA attribute in the request has the following format.</p>
+<div id="rfc.figure.2"/>
+<div id="Figure1"/>
+<pre>
+
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | Attribute Type (TBD-CA)   |          Length (4)               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | uDT | uLT | uJT |   RSVD1     | dDT | dLT | dJT |    RSVD2    |
+  +---------------------------------------------------------------+
+   
+          </pre>
+<p class="figure">Figure 2: FLOWDATA attribute in request</p>
+<p/>
+<p id="rfc.section.5.p.3">Description of the fields:</p>
+
+<dl>
+  <dt>uDT:</dt>
+  <dd style="margin-left: 8">Upstream Delay Tolerance, 0=no information available, 1=very low, 2=low, 3=medium, 4=high.</dd>
+  <dt>uLT:</dt>
+  <dd style="margin-left: 8">Upstream Loss Tolerance, 0=no information available, 1=very low, 2=low, 3=medium, 4=high.</dd>
+  <dt>uJT:</dt>
+  <dd style="margin-left: 8">Upstream Jitter Tolerance, 0=no information available, 1=very low, 2=low, 3=medium, 4=high.</dd>
+  <dt>RSVD1:</dt>
+  <dd style="margin-left: 8">Reserved (7 bits), MUST be ignored on reception and MUST be 0 on transmission.</dd>
+  <dt>dDT:</dt>
+  <dd style="margin-left: 8">Downstream Delay Tolerance, 0=no information available, 1=very low, 2=low, 3=medium, 4=high.</dd>
+  <dt>dLT:</dt>
+  <dd style="margin-left: 8">Downstream Loss Tolerance, 0=no information available, 1=very low, 2=low, 3=medium, 4=high.</dd>
+  <dt>dJT:</dt>
+  <dd style="margin-left: 8">Downstream Jitter Tolerance, 0=no information available, 1=very low, 2=low, 3=medium, 4=high.</dd>
+  <dt>RSVD2:</dt>
+  <dd style="margin-left: 8">Reserved (7 bits), MUST be ignored on reception and MUST be 0 on transmission.</dd>
+</dl>
+<p id="rfc.section.5.p.4">Different applications have different needs for their flows. The following table is derived from <a href="#RFC4594">[RFC4594]</a> to serve as a guideline for tolerance to loss, delay and jitter for some sample applications.</p>
+<div id="rfc.figure.3"/>
+<div id="Figure2"/>
+<pre>
+
+ -------------------------------------------------------------------
+|Service Class  |                              |    Tolerance to    |
+|    Name       |  Traffic Characteristics     | Loss |Delay |Jitter|
+|===============+==============================+======+======+======|
+|   Network     |Variable size packets, mostly |      |      |      |
+|   Control     |inelastic short messages, but |  Low |  Low | High |
+|               | traffic can also burst       |      |      |      |
+|               | (e.g., OSPF)                 |      |      |      |
+|---------------+------------------------------+------+------+------|
+|               | Fixed-size small packets,    | Very | Very | Very |
+|  Telephony    | constant emission rate,      |  Low |  Low |  Low |
+|               | inelastic and low-rate flows |      |      |      |
+|               | (e.g., G.711, G.729)         |      |      |      |
+|---------------+------------------------------+------+------+------|
+|   Signaling   | Variable size packets, some  | Low  | Low  | High |
+|               | what bursty short-lived flows|      |      |      |
+|---------------+------------------------------+------+------+------|
+|  Multimedia   | Variable size packets,       | Low  | Very |      |
+| Conferencing  | constant transmit interval,  |  -   | Low  | Low  |
+|               |rate adaptive, reacts to loss |Medium|      |      |
+|---------------+------------------------------+------+------+------|
+|   Real-Time   | RTP/UDP streams, inelastic,  | Low  | Very | Low  |
+|  Interactive  | mostly variable rate         |      | Low  |      |
+|---------------+------------------------------+------+------+------|
+|  Multimedia   |  Variable size packets,      |Low - |Medium| High |
+|   Streaming   | elastic with variable rate   |Medium|      |      |
+|---------------+------------------------------+------+------+------|
+|   Broadcast   | Constant and variable rate,  | Very |Medium| Low  |
+|     Video     | inelastic, non-bursty flows  |  Low |      |      |
+|---------------+------------------------------+------+------+------|
+|  Low-Latency  | Variable rate, bursty short- | Low  |Low - | High |
+|      Data     |  lived elastic flows         |      |Medium|      |
+|---------------+------------------------------+------+------+------|
+|      OAM      |  Variable size packets,      | Low  |Medium| High |
+|               |  elastic &amp; inelastic flows   |      |      |      |
+|---------------+------------------------------+------+------+------|
+|High-Throughput| Variable rate, bursty long-  | Low  |Medium| High |
+|      Data     |   lived elastic flows        |      |- High|      |
+|---------------+------------------------------+------+------+------|
+|   Standard    | A bit of everything          |   0     0       0  |
+|---------------+------------------------------+------+------+------|
+| Low-Priority  | Non-real-time and elastic    | High | High | High |
+|      Data     | (e.g., network backup)       |      |      |      |
+ -------------------------------------------------------------------
+   
+          </pre>
+<p class="figure">Figure 3: Flow characteristics</p>
+<p/>
+<p id="rfc.section.5.p.6">The FLOWDATA attribute in the response has the following format</p>
+<div id="rfc.figure.4"/>
+<div id="Figure3"/>
+<pre>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | Attribute Type (TBD-CA)   |          Length (4)               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | AuDT| AuLT| AuJT|   RSVD1     | AdDT| AdLT| AdJT|    RSVD2    |
+  +---------------------------------------------------------------+
+   
+          </pre>
+<p class="figure">Figure 4: FLOWDATA attribute in response</p>
+<p/>
+
+<dl>
+  <dt>AuDT:</dt>
+  <dd style="margin-left: 8">Accommodated Upstream Delay Tolerance, 0=no information available, 1=able to accommodate very low, 2=able to accommodate low, 3=able to accommodate medium, 4=able to accommodate high.</dd>
+  <dt>AuLT:</dt>
+  <dd style="margin-left: 8">Accommodated Upstream Loss Tolerance, 0=no information available, 1=able to accommodate very low, 2=able to accommodate low, 3=able to accommodate medium, 4=able to accommodate high.</dd>
+  <dt>AuJT:</dt>
+  <dd style="margin-left: 8">Accommodated Upstream Jitter Tolerance, 0=no information available, 1=able to accommodate very low, 2=able to accommodate low, 3=able to accommodate medium, 4=able to accommodate high.</dd>
+  <dt>RSVD1:</dt>
+  <dd style="margin-left: 8">Reserved (7 bits), MUST be ignored on reception and MUST be 0 on transmission.</dd>
+  <dt>AdDT:</dt>
+  <dd style="margin-left: 8">Accommodated Downstream Delay Tolerance, 0=no information available, 1=able to accommodate very low, 2=able to accommodate low, 3=able to accommodate medium, 4=able to accommodate high.</dd>
+  <dt>AdLT:</dt>
+  <dd style="margin-left: 8">Accommodated Downstream Loss Tolerance, 0=no information available, 1=able to accommodate very low, 2=able to accommodate low, 3=able to accommodate medium, 4=able to accommodate high.</dd>
+  <dt>AdJT:</dt>
+  <dd style="margin-left: 8">Accommodated Downstream Jitter Tolerance, 0=no information available, 1=able to accommodate very low, 2=able to accommodate low, 3=able to accommodate medium, 4=able to accommodate high.</dd>
+  <dt>RSVD2:</dt>
+  <dd style="margin-left: 8">Reserved (7 bits), MUST be ignored on reception and MUST be 0 on transmission.</dd>
+</dl>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> Security Considerations</h1>
+<p id="rfc.section.6.p.1">On some networks, only certain users or certain applications are authorized to signal the priority of a flow. This authorization can be achieved with STUN long-term authentication <a href="#RFC5389">[RFC5389]</a>.</p>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#sec.iana-considerations" id="sec.iana-considerations">IANA Considerations</a></h1>
+<p id="rfc.section.7.p.1">This document defines the FLOWDATA STUN attribute, described in <a href="#FLOWDATA">Section 5</a>. IANA has allocated the comprehension-optional codepoint TBD-CA for this attribute.</p>
+<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> Acknowledgement</h1>
+<p id="rfc.section.8.p.1">Authors would like to thank Anca Zamfir and Charles Eckel for their comments and review.</p>
+<h1 id="rfc.references"><a href="#rfc.references">9.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">9.1.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="I-D.ietf-rtcweb-overview">[I-D.ietf-rtcweb-overview]</b>
+      </td>
+      <td class="top"><a>Alvestrand, H.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-rtcweb-overview-09">Overview: Real Time Protocols for Brower-based Applications</a>", Internet-Draft draft-ietf-rtcweb-overview-09, February 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.ietf-tsvwg-rtcweb-qos">[I-D.ietf-tsvwg-rtcweb-qos]</b>
+      </td>
+      <td class="top"><a>Dhesikan, S.</a>, <a>Druta, D.</a>, <a>Jones, P.</a> and <a>J. Polk</a>, "<a href="http://tools.ietf.org/html/draft-ietf-tsvwg-rtcweb-qos-00">DSCP and other packet markings for RTCWeb QoS</a>", Internet-Draft draft-ietf-tsvwg-rtcweb-qos-00, April 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.williams-peer-redirect">[I-D.williams-peer-redirect]</b>
+      </td>
+      <td class="top"><a>Williams, B.</a> and <a>T. Reddy</a>, "<a href="http://tools.ietf.org/html/draft-williams-peer-redirect-00">Peer-specific Redirection for Traversal Using Relays around NAT (TURN)</a>", Internet-Draft draft-williams-peer-redirect-00, April 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5389">[RFC5389]</b>
+      </td>
+      <td class="top"><a>Rosenberg, J.</a>, <a>Mahy, R.</a>, <a>Matthews, P.</a> and <a>D. Wing</a>, "<a href="http://tools.ietf.org/html/rfc5389">Session Traversal Utilities for NAT (STUN)</a>", RFC 5389, October 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5766">[RFC5766]</b>
+      </td>
+      <td class="top"><a>Mahy, R.</a>, <a>Matthews, P.</a> and <a>J. Rosenberg</a>, "<a href="http://tools.ietf.org/html/rfc5766">Traversal Using Relays around NAT (TURN): Relay Extensions to Session Traversal Utilities for NAT (STUN)</a>", RFC 5766, April 2010.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">9.2.</a> Informative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC4594">[RFC4594]</b>
+      </td>
+      <td class="top"><a>Babiarz, J.</a>, <a>Chan, K.</a> and <a>F. Baker</a>, "<a href="http://tools.ietf.org/html/rfc4594">Configuration Guidelines for DiffServ Service Classes</a>", RFC 4594, August 2006.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Authors' Addresses</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Dan Wing</span> 
+	  <span class="n hidden">
+		<span class="family-name">Wing</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">821 Alder Drive</span>
+
+	  <span class="vcardline">
+		<span class="locality">Milpitas</span>,  
+		<span class="region">California</span> 
+		<span class="code">95035</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:dwing@cisco.com">dwing@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Tirumaleswar Reddy</span> 
+	  <span class="n hidden">
+		<span class="family-name">Reddy</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park, Varthur Hobli</span>
+<span class="vcardline">Sarjapur Marathalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:tireddy@cisco.com">tireddy@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Brandon Williams</span> 
+	  <span class="n hidden">
+		<span class="family-name">Williams</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Akamai, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">8 Cambridge Center</span>
+
+	  <span class="vcardline">
+		<span class="locality">Cambridge, MA</span>,  
+		<span class="region"></span>
+		<span class="code">02142</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:brandon.williams@akamai.com">brandon.williams@akamai.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Ram Mohan Ravindranath</span> 
+	  <span class="n hidden">
+		<span class="family-name">Ravindranath</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park</span>
+<span class="vcardline">Sarjapur-Marathahalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:rmohanr@cisco.com">rmohanr@cisco.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>
