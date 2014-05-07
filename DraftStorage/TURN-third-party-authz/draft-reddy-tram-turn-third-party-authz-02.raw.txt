@@ -5,10 +5,10 @@
 TRAM                                                            T. Reddy
 Internet-Draft                                                  P. Patil
 Intended status: Standards Track                         R. Ravindranath
-Expires: November 3, 2014                                          Cisco
+Expires: November 7, 2014                                          Cisco
                                                                J. Uberti
                                                                   Google
-                                                             May 2, 2014
+                                                             May 6, 2014
 
 
               TURN Extension for Third Party Authorization
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 3, 2014.
+   This Internet-Draft will expire on November 7, 2014.
 
 Copyright Notice
 
@@ -324,10 +324,11 @@ Table of Contents
    DSKPP client (i.e TURN server) which is equivalent to the kid defined
    in this specification.  The AS-RS, AUTH keys would be derived from
    the symmetric key using (HMAC)-based key derivation function (HKDF)
-   (DSKPP) [RFC5869].  For example if the input symmetric key (K) is 32
-   octets length, encryption algorithm is AES_128_CBC and HMAC algorithm
-   is HMAC-SHA-256-128 then the secondary keys AS-RS, AUTH are generated
-   from the input key K as follows
+   (DSKPP) [RFC5869] and the default hash function is SHA-256.  For
+   example if the input symmetric key (K) is 32 octets length,
+   encryption algorithm is AES_128_CBC and HMAC algorithm is HMAC-
+   SHA-256-128 then the secondary keys AS-RS, AUTH are generated from
+   the input key K as follows
 
    1.  HKDF-Extract(zero, K) -> PRK
 
@@ -400,10 +401,11 @@ Table of Contents
    access token and kid values in ACCESS-TOKEN and USERNAME STUN
    attributes.  The TURN client includes a MESSAGE-INTEGRITY attribute
    as the last attribute in the message over the contents of the TURN
-   message.  MESSAGE-INTEGRITY attribute is calculated using the long-
-   term credentials mechanism specified in section 10.2 of [RFC5389],
-   using the "kid" value from the returned JSON for its USERNAME
-   attribute, and the mac_key for computing the message integrity.
+   message.  The HMAC for the MESSAGE-INTEGRITY attribute is computed as
+   described in section 15.4 of [RFC5389] where the mac_key is used as
+   the input key for the HMAC computation.  The TURN client and server
+   will use the mac_key to compute the message integrity and doesn't
+   have to perform MD5 hash on the credentials.
 
 6.  STUN Attributes
 
@@ -485,8 +487,8 @@ Table of Contents
    specific period of time the resource server MUST cache it so that it
    need not to be provided in every request within an existing
    allocation.  The access token can be re-used for multiple Allocate
-   requests to the same TURN server.  The TURN client MUST only include
-   the ACCESS-TOKEN attribute in Allocate and Refresh requests.
+   requests to the same TURN server.  The TURN client MUST include the
+   ACCESS-TOKEN attribute only in Allocate and Refresh requests.
 
    Note : If Authenticated Encryption with Associated Data (AEAD)
    algorithm specified in [I-D.mcgrew-aead-aes-cbc-hmac-sha2] are used
@@ -516,16 +518,13 @@ Table of Contents
    o  The TURN server verifies that no replay took place by performing
       the following check:
 
-   o
-
-      *  The received timestamp (timestamp field in self-contained
-         token) is checked and the access token is accepted if the
-         timestamp is recent enough to the reception time of the TURN
-         request (RDnew) using the following formula: Lifetime + Delta >
-         abs(RDnew - TSnew).  The RECOMMENDED value for the allowed
-         Delta is 5 seconds.  If the timestamp is NOT within the
-         boundaries then the TURN server discards the request with error
-         response 401 (Unauthorized).
+      *  The access token is accepted if the timestamp field in the
+         self-contained token (TS) is recent enough to the reception
+         time of the TURN request (RDnew) using the following formula:
+         Lifetime + Delta > abs(RDnew - TS).  The RECOMMENDED value for
+         the allowed Delta is 5 seconds.  If the timestamp is NOT within
+         the boundaries then the TURN server discards the request with
+         error response 401 (Unauthorized).
 
    o  The TURN server uses the mac_key to compute the message integrity
       over the request and if the resulting value does not match the
@@ -557,10 +556,13 @@ Table of Contents
    authorization server requires Transport Layer Security (TLS) with a
    ciphersuite offering confidentiality protection.  The session key
    MUST NOT be transmitted in clear since this would completely destroy
-   the security benefits of the proposed scheme.
+   the security benefits of the proposed scheme.  If an attacker tries
+   to replay message with ACCESS-TOKEN attribute then the server can
+   detect that the transaction id was used for an old request and thus
+   prevent the replay attack.
 
-   Security considerations discussed in [I-D.ietf-oauth-v2-http-mac] are
-   to be taken into account.
+   Security considerations discussed in [I-D.ietf-oauth-v2-http-mac] and
+   [RFC5766] are to be taken into account.
 
 10.  IANA Considerations
 

@@ -5,7 +5,7 @@
 Internet Engineering Task Force                                 C. Eckel
 Internet-Draft                                                  T. Reddy
 Intended status: Informational                       Cisco Systems, Inc.
-Expires: November 3, 2014                                    May 2, 2014
+Expires: November 8, 2014                                    May 7, 2014
 
 
 Application Enabled Open Networking: Problem Statement and Requirements
@@ -14,22 +14,21 @@ Application Enabled Open Networking: Problem Statement and Requirements
 Abstract
 
    Identification and treatment of application flows are important to
-   many network operators.  They often rely on these capabilities to
-   deploy and/or support a wide range of applications that run on their
-   networks.  These applications, and the packet flows they generate and
-   consume, may have specific connectivity requirements that can be met
-   if made known to the network.  Historically, this functionality has
-   been implemented to the extent possible using heuristics, which
+   many application providers and network operators.  They often rely on
+   these capabilities to deploy and/or support a wide range of
+   applications.  These applications, and the packet flows they generate
+   and consume, may have specific connectivity requirements that can be
+   met if made known to the network.  Historically, this functionality
+   has been implemented to the extent possible using heuristics, which
    inspect and infer flow characteristics.  Heuristics may be based on
    port ranges, network separation (e.g. subnets or VLANS, or Deep
    Packet Inspection (DPI).  But many application flows in current
    usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer,
    asymmetric, used on multipurpose devices, and have different
-   priorities depending on network conditions, direction, time of the
-   day, dynamic user preferences and other factors.  Any combination of
-   these properties renders heuristic based techniques less effective
-   and may result in compromises to application security or user
-   privacy.
+   priorities depending on direction of flow, user preferences, and
+   other factors.  Any combination of these properties renders heuristic
+   based techniques less effective and may result in compromises to
+   application security or user privacy.
 
 Status of This Memo
 
@@ -46,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 3, 2014.
+   This Internet-Draft will expire on November 8, 2014.
 
 Copyright Notice
 
@@ -161,7 +160,7 @@ Table of Contents
    o  More and more traffic is encrypted, rendering DPI impossible,
       inefficient, or much more complex, and sometimes at the expense of
       privacy or security (e.g. need to share encryption keys with
-      intermediary performing DPI).
+      intermediary proxy performing DPI).
 
    o  Visibility generally requires inspecting the signaling traffic of
       applications.  This traffic may flow through a different network
@@ -202,11 +201,10 @@ Table of Contents
       within the IETF.
 
    o  NSIS (next Steps in Signaling) [RFC5978]is the next iteration of
-      RSVP-like signaling defined by the IETF.  Because it focused on
-      the same fundamental work flow as RSVP admission control as its
-      main driver, and because it did not provide significant enough
-      use-case benefits over RSVP, it has seen even less adoption than
-      RSVP.
+      RSVP-like signaling defined by the IETF.  It focused on the same
+      fundamental work flow as RSVP admission control as its main
+      driver, and because it did not provide significant enough use-case
+      benefits over RSVP, it has seen even less adoption than RSVP.
 
    o  DiffServ style packet marking [RFC4594]can help provide QoS in
       some environments but DSCP markings are often modified or removed
@@ -236,10 +234,10 @@ Table of Contents
       transport protocols such as UDP.  Through its extensions TURN
       [RFC5766] and ICE [RFC5245], it is becoming prevalent in
       application signaling driven by the initial use-case of providing
-      NAT and firewall traversal capabilities and determining the best
-      local and remote addresses for peer-to-peer connectivity.  The
-      TRAM working group is chartered to update TURN and STUN to make
-      them more suitable for WebRTC.
+      NAT and firewall traversal capabilities and detecting local and
+      remote candidates for peer-to-peer media sessions.  The TRAM
+      working group is chartered to update TURN and STUN to make them
+      more suitable for WebRTC.
 
    o  Port Control Protocol (PCP) [RFC6887] provides a mechanism to
       describe a flow to the network.  The primary driver for PCP is
@@ -322,7 +320,9 @@ Table of Contents
       including flows that cross administrative boundaries.
 
    Req-7:  Provide mechanism to authenticate and authorize endpoints/
-      applications to signal flow characteristics.
+      applications to signal flow characteristics, including 3rd party
+      authentication and authorization for over-the-top (OTT)
+      applications.
 
    Req-8:  Provide mechanism for integrity protection and replay
       protection of messages exchanged between the application and the

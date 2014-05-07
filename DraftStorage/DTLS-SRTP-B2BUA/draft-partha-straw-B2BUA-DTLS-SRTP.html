@@ -1,0 +1,710 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>DTLS-SRTP handling in Session Initiation Protocol (SIP) Back-to-Back User Agents (B2BUAs) </title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Terminology"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Media plane B2BUAs"/>
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Media relay"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Media-aware relay or Media terminator"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 DTLS-SRTP handling in B2BUA with signaling forking"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgement"/>
+<link href="#rfc.references" rel="Chapter" title="8 Normative References"/>
+<link href="#rfc.authors" rel="Chapter"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.4.5 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Ravindran, Parthasarathi., Ravindranath, R., and T. Reddy" />
+  <meta name="dct.identifier" content="urn:ietf:id:" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-5-7" />
+  <meta name="dct.abstract" content="SIP Back-to-Back User Agents (B2BUAs) are often envisaged to also be on the media path, rather than just intercepting signaling.  This document describes the behavior B2BUAs should follow when acting on the media plane that use Secure Real-time Transport Protocol (SRTP) security context setup with Datagram Transport Layer Security (DTLS) protocol.  " />
+  <meta name="description" content="SIP Back-to-Back User Agents (B2BUAs) are often envisaged to also be on the media path, rather than just intercepting signaling.  This document describes the behavior B2BUAs should follow when acting on the media plane that use Secure Real-time Transport Protocol (SRTP) security context setup with Datagram Transport Layer Security (DTLS) protocol.  " />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">STRAW</td>
+  <td class="right">Parthasarathi. Ravindran</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">Nokia Solutions and Networks</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Standards Track</td>
+  <td class="right">R. Ravindranath</td>
+</tr>
+<tr>
+  <td class="left">Expires: November 8, 2014</td>
+  <td class="right">T. Reddy</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">Cisco Systems</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">May 7, 2014</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">DTLS-SRTP handling in Session Initiation Protocol (SIP) Back-to-Back User Agents (B2BUAs) <br />
+  <span class="filename"></span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>SIP Back-to-Back User Agents (B2BUAs) are often envisaged to also be on the media path, rather than just intercepting signaling.  This document describes the behavior B2BUAs should follow when acting on the media plane that use Secure Real-time Transport Protocol (SRTP) security context setup with Datagram Transport Layer Security (DTLS) protocol.  </p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on November 8, 2014.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2014 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<li>2.   <a href="#rfc.section.2">Terminology</a></li>
+<li>3.   <a href="#rfc.section.3">Media plane B2BUAs</a></li>
+<li>3.1.   <a href="#rfc.section.3.1">Media relay</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">Media-aware relay or Media terminator</a></li>
+<li>4.   <a href="#rfc.section.4">DTLS-SRTP handling in B2BUA with signaling forking</a></li>
+<li>5.   <a href="#rfc.section.5">Security Considerations</a></li>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a></li>
+<li>7.   <a href="#rfc.section.7">Acknowledgement</a></li>
+<li>8.   <a href="#rfc.references">Normative References</a></li>
+<li><a href="#rfc.authors">Authors' Addresses</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
+<p><a href="#RFC5763">[RFC5763]</a> describes how Session Initiation Protocol (SIP) can be used to establish a Secure Real-time Transport Protocol (SRTP) security context with Datagram Transport Layer Security (DTLS) protocol.  It describes a mechanism of transporting a certificate fingerprint in Session Description Protocol (SDP), which identifies the certificate that will be presented during the DTLS handshake. DTLS-SRTP is defined for point-to-point media sessions, in which there are exactly two participants.  Each DTLS-SRTP session contains a single DTLS association, and either two SRTP contexts (if media traffic is flowing in both directions on the same host/port quartet) or one SRTP context (if media traffic is only flowing in one direction).  </p>
+<p id="rfc.section.1.p.2">In may SIP deployments, SIP  entities exist in the SIP signaling path between the originating and final terminating endpoints. These SIP entities as described in  <a href="#RFC7092">[RFC7092]</a> modify SIP and SDP bodies and also are likely to be on the media path. Such Entities when present in the signaling/media path are likely to do several things. For example some B2BUAs modify parts of SDP (like IP address, port) and subsequently modify the RTP headers as well. There are other types of B2BUAs that would completely modify the RTP packet including the payload(like transcoder). In all these cases a DTLS association would break unless the B2BUA participates in the DTLS setup and ensures the context are setup properly. It is envisioned that B2BUA that are in media path MUST support DTLS stack and SRTP extensions needed for DTLS as described in <a href="#RFC5763">[RFC5763]</a> so that it can function as DTLS-SRTP proxy.  </p>
+<p><a href="#RFC7092">[RFC7092]</a> describes three different categories of such B2BUAs, according to the level of activities performed on the media plane:</p>
+<p/>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">A B2BUA that act as a simple media relay effectively unaware of anything that is transported and only modifies the UDP/IP header of the packets.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">A B2BUA that performs a media-aware role. It inspects and potentially modifies RTP or RTCP headers, but it does not modify the payload of RTP/RTCP. </dd>
+  <dt></dt>
+  <dd style="margin-left: 8">A B2BUA that performs a media-termination role and operates at the media payload layer, such as RTP/RTCP payload (For example Transcoder). </dd>
+</dl>
+<p id="rfc.section.1.p.5">The following sections will describe the behaviour B2BUAs should follow in order to avoid  any impact on end-to-end DTLS-SRTP streams.</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#sec-term" id="sec-term">Terminology</a></h1>
+<p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.  Readers of this document are expected to be aware of different B2BUA's defined in <a href="#RFC7092">[RFC7092]</a>.  </p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> Media plane B2BUAs</h1>
+<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> Media relay</h1>
+<p id="rfc.section.3.1.p.1">A media relay as identified in section 3.2.1 of <a href="#RFC7092">[RFC7092]</a> basically just forwards, from an application level point of view, all packets it receives on a negotiated UDP connection, without either inspecting or modifying them. They just forward the UDP payload as is by changing only the UDP/IP header.  </p>
+<p id="rfc.section.3.1.p.2">A media relay B2BUA MUST forward the certificate fingerprint it receives in SDP from the originating endpoint as is to the remote side and vice-versa. Below example shows a sample flow of Early Offer SIP SIP call with both endpoints doing DTLS-SRTP with a media relay B2BUA that changes the UDP/IP address/port.</p>
+<div id="rfc.figure.1"/>
+<div id="Figure1"/>
+<pre>
+ +-------+              +-----------------+        +-----------+         
+ |  Alice|              | MediaRelay B2BUA|        |      Bob  |
+ +-------+              +-----------------+        +-----------+
+     |(1) INVITE               |  (3)INVITE                |
+     |   a=setup:actpass       |   a=setup:actpass         |
+     |   a=fingerprint1        |   a= fingerprint1         | 
+     |   (alice's IP/port)     |   (B2BUA's IP, port)      |                        
+     |------------------------&gt;|  ------------------------&gt;|
+     |                         |                           |
+     |    (2)  100 trying      |                           |
+     | &lt;-----------------------|                           |
+     |                         | (4) 100 trying            |
+     |                         | &lt;-------------------------|
+     |                         |                           |
+     |                         |  (5)200 OK                |
+     |                         |   a=setup:active          |
+     |                         |    a=fingerprint2         |
+     |                         |  (Bob's IP, port)         |
+     |                         | &lt;-------------------------|
+     |    (6) 200 OK           |                           |
+     |    a=setup:active       |                           |
+     |    a=fingerprint2       |                           |
+     |    B2BUA's address,port |                           |
+     |               (7, 8)ClientHello + use_srtp          |
+     |&lt;------------------------|&lt;--------------------------|
+     |                         |                           |
+     |                         |                           |
+     |           (9,10)ServerHello + use_srtp              |
+     |------------------------&gt;|--------------------------&gt;|
+     |                 (11)    |                           |
+     |  [Certificate exchange between Alice and Bob over   | 
+     |   DTLS ]                |                           |  
+     |                         |                           |
+     |         (12)            |                           |
+     |&lt;---------SRTP/SRTCP----&gt;|&lt;----SRTP/SRTCP-----------&gt;|
+     |   [B2BUA just changes UDP/IP header]                |   
+      
+     
+     
+     For the sake of brevity the entire fingerprint attribute is not shown.
+          </pre>
+<p class="figure">Figure 1: Early Offer Media Relay B2BUA</p>
+<p/>
+<p id="rfc.section.3.1.p.4">For each RTP or RTCP flow the peers do a DTLS handshake on the same source and destination port pair to establish a DTLS association. In this case Bob After he receives an INVITE triggers a DTLS connection. Note the DTLS handshake as well as the response to INVITE may happen in parallel and so the B2BUA SHOULD be prepared to receive media on the ports it advertised to Bob in the OFFER. Since a media relay B2BUA does not differentiate between a DTLS or RTP or any packet sent it just changes the UDP/IP addresses and forwards the packet on either leg.</p>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> Media-aware relay or Media terminator</h1>
+<p id="rfc.section.3.2.p.1">A Media-aware relay, unlike the the Media Relay addressed in the previous section, is actually aware of the media traffic it is handling.  As such, it is able to inspect SRTP and SRTCP packets flowing by, and may even be able to modify the headers in any of them before forwarding them.  A B2BUA implementing this role would not, though, inspect the payloads as well, which would be opaque to them. </p>
+<p id="rfc.section.3.2.p.2">A media terminator B2BUA in addition to modifying the header can modify parts of the payload. For example a Transcoder is a type of Media terminator that modifies the payload before it forwards the packet. It is envisioned that  these B2BUA's SHOULD have the capability the distinguish DTLS or SRTP or SRTCP or other packets (like STUN) received on the same udp port by using the algorithm mentioned in section 5.1.2 of <a href="#RFC5764">[RFC5764]</a> and takes care of handling them separately.</p>
+<p id="rfc.section.3.2.p.3">Below example shows how a DTLS-SRTP session is setup for these B2BUA</p>
+<div id="rfc.figure.2"/>
+<div id="Figure2"/>
+<pre>
+ +-------+              +-----------------+        +-----------+         
+ |  Alice|              | MediaAware B2BUA|        |      Bob  |
+ +-------+              +-----------------+        +-----------+
+     |(1) INVITE               |  (3)INVITE                |
+     |   a=setup:actpass       |   a=setup:actpass         |
+     |   a=fingerprint1        |   a= fingerprint2         | 
+     |   (alice's IP/port)     |   (B2BUA's IP, port)      |                        
+     |------------------------&gt;|  ------------------------&gt;|
+     |                         |                           |
+     |    (2)  100 trying      |                           |
+     | &lt;-----------------------|                           |
+     |                         | (4) 100 trying            |
+     |                         | &lt;-------------------------|
+     |                         |                           |
+     |                         |  (5)200 OK                |
+     |                         |   a=setup:active          |
+     |                         |    a=fingerprint3         |
+     |                         |  (Bob's IP, port)         |
+     |                         | &lt;-------------------------|
+     |                         |(6)ClientHello + use_srtp  |
+     |                         |&lt;--------------------------|
+     |    (7) 200 OK           |                           |
+     |    a=setup:active       | ServerHello + use_srtp (8)|
+     |    a=fingerprint4       | -------------------------&gt;|
+     |    B2BUA's address,port |             (9,10)        |
+     | &lt;-----------------------|   [Cert Exchange between] |
+     |  (11)ClientHello+       |      Bob and B2BUA over   |
+     |     use_srtp            |              DTLS         |
+     |&lt;------------------------|                           |
+     |  (12)ServerHello+       |                           |
+     |   use_srtp              |                           |
+     |------------------------&gt;|                           |
+     |                 (13,14  |                           |
+     |  [Cert exchange between |                           |
+     |   Alice and B2BUA       |                           |
+     |   DTLS ]                |                           |
+     |                         |                           |
+     |         (15)            |          (16)             |
+     |&lt;---------SRTP/SRTCP----&gt;|&lt;----SRTP/SRTCP-----------&gt;|
+     |   [B2BUA modifes SRTP/SRTCP header and/or payload]  |   
+      
+     
+     
+     For the sake of brevity the entire fingerprint attribute is not shown.
+     Also the same flow would be applicable for Delayed Offer calls. 
+          </pre>
+<p class="figure">Figure 2: Early Offer Media aware B2BUA</p>
+<p/>
+<p id="rfc.section.3.2.p.5">NOTE: Steps 5,6 may be parallel and so the B2BUA MAY receive ClientHello before it sees a 200OK. Steps 7,8 can happen in any order. Also steps 9,10, 11 may be parallel. B2BUA should be prepared to handle these responses on each leg independently.</p>
+<p id="rfc.section.3.2.p.6">A media terminator B2BUA MUST change the certificate fingerprint from both the endpoints so that it can signal its own certificate fingerprint in the SDP. This way B2BUA can act as DTLS-SRTP proxy and modify the payload.</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> DTLS-SRTP handling in B2BUA with signaling forking</h1>
+<p id="rfc.section.4.p.1">B2BUA's may receive multiple answers for an outbound INVITE due to downstream proxy forking the INVITE to multiple targets. It is possible that each of these responses have different certificate fingerprints. The B2BUA SHOULD take care of setting separate DTLS-SRTP associations with each of the forked targets.</p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Security Considerations</h1>
+<p id="rfc.section.5.p.1">Security considerations in <a href="#RFC5763">[RFC5763]</a> should be taken into account.  </p>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#sec.iana-considerations" id="sec.iana-considerations">IANA Considerations</a></h1>
+<p id="rfc.section.6.p.1">This document makes no request of IANA.  </p>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> Acknowledgement</h1>
+<h1 id="rfc.references"><a href="#rfc.references">8.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5764">[RFC5764]</b>
+      </td>
+      <td class="top"><a>McGrew, D.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5764">Datagram Transport Layer Security (DTLS) Extension to Establish Keys for the Secure Real-time Transport Protocol (SRTP)</a>", RFC 5764, May 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5763">[RFC5763]</b>
+      </td>
+      <td class="top"><a>Fischl, J.</a>, <a>Tschofenig, H.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5763">Framework for Establishing a Secure Real-time Transport Protocol (SRTP) Security Context Using Datagram Transport Layer Security (DTLS)</a>", RFC 5763, May 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7092">[RFC7092]</b>
+      </td>
+      <td class="top"><a>Kaplan, H.</a> and <a>V. Pascual</a>, "<a href="http://tools.ietf.org/html/rfc7092">A Taxonomy of Session Initiation Protocol (SIP) Back-to-Back User Agents</a>", RFC 7092, December 2013.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Authors' Addresses</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Parthasarathi Ravindran</span> 
+	  <span class="n hidden">
+		<span class="family-name">Ravindran</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Nokia Solutions and Networks</span>
+	<span class="adr">
+	  <span class="vcardline">Manyata Embassy Business park </span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560045</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:partha@parthasarathi.co.in">partha@parthasarathi.co.in</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Ram Mohan Ravindranath</span> 
+	  <span class="n hidden">
+		<span class="family-name">Ravindranath</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park</span>
+<span class="vcardline">Sarjapur-Marathahalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:rmohanr@cisco.com">rmohanr@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Tirumaleswar Reddy</span> 
+	  <span class="n hidden">
+		<span class="family-name">Reddy</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park, Varthur Hobli</span>
+<span class="vcardline">Sarjapur Marathalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:tireddy@cisco.com">tireddy@cisco.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>
