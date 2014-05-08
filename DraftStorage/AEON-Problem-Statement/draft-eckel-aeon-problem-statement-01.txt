@@ -5,7 +5,7 @@
 Internet Engineering Task Force                                 C. Eckel
 Internet-Draft                                                  T. Reddy
 Intended status: Informational                       Cisco Systems, Inc.
-Expires: November 8, 2014                                    May 7, 2014
+Expires: November 9, 2014                                    May 8, 2014
 
 
 Application Enabled Open Networking: Problem Statement and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 8, 2014.
+   This Internet-Draft will expire on November 9, 2014.
 
 
 
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Eckel & Reddy           Expires November 8, 2014                [Page 1]
+Eckel & Reddy           Expires November 9, 2014                [Page 1]
 
 Internet-Draft       AEON Problem Statement and Req             May 2014
 
@@ -83,7 +83,7 @@ Table of Contents
    5.  Limitations of Existing Signaling Mechanisms  . . . . . . . .   4
    6.  Efforts in Progress . . . . . . . . . . . . . . . . . . . . .   5
    7.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   7
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   8
    9.  Informative References  . . . . . . . . . . . . . . . . . . .   8
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Eckel & Reddy           Expires November 8, 2014                [Page 2]
+Eckel & Reddy           Expires November 9, 2014                [Page 2]
 
 Internet-Draft       AEON Problem Statement and Req             May 2014
 
@@ -131,6 +131,14 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    any insights are not available, or need to be recomputed, at network
    nodes further down the application flow path.
 
+   As the IETF establishes default behaviors that thwart pervasive
+   surveillance, it will be important to provide mechanisms for
+   applications that want to have the network provide differential flow
+   treatment for their data.  The intent is to have applications protect
+   the contents of their flows, yet have the ability to opt-in to
+   information exchanges that provide a more precise allocation of
+   network resources and thus a better user experience.
+
 2.  Definitions and Terminology
 
 2.1.  Types of Signaling
@@ -150,35 +158,34 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
 3.  Typical Workflows
 
    Various heuristic based approaches are used prevalently and
-   successfully for two types of work flows:
+   successfully for two types of workflows:
 
    1.  Provide network operators with visibility into traffic for
        troubleshooting, capacity planning, accounting and billing, and
-       other off network work flows.  This is done by exporting observed
-       traffic analysis via protocols such as IPFIX [RFC7011]and SNMP
+
+
+
+Eckel & Reddy           Expires November 9, 2014                [Page 3]
+
+Internet-Draft       AEON Problem Statement and Req             May 2014
+
+
+       other off network workflows.  This is done by exporting observed
+       traffic analysis via protocols such as IPFIX [RFC7011] and SNMP
        [RFC3416].
 
    2.  Provide differentiated network services for specific traffic
        according to network operator defined policies, including traffic
        classification, policing and shaping (e.g. [RFC2475]), providing
-
-
-
-
-Eckel & Reddy           Expires November 8, 2014                [Page 3]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
        admission control (e.g. [RFC6601]), impacting routing, and
        permitting passage of specific traffic (e.g. firewall functions).
 
 4.  Limitations of Heuristic Based Solutions
 
-   These typical work flows, visibility and differentiated network
+   These typical workflows, visibility and differentiated network
    services, are critical in many networks.  However, their reliance on
-   inspection and observation limits the ability to enable these work
-   flows more widely.  Reasons for this include the following:
+   inspection and observation limits the ability to enable these
+   workflows more widely.  Reasons for this include the following:
 
    o  Simple observation based classification based on TCP/UDP port
       numbers often result in incorrect results due to port overloading
@@ -208,24 +215,24 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
 
    The IETF has standardized several mechanisms involving explicit
    signaling between applications and the network that may be used to
-   support visibility and differentiated network services work flows.
+   support visibility and differentiated network services workflows.
    Unfortunately, none of these has experienced widespread deployment
    success, nor are they well suited for the applications usages
-   described previously.  Existing signaling options include the
-   following:
-
-   o  RSVP [RFC2205]is the original on-path signaling protocol
-      standardized by the IETF.  It is transported out-of-band and could
-      be used to signal information about any transport protocol traffic
-      (it currently supports TCP and UDP).  Its original goal was to
 
 
 
-Eckel & Reddy           Expires November 8, 2014                [Page 4]
+Eckel & Reddy           Expires November 9, 2014                [Page 4]
 
 Internet-Draft       AEON Problem Statement and Req             May 2014
 
 
+   described previously.  Existing signaling options include the
+   following:
+
+   o  RSVP [RFC2205] is the original on-path signaling protocol
+      standardized by the IETF.  It is transported out-of-band and could
+      be used to signal information about any transport protocol traffic
+      (it currently supports TCP and UDP).  Its original goal was to
       provide admission control.  Its requirement for explicit
       reservation of resources end to end proved too heavy for most
       network environments.  Its success was further impacted by its
@@ -233,54 +240,54 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
       filtered by intervening networks, and by its requirement for
       access to a raw socket, something that is generally not available
       to applications running in user space.  To date, more lightweight
-      signaling work flows utilizing RSVP have not been standardized
+      signaling workflows utilizing RSVP have not been standardized
       within the IETF.
 
-   o  NSIS (next Steps in Signaling) [RFC5978]is the next iteration of
+   o  NSIS (next Steps in Signaling) [RFC5978] is the next iteration of
       RSVP-like signaling defined by the IETF.  It focused on the same
-      fundamental work flow as RSVP admission control as its main
-      driver, and because it did not provide significant enough use-case
+      fundamental workflow as RSVP admission control as its main driver,
+      and because it did not provide significant enough use-case
       benefits over RSVP, it has seen even less adoption than RSVP.
 
-   o  DiffServ style packet marking [RFC4594]can help provide QoS in
-      some environments but DSCP markings are often modified or removed
-      at various points in the network or when crossing network
-      boundaries.  There are additional limitations when using DiffServ
-      with real-time communications applications, and the DART working
-      group has been chartered to write a document that explains the
-      limitations that exist with DiffServ when used with RTP in general
-      as well in the specific RTCWeb cases.
+   o  DiffServ [RFC4594] and VAN Tagging [IEEE-802.1Q] style packet
+      marking can help provide QoS in some environments, but such
+      markings are often modified or removed at various points in the
+      network or when crossing network boundaries.  There are additional
+      limitations when using DiffServ with real-time communications
+      applications, and the DART working group has been chartered to
+      write a document that explains the limitations that exist with
+      DiffServ when used with RTP in general as well in the specific
+      RTCWeb use cases [I-D.ietf-rtcweb-use-cases-and-requirements].
 
 6.  Efforts in Progress
 
-   There are a variety of evolving signaling options proposals for
-   identification and differentiated treatment of application flows to
-   fill where heuristic based approached or not sufficient.s are
-   currently being used.  It seems clear that there will be not be a
-   one-protocol-fits-all solution.  Every protocol is currently defined
-   in its own silo, creating duplicate or inconsistent information
-   models.  This results in duplicate work, more operational complexity
-   and an inability to convert information between protocols to leverage
-   the best protocol option for each specific use case.  Examples of
-   evolving signaling options include the following:
+   Not surprisingly, there are several evolving proposals that aim to
+   address the visibility and differentiated network services workflows
+   where existing approaches are not sufficient.  Protocol specific
+   extensions are being defined, creating duplicate or inconsistent
+   information models.  This results operational complexity and a need
+   to convert information between protocols to leverage the best
+   protocol option for each specific use case.  Examples of evolving
+   signaling options include the following:
 
    o  STUN [RFC5389] is an on-path, in-band signaling protocol that
       could be extended to provide signaling to on-path network devices.
       It provides an easily inspected packet signature, at least for
       transport protocols such as UDP.  Through its extensions TURN
+
+
+
+Eckel & Reddy           Expires November 9, 2014                [Page 5]
+
+Internet-Draft       AEON Problem Statement and Req             May 2014
+
+
       [RFC5766] and ICE [RFC5245], it is becoming prevalent in
       application signaling driven by the initial use-case of providing
       NAT and firewall traversal capabilities and detecting local and
       remote candidates for peer-to-peer media sessions.  The TRAM
       working group is chartered to update TURN and STUN to make them
       more suitable for WebRTC.
-
-
-
-Eckel & Reddy           Expires November 8, 2014                [Page 5]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
 
    o  Port Control Protocol (PCP) [RFC6887] provides a mechanism to
       describe a flow to the network.  The primary driver for PCP is
@@ -289,11 +296,18 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
       (specifically to the network's NAT or firewall device), and
       receives information back from the network (from the NAT or
       firewall device).  It is not meant to be used end-to-end but
-      rather independently on one "edge" of a traffic flow.  It is
-      therefore an attractive alternative because it allows the
-      introduction of application to network signaling without relying
-      on the remote peer.  This is especially useful in multi-domain
-      communications.
+      rather independently on one "edge" of a flow.  It is therefore an
+      attractive alternative because it allows the introduction of
+      application to network signaling without relying on the remote
+      peer.  This is especially useful in multi-domain communications.
+
+   o  RESTCONF [I-D.ietf-netconf-restconf] is a REST-like protocol that
+      provides a programmatic interface over HTTP for accessing data
+      defined in YANG, using the datastores defined in NETCONF
+      [RFC6241].  It is meant to provide a standard mechanism for web
+      applications to access the configuration data, operational data,
+      data-model specific protocol operations, and notification events
+      within a networking device, in a modular and extensible manner.
 
    o  Interface to the Routing System (I2RS) is a working group
       chartered to provide interfaces for management applications,
@@ -315,6 +329,15 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
       control mechanisms for interactive real-time media, which is often
       carried via sets of flows using RTP over UDP.  Explicit exchanges
       of flow characteristics and congestion information between
+
+
+
+
+Eckel & Reddy           Expires November 9, 2014                [Page 6]
+
+Internet-Draft       AEON Problem Statement and Req             May 2014
+
+
       applications and the network could play an important role in such
       mechanisms.
 
@@ -330,28 +353,21 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    o  Service Function Chaining (SFC) is a working group chartered to
       address issues associated with the deployment of service functions
       (e.g. firewalls, load balancers) in large-scale environments.
-
-
-
-Eckel & Reddy           Expires November 8, 2014                [Page 6]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
       Service function chaining is the definition and instantiation of
       an ordered set of instances of such service functions, and the
       subsequent "steering" of traffic flows through those service
       functions.  Flow characteristics communicated via AEON could be
-      used as input into the an SFC classifier and it could be
-      transported as SFC metadata.
+      used as input into an SFC classifier and it could be transported
+      as SFC metadata.
 
 7.  Requirements
 
    Rather than encourage independent, protocol specific solutions to
-   this problem, this document calls for a protocol and application
+   this problem, this document advocates a protocol and application
    independent information model and individual data models that can be
-   applied in a consistent fashion across a variety of protocols.  The
-   requirements are:
+   applied in a consistent fashion across a variety of protocols to
+   enable explicit communication between applications and the networks
+   on which they are used.  The requirements are:
 
    Req-1:  Allow applications to explicitly signal their flow
       characteristics to the network.
@@ -370,6 +386,14 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    Req-6:  Provide differentiated service for both directions of a flow,
       including flows that cross administrative boundaries.
 
+
+
+
+Eckel & Reddy           Expires November 9, 2014                [Page 7]
+
+Internet-Draft       AEON Problem Statement and Req             May 2014
+
+
    Req-7:  Provide mechanism to authenticate and authorize endpoints/
       applications to signal flow characteristics, including 3rd party
       authentication and authorization for over-the-top (OTT)
@@ -382,19 +406,27 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
 8.  Acknowledgements
 
    The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine
-   Choukir, Paul Jones, and Mohamed Boucadair for their contributions to
-   this document.
-
-
-
-
-
-Eckel & Reddy           Expires November 8, 2014                [Page 7]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
+   Choukir, Paul Jones, Mohamed Boucadair, and Bill VerSteeg for their
+   contributions to this document.
 
 9.  Informative References
+
+   [I-D.ietf-netconf-restconf]
+              Bierman, A., Bjorklund, M., Watsen, K., and R. Fernando,
+              "RESTCONF Protocol", draft-ietf-netconf-restconf-00 (work
+              in progress), March 2014.
+
+   [I-D.ietf-rtcweb-use-cases-and-requirements]
+              Holmberg, C., Hakansson, S., and G. Eriksson, "Web Real-
+              Time Communication Use-cases and Requirements", draft-
+              ietf-rtcweb-use-cases-and-requirements-14 (work in
+              progress), February 2014.
+
+   [IEEE-802.1Q]
+              "IEEE Standards for Local and Metropolitan Area Networks:
+              Virtual Bridged Local Area Networks", IEEE 802.1Q, 2005,
+              <http://standards.ieee.org/getieee802/download/
+              802.1Q-2005.pdf>.
 
    [RFC2205]  Braden, B., Zhang, L., Berson, S., Herzog, S., and S.
               Jamin, "Resource ReSerVation Protocol (RSVP) -- Version 1
@@ -407,6 +439,16 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    [RFC3416]  Presuhn, R., "Version 2 of the Protocol Operations for the
               Simple Network Management Protocol (SNMP)", STD 62, RFC
               3416, December 2002.
+
+
+
+
+
+
+Eckel & Reddy           Expires November 9, 2014                [Page 8]
+
+Internet-Draft       AEON Problem Statement and Req             May 2014
+
 
    [RFC4594]  Babiarz, J., Chan, K., and F. Baker, "Configuration
               Guidelines for DiffServ Service Classes", RFC 4594, August
@@ -429,6 +471,10 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
               and Extending the NSIS Protocol Family", RFC 5978, October
               2010.
 
+   [RFC6241]  Enns, R., Bjorklund, M., Schoenwaelder, J., and A.
+              Bierman, "Network Configuration Protocol (NETCONF)", RFC
+              6241, June 2011.
+
    [RFC6601]  Ash, G. and D. McDysan, "Generic Connection Admission
               Control (GCAC) Algorithm Specification for IP/MPLS
               Networks", RFC 6601, April 2012.
@@ -442,14 +488,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
               Exchange of Flow Information", STD 77, RFC 7011, September
               2013.
 
-
-
-
-Eckel & Reddy           Expires November 8, 2014                [Page 8]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
 Authors' Addresses
 
    Charles Eckel
@@ -459,6 +497,13 @@ Authors' Addresses
    USA
 
    Email: eckelcu@cisco.com
+
+
+
+
+Eckel & Reddy           Expires November 9, 2014                [Page 9]
+
+Internet-Draft       AEON Problem Statement and Req             May 2014
 
 
    Tirumaleswar Reddy
@@ -501,4 +546,15 @@ Authors' Addresses
 
 
 
-Eckel & Reddy           Expires November 8, 2014                [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+Eckel & Reddy           Expires November 9, 2014               [Page 10]
