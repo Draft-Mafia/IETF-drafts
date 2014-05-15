@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-  <title>Application Enabled Open Networking: Problem Statement and Requirements</title>
+  <title>Application Enabled Collaborative Networking: Problem Statement and Requirements</title>
 
   <style type="text/css" title="Xml2Rfc (sans serif)">
   /*<![CDATA[*/
@@ -390,11 +390,11 @@
   <meta name="generator" content="xml2rfc version 2.4.5 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Eckel, C. and T. Reddy" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-eckel-aeon-problem-statement-01" />
+  <meta name="dct.creator" content="Eckel, C., Reddy, T., Fan, P., Fan, H., and M. Boucadair" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-conet-aeon-problem-statement-00" />
   <meta name="dct.issued" scheme="ISO8601" content="2014-5-15" />
-  <meta name="dct.abstract" content="Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANS), or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy." />
-  <meta name="description" content="Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANS), or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy." />
+  <meta name="dct.abstract" content="Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANS, or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy." />
+  <meta name="description" content="Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANS, or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy." />
 
 </head>
 
@@ -417,6 +417,26 @@
 </tr>
 <tr>
   <td class="left">Expires: November 16, 2014</td>
+  <td class="right">P. Fan</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">H. Fan</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">China Mobile</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">M. Boucadair</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">France Telecom</td>
+</tr>
+<tr>
+  <td class="left"></td>
   <td class="right">May 15, 2014</td>
 </tr>
 
@@ -424,13 +444,13 @@
     </tbody>
   </table>
 
-  <p class="title">Application Enabled Open Networking: Problem Statement and Requirements<br />
-  <span class="filename">draft-eckel-aeon-problem-statement-01</span></p>
+  <p class="title">Application Enabled Collaborative Networking: Problem Statement and Requirements<br />
+  <span class="filename">draft-conet-aeon-problem-statement-00</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANS), or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy.</p>
+<p>Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANS, or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
@@ -469,7 +489,7 @@
 <p id="rfc.section.1.p.2">Now more so than ever before, identification and treatment of application flows are critical for the successful deployment and operation of a growing number of business and household applications.  These applications are based on wide range of signaling protocols and deployed by a diverse set of application providers that is not necessarily affiliated with the network providers across which the applications are used.</p>
 <p id="rfc.section.1.p.3">Historically, identification of application flows has been accomplished using heuristics, which inspect and infer flow characteristics based on port ranges, network separation, or DPI. Each of these techniques suffers from a set of limitations, particularly in the face of challenges on the network outlined previously.</p>
 <p id="rfc.section.1.p.4">Heuristic-based approaches may not be efficient and require continuous updates of application signatures. Port based solutions suffer from port overloading and inconsistent port usage. Network separation techniques like IP subnetting are error prone and increase network management complexity. DPI is computationally expensive and becomes a greater challenge with the wider adoption of encrypted signaling and secured media. An additional drawback of DPI is that any insights are not available, or need to be recomputed, at network nodes further down the application flow path.</p>
-<p id="rfc.section.1.p.5">As the IETF establishes default behaviors that thwart pervasive surveillance, it will be important to provide mechanisms for applications to protect the contents of their flows, yet have the ability to opt-in to information exchanges that provide a more precise allocation of network resources and thus a better user experience.</p>
+<p id="rfc.section.1.p.5">As the IETF establishes default behaviors that thwart pervasive surveillance, it will be important to provide mechanisms for applications that want to have the network provide differential flow treatment for their data. The intent is to have applications protect the contents of their flows, yet have the ability to opt-in to information exchanges that provide a more precise allocation of network resources and thus a better user experience.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> Definitions and Terminology</h1>
 <p/>
 <p/>
@@ -678,6 +698,71 @@
 	  <span class="country-name vcardline">India</span>
 	</span>
 	<span class="vcardline">EMail: <a href="mailto:tireddy@cisco.com">tireddy@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Peng Fan</span> 
+	  <span class="n hidden">
+		<span class="family-name">Fan</span>
+	  </span>
+	</span>
+	<span class="org vcardline">China Mobile</span>
+	<span class="adr">
+	  <span class="vcardline">32 Xuanwumen West Street, Xicheng District</span>
+
+	  <span class="vcardline">
+		<span class="locality">Beijing</span>,  
+		<span class="region"></span>
+		<span class="code">100053</span>
+	  </span>
+	  <span class="country-name vcardline">P.R. China</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:fanpeng@chinamobile.com">fanpeng@chinamobile.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Hui Deng</span> 
+	  <span class="n hidden">
+		<span class="family-name">Fan</span>
+	  </span>
+	</span>
+	<span class="org vcardline">China Mobile</span>
+	<span class="adr">
+	  <span class="vcardline">32 Xuanwumen West Street, Xicheng District</span>
+
+	  <span class="vcardline">
+		<span class="locality">Beijing</span>,  
+		<span class="region"></span>
+		<span class="code">100053</span>
+	  </span>
+	  <span class="country-name vcardline">P.R. China</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:denghui@chinamobile.com">denghui@chinamobile.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Mohamed Boucadair</span> 
+	  <span class="n hidden">
+		<span class="family-name">Boucadair</span>
+	  </span>
+	</span>
+	<span class="org vcardline">France Telecom</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality">Rennes</span>,  
+		<span class="region"></span>
+		<span class="code">35000</span>
+	  </span>
+	  <span class="country-name vcardline">France</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:mohamed.boucadair@orange.com">mohamed.boucadair@orange.com</a></span>
 
   </address>
 </div>

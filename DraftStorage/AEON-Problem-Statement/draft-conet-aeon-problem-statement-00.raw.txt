@@ -5,11 +5,17 @@
 Internet Engineering Task Force                                 C. Eckel
 Internet-Draft                                                  T. Reddy
 Intended status: Informational                       Cisco Systems, Inc.
-Expires: November 16, 2014                                  May 15, 2014
+Expires: November 16, 2014                                        P. Fan
+                                                                  H. Fan
+                                                            China Mobile
+                                                            M. Boucadair
+                                                          France Telecom
+                                                            May 15, 2014
 
 
-Application Enabled Open Networking: Problem Statement and Requirements
-                 draft-eckel-aeon-problem-statement-01
+  Application Enabled Collaborative Networking: Problem Statement and
+                              Requirements
+                 draft-conet-aeon-problem-statement-00
 
 Abstract
 
@@ -21,7 +27,7 @@ Abstract
    met if made known to the network.  Historically, this functionality
    has been implemented to the extent possible using heuristics, which
    inspect and infer flow characteristics.  Heuristics may be based on
-   port ranges, network separation (e.g. subnets or VLANS), or Deep
+   port ranges, network separation (e.g. subnets or VLANS, or Deep
    Packet Inspection (DPI).  But many application flows in current
    usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer,
    asymmetric, used on multipurpose devices, and have different
@@ -47,17 +53,6 @@ Status of This Memo
 
    This Internet-Draft will expire on November 16, 2014.
 
-
-
-
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 1]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
 Copyright Notice
 
    Copyright (c) 2014 IETF Trust and the persons identified as the
@@ -75,17 +70,17 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Definitions and Terminology . . . . . . . . . . . . . . . . .   3
-     2.1.  Types of Signaling  . . . . . . . . . . . . . . . . . . .   3
-   3.  Typical Workflows . . . . . . . . . . . . . . . . . . . . . .   3
-   4.  Limitations of Heuristic Based Solutions  . . . . . . . . . .   4
-   5.  Limitations of Existing Signaling Mechanisms  . . . . . . . .   4
-   6.  Efforts in Progress . . . . . . . . . . . . . . . . . . . . .   5
-   7.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   7
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   8
-   9.  Informative References  . . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+   1.  Introduction
+   2.  Definitions and Terminology
+     2.1.  Types of Signaling
+   3.  Typical Workflows
+   4.  Limitations of Heuristic Based Solutions
+   5.  Limitations of Existing Signaling Mechanisms
+   6.  Efforts in Progress
+   7.  Requirements
+   8.  Acknowledgements
+   9.  Informative References
+   Authors' Addresses
 
 1.  Introduction
 
@@ -106,14 +101,6 @@ Table of Contents
    necessarily affiliated with the network providers across which the
    applications are used.
 
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 2]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
    Historically, identification of application flows has been
    accomplished using heuristics, which inspect and infer flow
    characteristics based on port ranges, network separation, or DPI.
@@ -133,10 +120,11 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
 
    As the IETF establishes default behaviors that thwart pervasive
    surveillance, it will be important to provide mechanisms for
-   applications to protect the contents of their flows, yet have the
-   ability to opt-in to information exchanges that provide a more
-   precise allocation of network resources and thus a better user
-   experience.
+   applications that want to have the network provide differential flow
+   treatment for their data.  The intent is to have applications protect
+   the contents of their flows, yet have the ability to opt-in to
+   information exchanges that provide a more precise allocation of
+   network resources and thus a better user experience.
 
 2.  Definitions and Terminology
 
@@ -162,14 +150,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    1.  Provide network operators with visibility into traffic for
        troubleshooting, capacity planning, accounting and billing, and
        other off network workflows.  This is done by exporting observed
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 3]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
        traffic analysis via protocols such as IPFIX [RFC7011] and SNMP
        [RFC3416].
 
@@ -217,15 +197,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    support visibility and differentiated network services workflows.
    Unfortunately, none of these has experienced widespread deployment
    success, nor are they well suited for the applications usages
-
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 4]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
    described previously.  Existing signaling options include the
    following:
 
@@ -274,14 +245,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
       could be extended to provide signaling to on-path network devices.
       It provides an easily inspected packet signature, at least for
       transport protocols such as UDP.  Through its extensions TURN
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 5]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
       [RFC5766] and ICE [RFC5245], it is becoming prevalent in
       application signaling driven by the initial use-case of providing
       NAT and firewall traversal capabilities and detecting local and
@@ -329,15 +292,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
       control mechanisms for interactive real-time media, which is often
       carried via sets of flows using RTP over UDP.  Explicit exchanges
       of flow characteristics and congestion information between
-
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 6]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
       applications and the network could play an important role in such
       mechanisms.
 
@@ -386,14 +340,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    Req-6:  Provide differentiated service for both directions of a flow,
       including flows that cross administrative boundaries.
 
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 7]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
    Req-7:  Provide mechanism to authenticate and authorize endpoints/
       applications to signal flow characteristics, including 3rd party
       authentication and authorization for over-the-top (OTT)
@@ -439,16 +385,6 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    [RFC3416]  Presuhn, R., "Version 2 of the Protocol Operations for the
               Simple Network Management Protocol (SNMP)", STD 62, RFC
               3416, December 2002.
-
-
-
-
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 8]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
 
    [RFC4594]  Babiarz, J., Chan, K., and F. Baker, "Configuration
               Guidelines for DiffServ Service Classes", RFC 4594, August
@@ -499,13 +435,6 @@ Authors' Addresses
    Email: eckelcu@cisco.com
 
 
-
-
-Eckel & Reddy           Expires November 16, 2014               [Page 9]
-
-Internet-Draft       AEON Problem Statement and Req             May 2014
-
-
    Tirumaleswar Reddy
    Cisco Systems, Inc.
    Cessna Business Park, Varthur Hobli
@@ -516,45 +445,28 @@ Internet-Draft       AEON Problem Statement and Req             May 2014
    Email: tireddy@cisco.com
 
 
+   Peng Fan
+   China Mobile
+   32 Xuanwumen West Street, Xicheng District
+   Beijing  100053
+   P.R. China
+
+   Email: fanpeng@chinamobile.com
 
 
+   Hui Deng
+   China Mobile
+   32 Xuanwumen West Street, Xicheng District
+   Beijing  100053
+   P.R. China
+
+   Email: denghui@chinamobile.com
 
 
+   Mohamed Boucadair
+   France Telecom
+   Rennes  35000
+   France
 
+   Email: mohamed.boucadair@orange.com
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Eckel & Reddy           Expires November 16, 2014              [Page 10]

@@ -5,10 +5,10 @@
 TRAM                                                            T. Reddy
 Internet-Draft                                                  P. Patil
 Intended status: Standards Track                         R. Ravindranath
-Expires: November 7, 2014                                          Cisco
+Expires: November 13, 2014                                         Cisco
                                                                J. Uberti
                                                                   Google
-                                                             May 6, 2014
+                                                            May 12, 2014
 
 
               TURN Extension for Third Party Authorization
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 7, 2014.
+   This Internet-Draft will expire on November 13, 2014.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 1]
+Reddy, et al.           Expires November 13, 2014               [Page 1]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -79,10 +79,10 @@ Table of Contents
    7.  Receiving a request with ACCESS-TOKEN attribute . . . . . . .  12
    8.  Changes to TURN Client  . . . . . . . . . . . . . . . . . . .  13
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-   11. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
-   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
-     12.1.  Normative References . . . . . . . . . . . . . . . . . .  13
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+   11. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  14
      12.2.  Informative References . . . . . . . . . . . . . . . . .  14
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 2]
+Reddy, et al.           Expires November 13, 2014               [Page 2]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -165,7 +165,7 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 3]
+Reddy, et al.           Expires November 13, 2014               [Page 3]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -221,13 +221,13 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 4]
+Reddy, et al.           Expires November 13, 2014               [Page 4]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
         POST /o/oauth2/token HTTP/1.1
-        Host: 2001:db8:a000::1
+        Audience: turnserver1.example.com
         Content-Type: application/x-www-form-urlencoded
         timestamp=1361471629
         grant_type=implicit
@@ -277,7 +277,7 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 5]
+Reddy, et al.           Expires November 13, 2014               [Page 5]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -333,7 +333,7 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 6]
+Reddy, et al.           Expires November 13, 2014               [Page 6]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -383,13 +383,13 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
    key.  The TURN and authorization servers MUST establish the symmetric
    key over an authenticated secure channel.  The establishment of
    symmetric key is outside the scope of this specification.  For
-   example, implementations could use one of the following mechanisms to
-   establish a symmetric key.
+   example, implementations could use one of the following mechanisms in
+   to establish a symmetric key.
 
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 7]
+Reddy, et al.           Expires November 13, 2014               [Page 7]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -426,10 +426,10 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
    The two servers could choose to use REST API to establish a symmetric
    key.  To retrieve a new symmetric key, the TURN server makes an HTTP
    GET request to the authorization server, specifying TURN as the
-   service to allocate the symmetric keys for, and optionally specifying
-   the IP Address of the TURN server.  The response is returned with
-   content-type "application/json", and consists of a JSON object
-   containing the symmetric key.
+   service to allocate the symmetric keys for, and specifying the name
+   of the TURN server.  The response is returned with content-type
+   "application/json", and consists of a JSON object containing the
+   symmetric key.
 
 
 
@@ -445,7 +445,7 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 8]
+Reddy, et al.           Expires November 13, 2014               [Page 8]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -454,9 +454,9 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
    -------
 
    service - specifies the desired service (turn)
-   myip    - an optional IP address to be associated with the key
+   domain  -  TURN server name be associated with the key
 
-   example: GET /?service=turn&myip=2001:db8:a000::1
+   example: GET /?service=turn&domain=turnserver1.example.com
 
 
    Response
@@ -501,7 +501,7 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014                [Page 9]
+Reddy, et al.           Expires November 13, 2014               [Page 9]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -527,18 +527,13 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 6.1.  THIRD-PARTY-AUTHORIZATION
 
    This attribute is used by the TURN server to inform the client that
-   it supports third party authorization.  This attribute is used by the
-   TURN server to inform the client that it supports third party
-   authorization.  This optional attribute value be a URL that the
-   client should contact, to obtain a token for third party
-   authorization.  The format for the URL will be as described in
-   [RFC3986].  The THIRD-PARTY-AUTHORIZATION attribute is a
-   comprehension-optional attribute (see Section 15 from [RFC5389]).
-
-   The TURN server may have tie-up with multiple authorization servers
-   so the client MUST provide the TURN server domain name or IP address
-   to the authorization server so that it can select the appropriate
-   keying material to generate the self-contained token.
+   it supports third party authorization.  This attribute value contains
+   the TURN server name.  The TURN server may have tie-up with multiple
+   authorization servers and vice versa, so the client MUST provide the
+   TURN server name to the authorization server so that it can select
+   the appropriate keying material to generate the self-contained token.
+   The THIRD-PARTY-AUTHORIZATION attribute is a comprehension-optional
+   attribute (see Section 15 from [RFC5389]).
 
 6.2.  ACCESS-TOKEN
 
@@ -557,7 +552,12 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-Reddy, et al.           Expires November 7, 2014               [Page 10]
+
+
+
+
+
+Reddy, et al.           Expires November 13, 2014              [Page 10]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
@@ -596,32 +596,48 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
       4.2.2 of [RFC6749].
 
    mac:  The Hashed Message Authentication Code (HMAC) is calculated
-      with AUTH key over the encrypted portion of the token
-      (encrypted_block).  Thus encryption is applied before
-      authentication on the sender side and conversely on the receiver
-      side.
+      with AUTH key over the encrypted portion of the token and the TURN
+      server name (N) conveyed in the THIRD-PARTY-AUTHORIZATION response
+      . Encryption is applied before authentication on the sender side
+      and conversely on the receiver side.
+
+   The encryption process can be illustrated as follows.  Here C, N
+   denote the ciphertext and TURN server name.
+
+   o  C = AES_128_CBC(AS-RS, encrypted_block)
+
+   o  mac = HMAC-SHA-256-128(AUTH, C | | N)
 
    The token MUST be encoded as defined in Section 4 of [RFC4648] and
    then encrypted using the symmetric long-term key established between
-   the resource server and the authorization server, as shown in
-   Figure 5 as AS-RS key.  Since the access token is valid for a
-   specific period of time the resource server MUST cache it so that it
-   need not to be provided in every request within an existing
-   allocation.  The access token can be re-used for multiple Allocate
-   requests to the same TURN server.  The TURN client MUST include the
-   ACCESS-TOKEN attribute only in Allocate and Refresh requests.
 
 
 
-Reddy, et al.           Expires November 7, 2014               [Page 11]
+Reddy, et al.           Expires November 13, 2014              [Page 11]
 
 Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
+   the resource server and the authorization server, as shown in
+   Figure 5 as AS-RS key.  HMAC is computed using the encrypted portion
+   of the token and TURN server name to ensure that the client does not
+   use the same token to gain illegal access to other TURN servers
+   provided by the same administrative domain.  This attack is possible
+   when multiple TURN servers in a single administrative domain share
+   the same symmetric key with the authorization server.  Since the
+   access token is valid for a specific period of time the resource
+   server MUST cache it so that it need not to be provided in every
+   request within an existing allocation.  The access token can be re-
+   used for multiple Allocate requests to the same TURN server.
+
+   The TURN client MUST include the ACCESS-TOKEN attribute only in
+   Allocate and Refresh requests.
+
    Note : If Authenticated Encryption with Associated Data (AEAD)
-   algorithm specified in [I-D.mcgrew-aead-aes-cbc-hmac-sha2] are used
+   algorithm specified in [I-D.mcgrew-aead-aes-cbc-hmac-sha2] is used
    then there is no need to explicitly compute HMAC.  In this scenario
-   the mac field must carry the initialization vector (IV).
+   the associated data MUST be the TURN server name (N) and the mac
+   field MUST carry the initialization vector (IV).
 
 7.  Receiving a request with ACCESS-TOKEN attribute
 
@@ -633,11 +649,13 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
       the USERNAME attribute.
 
    o  It performs the verification of the token message integrity by
-      calculating calculates HMAC over the encrypted_block in the self-
-      contained token using AUTH key and if the resulting value does not
-      match the mac field in the self-contained token then it rejects
-      the request with an error response 401 (Unauthorized).  If AEAD
-      algorithm is used then this step is skipped.
+      calculating HMAC over the encrypted portion in the self-contained
+      token and TURN server name using AUTH key and if the resulting
+      value does not match the mac field in the self-contained token
+      then it rejects the request with an error response 401
+      (Unauthorized).  Note : If AEAD algorithm is used then it has only
+      a single output, either a plaintext or a special symbol FAIL that
+      indicates that the inputs are not authentic.
 
    o  TURN server obtains the mac_key by retrieving the content of the
       access token (which requires decryption of the self-contained
@@ -648,6 +666,14 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
       *  The access token is accepted if the timestamp field in the
          self-contained token (TS) is recent enough to the reception
+
+
+
+Reddy, et al.           Expires November 13, 2014              [Page 12]
+
+Internet-Draft      TURN for 3rd party Authorization            May 2014
+
+
          time of the TURN request (RDnew) using the following formula:
          Lifetime + Delta > abs(RDnew - TS).  The RECOMMENDED value for
          the allowed Delta is 5 seconds.  If the timestamp is NOT within
@@ -665,14 +691,6 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
    The lifetime provided by the TURN server in the Allocate and Refresh
    responses MUST be less than or equal to the lifetime of the token.
-
-
-
-
-Reddy, et al.           Expires November 7, 2014               [Page 12]
-
-Internet-Draft      TURN for 3rd party Authorization            May 2014
-
 
 8.  Changes to TURN Client
 
@@ -700,6 +718,18 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
    Security considerations discussed in [I-D.ietf-oauth-v2-http-mac] and
    [RFC5766] are to be taken into account.
 
+
+
+
+
+
+
+
+Reddy, et al.           Expires November 13, 2014              [Page 13]
+
+Internet-Draft      TURN for 3rd party Authorization            May 2014
+
+
 10.  IANA Considerations
 
    IANA is requested to add the following attributes to the STUN
@@ -721,18 +751,6 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
-
-
-
-
-Reddy, et al.           Expires November 7, 2014               [Page 13]
-
-Internet-Draft      TURN for 3rd party Authorization            May 2014
-
-
-   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
-              Resource Identifier (URI): Generic Syntax", STD 66, RFC
-              3986, January 2005.
 
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, October 2006.
@@ -759,6 +777,15 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
               2.0 Message Authentication Code (MAC) Tokens", draft-ietf-
               oauth-v2-http-mac-05 (work in progress), January 2014.
 
+
+
+
+
+Reddy, et al.           Expires November 13, 2014              [Page 14]
+
+Internet-Draft      TURN for 3rd party Authorization            May 2014
+
+
    [I-D.ietf-rtcweb-overview]
               Alvestrand, H., "Overview: Real Time Protocols for Brower-
               based Applications", draft-ietf-rtcweb-overview-09 (work
@@ -776,15 +803,6 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
    [RFC5116]  McGrew, D., "An Interface and Algorithms for Authenticated
               Encryption", RFC 5116, January 2008.
-
-
-
-
-
-Reddy, et al.           Expires November 7, 2014               [Page 14]
-
-Internet-Draft      TURN for 3rd party Authorization            May 2014
-
 
    [RFC5766]  Mahy, R., Matthews, P., and J. Rosenberg, "Traversal Using
               Relays around NAT (TURN): Relay Extensions to Session
@@ -813,6 +831,17 @@ Authors' Addresses
    Email: tireddy@cisco.com
 
 
+
+
+
+
+
+
+Reddy, et al.           Expires November 13, 2014              [Page 15]
+
+Internet-Draft      TURN for 3rd party Authorization            May 2014
+
+
    Prashanth Patil
    Cisco Systems, Inc.
    Bangalore
@@ -830,16 +859,6 @@ Authors' Addresses
    India
 
    Email: rmohanr@cisco.com
-
-
-
-
-
-
-
-Reddy, et al.           Expires November 7, 2014               [Page 15]
-
-Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
    Justin Uberti
@@ -874,23 +893,4 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Reddy, et al.           Expires November 7, 2014               [Page 16]
+Reddy, et al.           Expires November 13, 2014              [Page 16]
