@@ -27,14 +27,14 @@ Abstract
    met if made known to the network.  Historically, this functionality
    has been implemented to the extent possible using heuristics, which
    inspect and infer flow characteristics.  Heuristics may be based on
-   port ranges, network separation (e.g. subnets or VLANS, or Deep
-   Packet Inspection (DPI).  But many application flows in current
-   usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer,
-   asymmetric, used on multipurpose devices, and have different
-   priorities depending on direction of flow, user preferences, and
-   other factors.  Any combination of these properties renders heuristic
-   based techniques less effective and may result in compromises to
-   application security or user privacy.
+   port ranges, network separation (e.g. subnets or VLANS, Deep Flow
+   Inspection (DFI), or Deep Packet Inspection (DPI).  But many
+   application flows in current usages are dynamic, adaptive, time-
+   bound, encrypted, peer-to-peer, asymmetric, used on multipurpose
+   devices, and have different priorities depending on direction of
+   flow, user preferences, and other factors.  Any combination of these
+   properties renders heuristic based techniques less effective and may
+   result in compromises to application security or user privacy.
 
 Status of This Memo
 
@@ -102,21 +102,25 @@ Table of Contents
    applications are used.
 
    Historically, identification of application flows has been
-   accomplished using heuristics, which inspect and infer flow
-   characteristics based on port ranges, network separation, or DPI.
-   Each of these techniques suffers from a set of limitations,
-   particularly in the face of challenges on the network outlined
-   previously.
+   accomplished using heuristics, which infer flow characteristics based
+   on port ranges, network separation, or inspection of the flow itself.
+   Inspection techniques include DPI, which matches against
+   characteristic signatures (e.g. key string, binary sequence, etc.)
+   and DFI, which analyzes statistical characteristics and connection
+   behavior of flows.  Each of these techniques suffers from a set of
+   limitations, particularly in the face of the challenges on the
+   network outlined previously.
 
    Heuristic-based approaches may not be efficient and require
    continuous updates of application signatures.  Port based solutions
    suffer from port overloading and inconsistent port usage.  Network
    separation techniques like IP subnetting are error prone and increase
-   network management complexity.  DPI is computationally expensive and
-   becomes a greater challenge with the wider adoption of encrypted
-   signaling and secured media.  An additional drawback of DPI is that
-   any insights are not available, or need to be recomputed, at network
-   nodes further down the application flow path.
+   network management complexity.  DPI and DFI are computationally
+   expensive, prone to error, and become more challenging with greater
+   adoption of encrypted signaling and secured media.  An additional
+   drawback of DPI and DFI is that any insights are not available, or
+   need to be recomputed, at network nodes further down the application
+   flow path.
 
    As the IETF establishes default behaviors that thwart pervasive
    surveillance, it will be important to provide mechanisms for
@@ -166,26 +170,38 @@ Table of Contents
    inspection and observation limits the ability to enable these
    workflows more widely.  Reasons for this include the following:
 
-   o  Simple observation based classification based on TCP/UDP port
-      numbers often result in incorrect results due to port overloading
-      (i.e. ports used by applications other than those claiming the
-      port with IANA).
+   o  Identification based on IP address lists is difficult to manage.
+      The addresses may be numerous and may change, or they may be
+      dynamic, private, or otherwise not meant to be exposed.  Even in
+      cases where identification by IP addresses is possible, more
+      granular identification of individual flows is not possible (e.g.
+      audio vs. video vs. data).
 
-   o  More and more traffic is encrypted, rendering DPI impossible,
-      inefficient, or much more complex, and sometimes at the expense of
-      privacy or security (e.g. need to share encryption keys with
-      intermediary proxy performing DPI).
+   o  Classification based on TCP/UDP port numbers often result in
+      incorrect results due to port overloading (i.e. ports used by
+      applications other than those claiming the port with IANA).
+
+   o  More and more traffic is encrypted, rendering DPI and DFI
+      impossible, inefficient, or much more complex, and sometimes at
+      the expense of privacy or security (e.g. need to share encryption
+      keys with intermediary proxy performing DPI/DFI).
 
    o  Visibility generally requires inspecting the signaling traffic of
       applications.  This traffic may flow through a different network
       path than the actual application data traffic.  Impacting the
       traffic behavior is ineffective in those scenarios.
 
-   o  Extensions to signaling protocols can result in false negatives or
-      false positives during inspection.
+   o  Extensions to signaling protocols and changes in the ways
+      application use them can result in false negatives or false
+      positives during inspection.
 
-   o  Network services leveraging DPI traffic classification impact the
-      application behavior by impacting its traffic, but they do not
+   o  Inspection techniques are completely non-standard, so the ability
+      and accuracy to identify traffic varies across vendors, and
+      different implementation are likely to give different results for
+      the same traffic.
+
+   o  Network services leveraging heuristic based classification impact
+      the application behavior by impacting its traffic, but they do not
       provide explicit feedback to the application.  This results in a
       lost opportunity for the application to gain insight and adjust
       its operation accordingly.
@@ -352,8 +368,8 @@ Table of Contents
 8.  Acknowledgements
 
    The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine
-   Choukir, Paul Jones, Mohamed Boucadair, and Bill VerSteeg for their
-   contributions to this document.
+   Choukir, Paul Jones, and Bill VerSteeg for their contributions to
+   this document.
 
 9.  Informative References
 

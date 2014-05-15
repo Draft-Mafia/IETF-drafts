@@ -27,14 +27,14 @@ Abstract
    met if made known to the network.  Historically, this functionality
    has been implemented to the extent possible using heuristics, which
    inspect and infer flow characteristics.  Heuristics may be based on
-   port ranges, network separation (e.g. subnets or VLANS, or Deep
-   Packet Inspection (DPI).  But many application flows in current
-   usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer,
-   asymmetric, used on multipurpose devices, and have different
-   priorities depending on direction of flow, user preferences, and
-   other factors.  Any combination of these properties renders heuristic
-   based techniques less effective and may result in compromises to
-   application security or user privacy.
+   port ranges, network separation (e.g. subnets or VLANS, Deep Flow
+   Inspection (DFI), or Deep Packet Inspection (DPI).  But many
+   application flows in current usages are dynamic, adaptive, time-
+   bound, encrypted, peer-to-peer, asymmetric, used on multipurpose
+   devices, and have different priorities depending on direction of
+   flow, user preferences, and other factors.  Any combination of these
+   properties renders heuristic based techniques less effective and may
+   result in compromises to application security or user privacy.
 
 Status of This Memo
 
@@ -83,11 +83,11 @@ Table of Contents
    3.  Typical Workflows . . . . . . . . . . . . . . . . . . . . . .   4
    4.  Limitations of Heuristic Based Solutions  . . . . . . . . . .   4
    5.  Limitations of Existing Signaling Mechanisms  . . . . . . . .   5
-   6.  Efforts in Progress . . . . . . . . . . . . . . . . . . . . .   5
+   6.  Efforts in Progress . . . . . . . . . . . . . . . . . . . . .   6
    7.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   7
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   8
    9.  Informative References  . . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
@@ -118,21 +118,25 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    applications are used.
 
    Historically, identification of application flows has been
-   accomplished using heuristics, which inspect and infer flow
-   characteristics based on port ranges, network separation, or DPI.
-   Each of these techniques suffers from a set of limitations,
-   particularly in the face of challenges on the network outlined
-   previously.
+   accomplished using heuristics, which infer flow characteristics based
+   on port ranges, network separation, or inspection of the flow itself.
+   Inspection techniques include DPI, which matches against
+   characteristic signatures (e.g. key string, binary sequence, etc.)
+   and DFI, which analyzes statistical characteristics and connection
+   behavior of flows.  Each of these techniques suffers from a set of
+   limitations, particularly in the face of the challenges on the
+   network outlined previously.
 
    Heuristic-based approaches may not be efficient and require
    continuous updates of application signatures.  Port based solutions
    suffer from port overloading and inconsistent port usage.  Network
    separation techniques like IP subnetting are error prone and increase
-   network management complexity.  DPI is computationally expensive and
-   becomes a greater challenge with the wider adoption of encrypted
-   signaling and secured media.  An additional drawback of DPI is that
-   any insights are not available, or need to be recomputed, at network
-   nodes further down the application flow path.
+   network management complexity.  DPI and DFI are computationally
+   expensive, prone to error, and become more challenging with greater
+   adoption of encrypted signaling and secured media.  An additional
+   drawback of DPI and DFI is that any insights are not available, or
+   need to be recomputed, at network nodes further down the application
+   flow path.
 
    As the IETF establishes default behaviors that thwart pervasive
    surveillance, it will be important to provide mechanisms for
@@ -157,10 +161,6 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
       *  in-band: signaling on the same port as the media flow
 
       *  out-of-band: signaling on a different port than the media flow
-
-
-
-
 
 
 
@@ -194,30 +194,30 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    inspection and observation limits the ability to enable these
    workflows more widely.  Reasons for this include the following:
 
-   o  Simple observation based classification based on TCP/UDP port
-      numbers often result in incorrect results due to port overloading
-      (i.e. ports used by applications other than those claiming the
-      port with IANA).
+   o  Identification based on IP address lists is difficult to manage.
+      The addresses may be numerous and may change, or they may be
+      dynamic, private, or otherwise not meant to be exposed.  Even in
+      cases where identification by IP addresses is possible, more
+      granular identification of individual flows is not possible (e.g.
+      audio vs. video vs. data).
 
-   o  More and more traffic is encrypted, rendering DPI impossible,
-      inefficient, or much more complex, and sometimes at the expense of
-      privacy or security (e.g. need to share encryption keys with
-      intermediary proxy performing DPI).
+   o  Classification based on TCP/UDP port numbers often result in
+      incorrect results due to port overloading (i.e. ports used by
+      applications other than those claiming the port with IANA).
+
+   o  More and more traffic is encrypted, rendering DPI and DFI
+      impossible, inefficient, or much more complex, and sometimes at
+      the expense of privacy or security (e.g. need to share encryption
+      keys with intermediary proxy performing DPI/DFI).
 
    o  Visibility generally requires inspecting the signaling traffic of
       applications.  This traffic may flow through a different network
       path than the actual application data traffic.  Impacting the
       traffic behavior is ineffective in those scenarios.
 
-   o  Extensions to signaling protocols can result in false negatives or
-      false positives during inspection.
-
-   o  Network services leveraging DPI traffic classification impact the
-      application behavior by impacting its traffic, but they do not
-      provide explicit feedback to the application.  This results in a
-      lost opportunity for the application to gain insight and adjust
-      its operation accordingly.
-
+   o  Extensions to signaling protocols and changes in the ways
+      application use them can result in false negatives or false
+      positives during inspection.
 
 
 
@@ -225,6 +225,17 @@ Eckel, et al.           Expires November 16, 2014               [Page 4]
 
 Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 
+
+   o  Inspection techniques are completely non-standard, so the ability
+      and accuracy to identify traffic varies across vendors, and
+      different implementation are likely to give different results for
+      the same traffic.
+
+   o  Network services leveraging heuristic based classification impact
+      the application behavior by impacting its traffic, but they do not
+      provide explicit feedback to the application.  This results in a
+      lost opportunity for the application to gain insight and adjust
+      its operation accordingly.
 
 5.  Limitations of Existing Signaling Mechanisms
 
@@ -263,6 +274,14 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
       limitations when using DiffServ with real-time communications
       applications, and the DART working group has been chartered to
       write a document that explains the limitations that exist with
+
+
+
+Eckel, et al.           Expires November 16, 2014               [Page 5]
+
+Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
+
+
       DiffServ when used with RTP in general as well in the specific
       RTCWeb use cases [I-D.ietf-rtcweb-use-cases-and-requirements].
 
@@ -274,14 +293,6 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    extensions are being defined, creating duplicate or inconsistent
    information models.  This results operational complexity and a need
    to convert information between protocols to leverage the best
-
-
-
-Eckel, et al.           Expires November 16, 2014               [Page 5]
-
-Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
-
-
    protocol option for each specific use case.  Examples of evolving
    signaling options include the following:
 
@@ -318,6 +329,15 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 
    o  Interface to the Routing System (I2RS) is a working group
       chartered to provide interfaces for management applications,
+
+
+
+
+Eckel, et al.           Expires November 16, 2014               [Page 6]
+
+Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
+
+
       network controllers, and user applications to make specific
       demands on the network.
 
@@ -330,13 +350,6 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    o  Prefix coloring has been proposed for use in HOMENET and 6MAN
       working groups to provide differentiated services to applications
       based on IP address.
-
-
-
-Eckel, et al.           Expires November 16, 2014               [Page 6]
-
-Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
-
 
    o  RTP Media Congestion Avoidance Techniques (RMCAT) has been
       chartered to address the lack of generally accepted congestion
@@ -374,6 +387,13 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    enable explicit communication between applications and the networks
    on which they are used.  The requirements are:
 
+
+
+Eckel, et al.           Expires November 16, 2014               [Page 7]
+
+Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
+
+
    Req-1:  Allow applications to explicitly signal their flow
       characteristics to the network.
 
@@ -385,14 +405,6 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 
    Req-4:  Allow applications to receive resulting flow descriptions as
       feedback from the network.
-
-
-
-
-Eckel, et al.           Expires November 16, 2014               [Page 7]
-
-Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
-
 
    Req-5:  Complement existing heuristic based mechanisms.
 
@@ -411,8 +423,8 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 8.  Acknowledgements
 
    The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine
-   Choukir, Paul Jones, Mohamed Boucadair, and Bill VerSteeg for their
-   contributions to this document.
+   Choukir, Paul Jones, and Bill VerSteeg for their contributions to
+   this document.
 
 9.  Informative References
 
@@ -427,6 +439,17 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
               ietf-rtcweb-use-cases-and-requirements-14 (work in
               progress), February 2014.
 
+
+
+
+
+
+
+Eckel, et al.           Expires November 16, 2014               [Page 8]
+
+Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
+
+
    [IEEE-802.1Q]
               "IEEE Standards for Local and Metropolitan Area Networks:
               Virtual Bridged Local Area Networks", IEEE 802.1Q, 2005,
@@ -440,15 +463,6 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    [RFC2475]  Blake, S., Black, D., Carlson, M., Davies, E., Wang, Z.,
               and W. Weiss, "An Architecture for Differentiated
               Services", RFC 2475, December 1998.
-
-
-
-
-
-Eckel, et al.           Expires November 16, 2014               [Page 8]
-
-Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
-
 
    [RFC3416]  Presuhn, R., "Version 2 of the Protocol Operations for the
               Simple Network Management Protocol (SNMP)", STD 62, RFC
@@ -483,6 +497,15 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
               Control (GCAC) Algorithm Specification for IP/MPLS
               Networks", RFC 6601, April 2012.
 
+
+
+
+
+Eckel, et al.           Expires November 16, 2014               [Page 9]
+
+Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
+
+
    [RFC6887]  Wing, D., Cheshire, S., Boucadair, M., Penno, R., and P.
               Selkirk, "Port Control Protocol (PCP)", RFC 6887, April
               2013.
@@ -493,18 +516,6 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
               2013.
 
 Authors' Addresses
-
-
-
-
-
-
-
-
-Eckel, et al.           Expires November 16, 2014               [Page 9]
-
-Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
-
 
    Charles Eckel
    Cisco Systems, Inc.
@@ -543,6 +554,14 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    Email: denghui@chinamobile.com
 
 
+
+
+
+Eckel, et al.           Expires November 16, 2014              [Page 10]
+
+Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
+
+
    Mohamed Boucadair
    France Telecom
    Rennes  35000
@@ -557,4 +576,41 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 
 
 
-Eckel, et al.           Expires November 16, 2014              [Page 10]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Eckel, et al.           Expires November 16, 2014              [Page 11]
