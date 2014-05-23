@@ -375,15 +375,13 @@
 
   <link href="#rfc.toc" rel="Contents"/>
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 Definitions and Terminology"/>
-<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Types of Signaling"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 Typical Workflows"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 Limitations of Heuristic Based Solutions"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Limitations of Existing Signaling Mechanisms"/>
-<link href="#rfc.section.6" rel="Chapter" title="6 Efforts in Progress"/>
-<link href="#rfc.section.7" rel="Chapter" title="7 Requirements"/>
-<link href="#rfc.section.8" rel="Chapter" title="8 Acknowledgements"/>
-<link href="#rfc.references" rel="Chapter" title="9 Informative References"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Typical Workflows"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Limitations of Heuristic Based Solutions"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Limitations of Existing Signaling Mechanisms"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Efforts in Progress"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 Requirements"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgements"/>
+<link href="#rfc.references" rel="Chapter" title="8 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
@@ -392,7 +390,7 @@
 
   <meta name="dct.creator" content="Fan, P., Deng, H., Boucadair, M., Reddy, T., and C. Eckel" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-conet-aeon-problem-statement-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2014-5-20" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-5-22" />
   <meta name="dct.abstract" content="Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANs, Deep Flow Inspection (DFI), or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy." />
   <meta name="description" content="Identification and treatment of application flows are important to many application providers and network operators. They often rely on these capabilities to deploy and/or support a wide range of applications. These applications, and the packet flows they generate and consume, may have specific connectivity requirements that can be met if made known to the network. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. Heuristics may be based on port ranges, network separation (e.g. subnets or VLANs, Deep Flow Inspection (DFI), or Deep Packet Inspection (DPI). But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy." />
 
@@ -416,7 +414,7 @@
   <td class="right">China Mobile</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 21, 2014</td>
+  <td class="left">Expires: November 23, 2014</td>
   <td class="right">M. Boucadair</td>
 </tr>
 <tr>
@@ -437,7 +435,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">May 20, 2014</td>
+  <td class="right">May 22, 2014</td>
 </tr>
 
     	
@@ -457,7 +455,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 21, 2014.</p>
+<p>This Internet-Draft will expire on November 23, 2014.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -470,15 +468,13 @@
   <ul class="toc">
 
   	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<li>2.   <a href="#rfc.section.2">Definitions and Terminology</a></li>
-<li>2.1.   <a href="#rfc.section.2.1">Types of Signaling</a></li>
-<li>3.   <a href="#rfc.section.3">Typical Workflows</a></li>
-<li>4.   <a href="#rfc.section.4">Limitations of Heuristic Based Solutions</a></li>
-<li>5.   <a href="#rfc.section.5">Limitations of Existing Signaling Mechanisms</a></li>
-<li>6.   <a href="#rfc.section.6">Efforts in Progress</a></li>
-<li>7.   <a href="#rfc.section.7">Requirements</a></li>
-<li>8.   <a href="#rfc.section.8">Acknowledgements</a></li>
-<li>9.   <a href="#rfc.references">Informative References</a></li>
+<li>2.   <a href="#rfc.section.2">Typical Workflows</a></li>
+<li>3.   <a href="#rfc.section.3">Limitations of Heuristic Based Solutions</a></li>
+<li>4.   <a href="#rfc.section.4">Limitations of Existing Signaling Mechanisms</a></li>
+<li>5.   <a href="#rfc.section.5">Efforts in Progress</a></li>
+<li>6.   <a href="#rfc.section.6">Requirements</a></li>
+<li>7.   <a href="#rfc.section.7">Acknowledgements</a></li>
+<li>8.   <a href="#rfc.references">Informative References</a></li>
 <li><a href="#rfc.authors">Authors' Addresses</a></li>
 
 
@@ -490,26 +486,16 @@
 <p id="rfc.section.1.p.3">Historically, identification of application flows has been accomplished using heuristics, which infer flow characteristics based on port ranges, network separation, or inspection of the flow itself.  Inspection techniques include DPI, which matches against characteristic signatures (e.g. key string, binary sequence, etc.) and DFI, which analyzes statistical characteristics and connection behavior of flows.  Each of these techniques suffers from a set of limitations, particularly in the face of the challenges on the network outlined previously.</p>
 <p id="rfc.section.1.p.4">Heuristic-based approaches may not be efficient and require continuous updates of application signatures. Port based solutions suffer from port overloading and inconsistent port usage. Network separation techniques like IP subnetting are error prone and increase network management complexity. DPI and DFI are computationally expensive, prone to error, and become more challenging with greater adoption of encrypted signaling and secured media. An additional drawback of DPI and DFI is that any insights are not available, or need to be recomputed, at network nodes further down the application flow path.</p>
 <p id="rfc.section.1.p.5">As the IETF establishes default behaviors that thwart pervasive surveillance (e.g. <a href="#RFC7258">[RFC7258]</a>), it will be important to provide mechanisms for applications that want to have the network provide differential flow treatment for their data. The intent is to have applications protect the contents of their flows, yet have the ability to opt-in to information exchanges that provide a more precise allocation of network resources and thus a better user experience.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> Definitions and Terminology</h1>
-<p/>
-<p/>
-<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> Types of Signaling</h1>
-<p id="rfc.section.2.1.p.1">The following terms describe the relationship between signaling and the media to which it is associated.</p>
-
-<ul>
-  <li>off-path: signaling along a different network path than the media flow</li>
-  <li>on-path: signaling along the same network path as the media flow<ul><li>in-band: signaling on the same port as the media flow</li><li>out-of-band: signaling on a different port than the media flow</li></ul></li>
-</ul>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> Typical Workflows</h1>
-<p id="rfc.section.3.p.1">Various heuristic based approaches are used prevalently and successfully for the following workflows:</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> Typical Workflows</h1>
+<p id="rfc.section.2.p.1">Various heuristic based approaches are used prevalently and successfully for the following workflows:</p>
 
 <ol>
   <li>Provide network operators with visibility of traffic usage and patterns for troubleshooting, capacity planning, and other off network workflows. This is done by exporting observed traffic analysis via standard protocols such as IPFIX <a href="#RFC7011">[RFC7011]</a> and SNMP <a href="#RFC3416">[RFC3416]</a>as well as by proprietary protocols and methods.</li>
   <li>Provide network operators with visibility of application and data usage for accounting and billing.</li>
   <li>Provide differentiated network services for specific traffic according to network operator defined policies, including traffic classification, policing and shaping (e.g. <a href="#RFC2475">[RFC2475]</a>), providing admission control (e.g. <a href="#RFC6601">[RFC6601]</a>), impacting routing, and permitting passage of specific traffic (e.g. firewall functions).</li>
 </ol>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Limitations of Heuristic Based Solutions</h1>
-<p id="rfc.section.4.p.1">These typical workflows, visibility and differentiated network services, are critical in many networks. However, their reliance on inspection and observation limits the ability to enable these workflows more widely. Reasons for this include the following:</p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> Limitations of Heuristic Based Solutions</h1>
+<p id="rfc.section.3.p.1">These typical workflows, visibility and differentiated network services, are critical in many networks. However, their reliance on inspection and observation limits the ability to enable these workflows more widely. Reasons for this include the following:</p>
 
 <ul>
   <li>Identification based on IP address lists is difficult to manage.  The addresses may be numerous and may change, or they may be dynamic, private, or otherwise not meant to be exposed. With Content Delivery Network InterConnection (CDNI) <a href="#RFC6770">[RFC6770]</a>, content could be served either from an upstream CDN (uCDN) or any of a number of downstream CDNs (dCDN), and it will not be possible to manually track the IP addresses of all the CDN surrogates. Even in cases where identification by IP addresses is possible, more granular identification of individual flows is not possible (e.g.  audio vs. video vs. data).</li>
@@ -521,16 +507,16 @@
   <li>Inspection techniques that require parsing the payload of packets (e.g. DPI) impact performance due to additional processing, and impact memory due to the growing number and size of signatures to identify new protocols.</li>
   <li>Network services leveraging heuristic based classification impact the application behavior by impacting its traffic, but they do not provide explicit feedback to the application. This results in a lost opportunity for the application to gain insight and adjust its operation accordingly.</li>
 </ul>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Limitations of Existing Signaling Mechanisms</h1>
-<p id="rfc.section.5.p.1">The IETF has standardized several mechanisms involving explicit signaling between applications and the network that may be used to support visibility and differentiated network services workflows.  Unfortunately, none of these has experienced widespread deployment success, nor are they well suited for the applications usages described previously. Existing signaling options include the following:</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Limitations of Existing Signaling Mechanisms</h1>
+<p id="rfc.section.4.p.1">The IETF has standardized several mechanisms involving explicit signaling between applications and the network that may be used to support visibility and differentiated network services workflows.  Unfortunately, none of these has experienced widespread deployment success, nor are they well suited for the applications usages described previously. Existing signaling options include the following:</p>
 
 <ul>
   <li>RSVP <a href="#RFC2205">[RFC2205]</a> is the original on-path signaling protocol standardized by the IETF. It is transported out-of-band and could be used to signal information about any transport protocol traffic (it currently supports TCP and UDP). Its original goal was to provide admission control. Its requirement for explicit reservation of resources end to end proved too heavy for most network environments. Its success was further impacted by its reliance on router-alert, which often leads to RSVP packets being filtered by intervening networks, and by its requirement for access to a raw socket, something that is generally not available to applications running in user space. To date, more lightweight signaling workflows utilizing RSVP have not been standardized within the IETF.</li>
   <li>NSIS (next Steps in Signaling) <a href="#RFC5978">[RFC5978]</a> is the next iteration of RSVP-like signaling defined by the IETF. It focused on the same fundamental workflow as RSVP admission control as its main driver, and because it did not provide significant enough use-case benefits over RSVP, it has seen even less adoption than RSVP.</li>
   <li>DiffServ <a href="#RFC4594">[RFC4594]</a> and VAN Tagging <a href="#IEEE-802.1Q">[IEEE-802.1Q]</a> style packet marking can help provide QoS in some environments, but such markings are often modified or removed at various points in the network or when crossing network boundaries. There are additional limitations when using DiffServ with real-time communications applications, and the DART working group has been chartered to write a document that explains the limitations that exist with DiffServ when used with RTP in general as well in the specific RTCWeb use cases <a href="#I-D.ietf-rtcweb-use-cases-and-requirements">[I-D.ietf-rtcweb-use-cases-and-requirements]</a>.</li>
 </ul>
-<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> Efforts in Progress</h1>
-<p id="rfc.section.6.p.1">Not surprisingly, there are several evolving proposals that aim to address the visibility and differentiated network services workflows where existing approaches are not sufficient. Protocol specific extensions are being defined, creating duplicate or inconsistent information models. This results operational complexity and a need to convert information between protocols to leverage the best protocol option for each specific use case. Examples of evolving signaling options include the following:</p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Efforts in Progress</h1>
+<p id="rfc.section.5.p.1">Not surprisingly, there are several evolving proposals that aim to address the visibility and differentiated network services workflows where existing approaches are not sufficient. Protocol specific extensions are being defined, creating duplicate or inconsistent information models. This results operational complexity and a need to convert information between protocols to leverage the best protocol option for each specific use case. Examples of evolving signaling options include the following:</p>
 
 <ul>
   <li>STUN <a href="#RFC5389">[RFC5389]</a> is an on-path, in-band signaling protocol that could be extended to provide signaling to on-path network devices. It provides an easily inspected packet signature, at least for transport protocols such as UDP. Through its extensions TURN <a href="#RFC5766">[RFC5766]</a> and ICE <a href="#RFC5245">[RFC5245]</a>, it is becoming prevalent in application signaling driven by the initial use-case of providing NAT and firewall traversal capabilities and detecting local and remote candidates for peer-to-peer media sessions. The TRAM working group is chartered to update TURN and STUN to make them more suitable for WebRTC.</li>
@@ -543,8 +529,8 @@
   <li>Transport Services (TAPS) is an effort to create a working group to define transport services that are exposed to internet applications. A TAP enabled application identifies its needs of the locally available transports services via an API. Some of the information provided is the same as what AEON proposes to have the application communicate to the network. Furthermore, the transport services of TAPS could benefit from this communication with the network.</li>
   <li>Service Function Chaining (SFC) is a working group chartered to address issues associated with the deployment of service functions (e.g. firewalls, load balancers) in large-scale environments.  Service function chaining is the definition and instantiation of an ordered set of instances of such service functions, and the subsequent "steering" of traffic flows through those service functions. Flow characteristics communicated via AEON could be used as input into an SFC classifier and it could be transported as SFC metadata.</li>
 </ul>
-<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> Requirements</h1>
-<p id="rfc.section.7.p.1">Rather than encourage independent, protocol specific solutions to this problem, this document advocates a protocol and application independent information model and individual data models that can be applied in a consistent fashion across a variety of protocols to enable explicit communication between applications and the networks on which they are used. The requirements are:</p>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> Requirements</h1>
+<p id="rfc.section.6.p.1">Rather than encourage independent, protocol specific solutions to this problem, this document advocates a protocol and application independent information model and individual data models that can be applied in a consistent fashion across a variety of protocols to enable explicit communication between applications and the networks on which they are used. The requirements are:</p>
 
 <dl>
   <dt>Req-1:</dt>
@@ -564,9 +550,9 @@
   <dt>Req-8:</dt>
   <dd style="margin-left: 8">Provide mechanism for integrity protection and replay protection of messages exchanged between the application and the network.</dd>
 </dl>
-<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a></h1>
-<p id="rfc.section.8.p.1">The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine Choukir, Paul Jones, and Bill VerSteeg for their contributions to this document.</p>
-<h1 id="rfc.references"><a href="#rfc.references">9.</a> Informative References</h1>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a></h1>
+<p id="rfc.section.7.p.1">The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine Choukir, Paul Jones, and Bill VerSteeg for their contributions to this document.</p>
+<h1 id="rfc.references"><a href="#rfc.references">8.</a> Informative References</h1>
 <table>
   <tbody>
     <tr>

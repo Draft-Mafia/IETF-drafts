@@ -5,12 +5,12 @@
 Internet Engineering Task Force                                   P. Fan
 Internet-Draft                                                   H. Deng
 Intended status: Informational                              China Mobile
-Expires: November 21, 2014                                  M. Boucadair
+Expires: November 23, 2014                                  M. Boucadair
                                                           France Telecom
                                                                 T. Reddy
                                                                 C. Eckel
                                                      Cisco Systems, Inc.
-                                                            May 20, 2014
+                                                            May 22, 2014
 
 
   Application Enabled Collaborative Networking: Problem Statement and
@@ -51,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 21, 2014.
+   This Internet-Draft will expire on November 23, 2014.
 
 Copyright Notice
 
@@ -71,15 +71,13 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Definitions and Terminology
-     2.1.  Types of Signaling
-   3.  Typical Workflows
-   4.  Limitations of Heuristic Based Solutions
-   5.  Limitations of Existing Signaling Mechanisms
-   6.  Efforts in Progress
-   7.  Requirements
-   8.  Acknowledgements
-   9.  Informative References
+   2.  Typical Workflows
+   3.  Limitations of Heuristic Based Solutions
+   4.  Limitations of Existing Signaling Mechanisms
+   5.  Efforts in Progress
+   6.  Requirements
+   7.  Acknowledgements
+   8.  Informative References
    Authors' Addresses
 
 1.  Introduction
@@ -131,23 +129,7 @@ Table of Contents
    precise allocation of network resources and thus a better user
    experience.
 
-2.  Definitions and Terminology
-
-2.1.  Types of Signaling
-
-   The following terms describe the relationship between signaling and
-   the media to which it is associated.
-
-   o  off-path: signaling along a different network path than the media
-      flow
-
-   o  on-path: signaling along the same network path as the media flow
-
-      *  in-band: signaling on the same port as the media flow
-
-      *  out-of-band: signaling on a different port than the media flow
-
-3.  Typical Workflows
+2.  Typical Workflows
 
    Various heuristic based approaches are used prevalently and
    successfully for the following workflows:
@@ -167,7 +149,7 @@ Table of Contents
        admission control (e.g. [RFC6601]), impacting routing, and
        permitting passage of specific traffic (e.g. firewall functions).
 
-4.  Limitations of Heuristic Based Solutions
+3.  Limitations of Heuristic Based Solutions
 
    These typical workflows, visibility and differentiated network
    services, are critical in many networks.  However, their reliance on
@@ -219,7 +201,7 @@ Table of Contents
       lost opportunity for the application to gain insight and adjust
       its operation accordingly.
 
-5.  Limitations of Existing Signaling Mechanisms
+4.  Limitations of Existing Signaling Mechanisms
 
    The IETF has standardized several mechanisms involving explicit
    signaling between applications and the network that may be used to
@@ -259,7 +241,7 @@ Table of Contents
       DiffServ when used with RTP in general as well in the specific
       RTCWeb use cases [I-D.ietf-rtcweb-use-cases-and-requirements].
 
-6.  Efforts in Progress
+5.  Efforts in Progress
 
    Not surprisingly, there are several evolving proposals that aim to
    address the visibility and differentiated network services workflows
@@ -343,7 +325,7 @@ Table of Contents
       used as input into an SFC classifier and it could be transported
       as SFC metadata.
 
-7.  Requirements
+6.  Requirements
 
    Rather than encourage independent, protocol specific solutions to
    this problem, this document advocates a protocol and application
@@ -378,13 +360,13 @@ Table of Contents
       protection of messages exchanged between the application and the
       network.
 
-8.  Acknowledgements
+7.  Acknowledgements
 
    The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine
    Choukir, Paul Jones, and Bill VerSteeg for their contributions to
    this document.
 
-9.  Informative References
+8.  Informative References
 
    [I-D.ietf-netconf-restconf]
               Bierman, A., Bjorklund, M., Watsen, K., and R. Fernando,
