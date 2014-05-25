@@ -98,7 +98,7 @@ Table of Contents
    [I-D.ietf-rtcweb-overview] etc traversing through the TURN server.
    The TURN server can further communicate the flow information to a
    number of on-path devices in its network using a Policy decision
-   Point (e.g. SDN controller).  This way the network hosting the TURN
+   Point (e.g.  SDN controller).  This way the network hosting the TURN
    server can accommodate the flow.  With this mechanism, a TURN client
    can request the TURN server to provide certain characteristics for
    the relayed channel on both legs (client-to-server, server-to-peer).

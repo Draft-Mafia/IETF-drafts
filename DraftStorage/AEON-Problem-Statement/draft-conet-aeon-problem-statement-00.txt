@@ -136,7 +136,7 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    flow path.
 
    As the IETF establishes default behaviors that thwart pervasive
-   surveillance (e.g. [RFC7258]), it will be important to provide
+   surveillance (e.g.  [RFC7258]), it will be important to provide
    mechanisms for applications that want to have the network provide
    differential flow treatment for their data.  The intent is to have
    applications protect the contents of their flows, yet have the
@@ -160,7 +160,7 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 
    3.  Provide differentiated network services for specific traffic
        according to network operator defined policies, including traffic
-       classification, policing and shaping (e.g. [RFC2475]), providing
+       classification, policing and shaping (e.g.  [RFC2475]), providing
 
 
 
@@ -170,7 +170,7 @@ Fan, et al.             Expires November 23, 2014               [Page 3]
 Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
 
 
-       admission control (e.g. [RFC6601]), impacting routing, and
+       admission control (e.g.  [RFC6601]), impacting routing, and
        permitting passage of specific traffic (e.g. firewall functions).
 
 3.  Limitations of Heuristic Based Solutions
@@ -215,7 +215,7 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
       the same traffic.
 
    o  Inspection techniques that require parsing the payload of packets
-      (e.g. DPI) impact performance due to additional processing, and
+      (e.g.  DPI) impact performance due to additional processing, and
       impact memory due to the growing number and size of signatures to
       identify new protocols.
 
@@ -439,8 +439,8 @@ Internet-Draft    AEON/CONET Problem Statement and Req          May 2014
    [IEEE-802.1Q]
               "IEEE Standards for Local and Metropolitan Area Networks:
               Virtual Bridged Local Area Networks", IEEE 802.1Q, 2005,
-              <http://standards.ieee.org/getieee802/download/
-              802.1Q-2005.pdf>.
+              <http://standards.ieee.org/getieee802/
+              download/802.1Q-2005.pdf>.
 
 
 

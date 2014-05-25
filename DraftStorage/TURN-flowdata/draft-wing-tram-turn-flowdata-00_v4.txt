@@ -114,7 +114,7 @@ Wing, et al.            Expires October 25, 2014                [Page 2]
 Internet-Draft                TURN flowdata                   April 2014
 
 
-   Point (e.g. SDN controller).  This way the network hosting the TURN
+   Point (e.g.  SDN controller).  This way the network hosting the TURN
    server can accommodate the flow.  With this mechanism, a TURN client
    can request the TURN server to provide certain characteristics for
    the relayed channel on both legs (client-to-server, server-to-peer).

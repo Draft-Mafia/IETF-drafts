@@ -148,8 +148,8 @@ Table of Contents
 
    2.  Provide differentiated network services for specific traffic
        according to network operator defined policies, including traffic
-       classification, policing and shaping (e.g. [RFC2475]), providing
-       admission control (e.g. [RFC6601]), impacting routing, and
+       classification, policing and shaping (e.g.  [RFC2475]), providing
+       admission control (e.g.  [RFC6601]), impacting routing, and
        permitting passage of specific traffic (e.g. firewall functions).
 
 4.  Limitations of Heuristic Based Solutions
@@ -364,8 +364,8 @@ Table of Contents
    [IEEE-802.1Q]
               "IEEE Standards for Local and Metropolitan Area Networks:
               Virtual Bridged Local Area Networks", IEEE 802.1Q, 2005,
-              <http://standards.ieee.org/getieee802/download/
-              802.1Q-2005.pdf>.
+              <http://standards.ieee.org/getieee802/
+              download/802.1Q-2005.pdf>.
 
    [RFC2205]  Braden, B., Zhang, L., Berson, S., Herzog, S., and S.
               Jamin, "Resource ReSerVation Protocol (RSVP) -- Version 1

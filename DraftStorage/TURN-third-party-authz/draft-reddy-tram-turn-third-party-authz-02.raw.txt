@@ -98,12 +98,12 @@ Table of Contents
    document proposes the use of third party authorization using OAuth
    for TURN.
 
-   To achieve third party authorization, a resource owner e.g. WebRTC
+   To achieve third party authorization, a resource owner e.g.  WebRTC
    server, authorizes a TURN client to access resources on the TURN
    server.
 
    Using OAuth, a client obtains an ephemeral token from an
-   authorization server e.g. WebRTC server, and the token is presented
+   authorization server e.g.  WebRTC server, and the token is presented
    to the TURN server instead of the traditional mechanism of presenting
    username/password credentials.  The TURN server validates the
    authenticity of the token and provides required services.
@@ -305,13 +305,13 @@ Table of Contents
    ensure that the size of encrypted token is not large because usage of
    asymmetric keys will result in large encrypted tokens which may not
    fit into a single STUN message.  The AS-RS, AUTH keys will be derived
-   from K. AS-RS key is used for encrypting the self-contained token and
-   message integrity of the encrypted token is calculated using the AUTH
-   key.  The TURN and authorization servers MUST establish the symmetric
-   key over an authenticated secure channel.  The establishment of
-   symmetric key is outside the scope of this specification.  For
-   example, implementations could use one of the following mechanisms in
-   to establish a symmetric key.
+   from K.  AS-RS key is used for encrypting the self-contained token
+   and message integrity of the encrypted token is calculated using the
+   AUTH key.  The TURN and authorization servers MUST establish the
+   symmetric key over an authenticated secure channel.  The
+   establishment of symmetric key is outside the scope of this
+   specification.  For example, implementations could use one of the
+   following mechanisms in to establish a symmetric key.
 
 4.1.1.  DSKPP
 
@@ -320,7 +320,7 @@ Table of Contents
    (K).  The encryption and MAC algorithms will be negotiated using the
    KeyProvClientHello, KeyProvServerHello messages.  A unique key
    identifier (referred to as KeyID) for the symmetric key is generated
-   by the DSKPP server (i.e. Authorization server) and signalled to the
+   by the DSKPP server (i.e.  Authorization server) and signalled to the
    DSKPP client (i.e TURN server) which is equivalent to the kid defined
    in this specification.  The AS-RS, AUTH keys would be derived from
    the symmetric key using (HMAC)-based key derivation function (HKDF)

@@ -161,7 +161,7 @@ Table of Contents
       when moving out of a WiFi hotspot) and new interfaces may become
       available due to administrative action (e.g manual activation of a
       specific connectivity technology) or due to dynamic conditions
-      (e.g. Entering coverage area of a wireless network).
+      (e.g.  Entering coverage area of a wireless network).
 
    Make Before Break:  The initially selected interface for
       communication may become deprioritized (e.g new interface becoming

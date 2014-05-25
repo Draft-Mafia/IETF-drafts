@@ -307,7 +307,7 @@ Internet-Draft               AEON Use Cases                 January 2014
    need to be enhanced to perform ALG on new applications.  For example
    Enterprise firewall could have granular policies to permit peer-to-
    peer UDP media session only when the call is initiated using the
-   selected WebRTC server (Dr. Good) it trusts and block others (Dr.
+   selected WebRTC server (Dr.  Good) it trusts and block others (Dr.
    Evil).  PCP-aware firewalls can enforce such granular security
    policies without performing ALG on the session signaling protocols.
    This mechanism can be used by any other Application Function trusted

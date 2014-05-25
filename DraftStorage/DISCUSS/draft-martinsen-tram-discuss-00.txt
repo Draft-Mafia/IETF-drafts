@@ -370,7 +370,7 @@ Internet-Draft                   DISCUSS                   February 2014
    network domains (e.g. managed network to/from Internet), access
    switches in managed network, etc.  The translation from the Priority
    number in the STREAM-PRIORITY attribute to the correct transport
-   layer marking (e.g. DSCP) is implementation specific and out of the
+   layer marking (e.g.  DSCP) is implementation specific and out of the
    scope of this document.
 
    [I-D.dhesikan-tsvwg-rtcweb-qos] provides the recommended DSCP values

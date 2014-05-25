@@ -701,7 +701,7 @@ Internet-Draft                   MALICE                    November 2013
    request.  The way the application determines the attributes to be
    sent to the MALICE agent for signaling is outside the scope of this
    specification.  The client agent may reduce the attribute set based
-   on other factors (e.g. MTU considerations).
+   on other factors (e.g.  MTU considerations).
 
    The client encodes metadata information in the MD-AGENT attribute.
    It then builds the MD-RESP-UP and MD-RESP-DN attributes, including an
@@ -823,7 +823,7 @@ Internet-Draft                   MALICE                    November 2013
 
    The diagram below illustrates the exchange and processing when a new
    IE is added.  Alice sends a STUN request upstream with attribute MD-
-   RESP-UP, MD-AGENT and IE X=A. The network element creates the f(L,R)
+   RESP-UP, MD-AGENT and IE X=A.  The network element creates the f(L,R)
    state where it stores the requested metadata value (m: X=A), the
    context it was received from (s: MALICE request) and the result of
    processing (r: x=N).  It then updates the response attribute MD-RESP-
@@ -929,7 +929,7 @@ Internet-Draft                   MALICE                    November 2013
        The NE retrieves the f(L,R) state and removes the MALICE Response
        from the source list.  Since X has no source, it also removes X
        from the metadata information element list and releases any
-       resources associated with X. And because the flow state has no
+       resources associated with X.  And because the flow state has no
        more attributes, it also removes the state.
 
       Alice(L)          NE                Bob(R)

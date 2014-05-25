@@ -92,9 +92,9 @@ Table of Contents
    This specification proposes a new RSVP object with Class-Num from the
    0x11bbbbbb range.  To support informational metadata attribute
    processing on the path to the receiver, the sender inserts the
-   Metadata object into an IPv4 or IPv6 Path message (i.e. Path messages
-   with SESSION Class = 1 and SENDER_TEMPLATE Class = 11).  The Metadata
-   object SHOULD appear only once in the message.
+   Metadata object into an IPv4 or IPv6 Path message (i.e.  Path
+   messages with SESSION Class = 1 and SENDER_TEMPLATE Class = 11).  The
+   Metadata object SHOULD appear only once in the message.
 
    The object definition is given in Section 2.1 while the details of
    processing are covered in Section 2.2
