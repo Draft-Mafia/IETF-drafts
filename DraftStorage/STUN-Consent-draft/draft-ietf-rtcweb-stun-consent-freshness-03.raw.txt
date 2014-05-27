@@ -5,11 +5,11 @@
 RTCWEB                                                        M. Perumal
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                         R. Ravindranath
-Expires: November 20, 2014                                      T. Reddy
+Expires: November 27, 2014                                      T. Reddy
                                                            Cisco Systems
                                                               M. Thomson
                                                                  Mozilla
-                                                            May 19, 2014
+                                                            May 26, 2014
 
 
                     STUN Usage for Consent Freshness
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 20, 2014.
+   This Internet-Draft will expire on November 27, 2014.
 
 Copyright Notice
 
@@ -98,6 +98,12 @@ Table of Contents
    This document describes a new STUN usage with a request and response
    messages which verifies the remote peer's consent to receive traffic,
    and can also detect loss of liveness.
+
+   Consent is done irrespective of transport protocol used for media.
+   When TCP is used as transport for media from a TURN client to a TURN
+   server and UDP is used from the server to the remote peer, Consent
+   MUST be done by the TURN Client.  For other cases where TCP is used
+   for media, Consent MAY be done by the endpoints.
 
 2.  Terminology
 
@@ -158,15 +164,15 @@ Table of Contents
    the initial ICE exchange, but using a new (fresh) transaction-id each
    time consent needs to be refreshed.  Implementations MUST obtain
    fresh consent before their existing consent expires.  If an ICE
-   binding response is not received within 1.5 times the previous round
-   trip time, another ICE binding request is sent using the a new
-   (fresh) transaction-id (so that round-trip time can be calculated),
-   and re-transmissions MUST NOT be sent more frequently than every
-   500ms or the smoothed round-trip time (from previous consent
-   freshness checks or RTP round-trip time), whichever is less.  For the
-   purposes of this document, receipt of an ICE response with the
-   matching transaction-id of its request with a valid MESSAGE-INTEGRITY
-   is considered a consent response.
+   binding response is not received after waiting for 5 (+/-1) seconds
+   (giving ample time for the response to be received), another ICE
+   binding request is sent using a new (fresh) transaction-id (so that
+   round-trip time can be calculated), and re-transmissions MUST NOT be
+   sent more frequently than every 500ms or the smoothed round-trip time
+   (from previous consent freshness checks or RTP round-trip time),
+   whichever is less.  For the purposes of this document, receipt of an
+   ICE response with the matching transaction-id of its request with a
+   valid MESSAGE-INTEGRITY is considered a consent response.
 
    The initial Consent to send traffic is obtained by ICE.  Consent
    expires after 30 seconds.  That is, if a valid STUN binding response

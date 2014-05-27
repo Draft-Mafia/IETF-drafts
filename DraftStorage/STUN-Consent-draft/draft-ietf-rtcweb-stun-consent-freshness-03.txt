@@ -5,11 +5,11 @@
 RTCWEB                                                        M. Perumal
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                         R. Ravindranath
-Expires: November 20, 2014                                      T. Reddy
+Expires: November 27, 2014                                      T. Reddy
                                                            Cisco Systems
                                                               M. Thomson
                                                                  Mozilla
-                                                            May 19, 2014
+                                                            May 26, 2014
 
 
                     STUN Usage for Consent Freshness
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 20, 2014.
+   This Internet-Draft will expire on November 27, 2014.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Perumal, et al.         Expires November 20, 2014               [Page 1]
+Perumal, et al.         Expires November 27, 2014               [Page 1]
 
 Internet-Draft      STUN Usage for Consent Freshness            May 2014
 
@@ -70,16 +70,16 @@ Table of Contents
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
    3.  Design Considerations . . . . . . . . . . . . . . . . . . . .   3
    4.  Solution Overview . . . . . . . . . . . . . . . . . . . . . .   3
-     4.1.  Expiration of Consent . . . . . . . . . . . . . . . . . .   3
-     4.2.  Immediate Revocation of Consent . . . . . . . . . . . . .   4
+     4.1.  Expiration of Consent . . . . . . . . . . . . . . . . . .   4
+     4.2.  Immediate Revocation of Consent . . . . . . . . . . . . .   5
    5.  Connection Liveness . . . . . . . . . . . . . . . . . . . . .   5
    6.  DiffServ Treatment for Consent packets  . . . . . . . . . . .   5
-   7.  W3C API Implications  . . . . . . . . . . . . . . . . . . . .   5
+   7.  W3C API Implications  . . . . . . . . . . . . . . . . . . . .   6
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
    10. Acknowledgement . . . . . . . . . . . . . . . . . . . . . . .   6
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .   6
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .   7
      11.2.  Informative References . . . . . . . . . . . . . . . . .   7
    Appendix A.  Example Implementation . . . . . . . . . . . . . . .   7
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
@@ -109,10 +109,16 @@ Table of Contents
 
 
 
-Perumal, et al.         Expires November 20, 2014               [Page 2]
+Perumal, et al.         Expires November 27, 2014               [Page 2]
 
 Internet-Draft      STUN Usage for Consent Freshness            May 2014
 
+
+   Consent is done irrespective of transport protocol used for media.
+   When TCP is used as transport for media from a TURN client to a TURN
+   server and UDP is used from the server to the remote peer, Consent
+   MUST be done by the TURN Client.  For other cases where TCP is used
+   for media, Consent MAY be done by the endpoints.
 
 2.  Terminology
 
@@ -153,6 +159,17 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    consent and immediate revocation of consent, which are discussed in
    the following sections.
 
+
+
+
+
+
+
+Perumal, et al.         Expires November 27, 2014               [Page 3]
+
+Internet-Draft      STUN Usage for Consent Freshness            May 2014
+
+
 4.1.  Expiration of Consent
 
    A WebRTC browser performs a combined consent freshness and session
@@ -162,14 +179,6 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    DTLS) on an ICE-initiated connection unless the receiving endpoint
    consents to receive the data.  After a successful ICE connectivity
    check on a particular transport address, subsequent consent MUST be
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 3]
-
-Internet-Draft      STUN Usage for Consent Freshness            May 2014
-
-
    obtained following the procedure described in this document.  The
    consent expires after a fixed amount of time.
 
@@ -181,15 +190,15 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    the initial ICE exchange, but using a new (fresh) transaction-id each
    time consent needs to be refreshed.  Implementations MUST obtain
    fresh consent before their existing consent expires.  If an ICE
-   binding response is not received within 1.5 times the previous round
-   trip time, another ICE binding request is sent using the a new
-   (fresh) transaction-id (so that round-trip time can be calculated),
-   and re-transmissions MUST NOT be sent more frequently than every
-   500ms or the smoothed round-trip time (from previous consent
-   freshness checks or RTP round-trip time), whichever is less.  For the
-   purposes of this document, receipt of an ICE response with the
-   matching transaction-id of its request with a valid MESSAGE-INTEGRITY
-   is considered a consent response.
+   binding response is not received after waiting for 5 (+/-1) seconds
+   (giving ample time for the response to be received), another ICE
+   binding request is sent using a new (fresh) transaction-id (so that
+   round-trip time can be calculated), and re-transmissions MUST NOT be
+   sent more frequently than every 500ms or the smoothed round-trip time
+   (from previous consent freshness checks or RTP round-trip time),
+   whichever is less.  For the purposes of this document, receipt of an
+   ICE response with the matching transaction-id of its request with a
+   valid MESSAGE-INTEGRITY is considered a consent response.
 
    The initial Consent to send traffic is obtained by ICE.  Consent
    expires after 30 seconds.  That is, if a valid STUN binding response
@@ -210,21 +219,19 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    endpoint wants send application traffic, it needs to first obtain
    consent if its consent expired.
 
+
+
+Perumal, et al.         Expires November 27, 2014               [Page 4]
+
+Internet-Draft      STUN Usage for Consent Freshness            May 2014
+
+
 4.2.  Immediate Revocation of Consent
 
    The previous section explained how consent expires due to a timeout.
    In some cases it is useful to signal a connection is terminated,
    rather than relying on a timeout.  This is done by immediately
    revoking consent.
-
-
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 4]
-
-Internet-Draft      STUN Usage for Consent Freshness            May 2014
-
 
    Consent for sending traffic on the media or data channel is revoked
    by receipt of a an authenticated message that closes the connection
@@ -266,6 +273,15 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    [I-D.ietf-tsvwg-rtcweb-qos].  In that case, what should this document
    recommend as the Codepoint for STUN consent packets ?
 
+
+
+
+
+Perumal, et al.         Expires November 27, 2014               [Page 5]
+
+Internet-Draft      STUN Usage for Consent Freshness            May 2014
+
+
 7.  W3C API Implications
 
    For the consent freshness and liveness test the W3C specification
@@ -274,13 +290,6 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    1.  Ability for the browser to notify the JavaScript that a consent
        freshness transaction has failed for a media stream and the
        browser has stopped transmitting for that stream.
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 5]
-
-Internet-Draft      STUN Usage for Consent Freshness            May 2014
-
 
    2.  Ability for the JavaScript to start and stop liveness test and
        set the liveness test interval.
@@ -317,6 +326,18 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
    Westerland, Cullen Jennings and Simon Perreault for their valuable
    inputs and comments.
 
+
+
+
+
+
+
+
+Perumal, et al.         Expires November 27, 2014               [Page 6]
+
+Internet-Draft      STUN Usage for Consent Freshness            May 2014
+
+
 11.  References
 
 11.1.  Normative References
@@ -328,15 +349,6 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
               (ICE): A Protocol for Network Address Translator (NAT)
               Traversal for Offer/Answer Protocols", RFC 5245, April
               2010.
-
-
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 6]
-
-Internet-Draft      STUN Usage for Consent Freshness            May 2014
-
 
    [RFC6263]  Marjou, X. and A. Sollaud, "Application Mechanism for
               Keeping Alive the NAT Mappings Associated with RTP / RTP
@@ -372,6 +384,16 @@ Appendix A.  Example Implementation
 
    1.  A consent timer, Tc, whose value is set to 30 seconds.
 
+
+
+
+
+
+Perumal, et al.         Expires November 27, 2014               [Page 7]
+
+Internet-Draft      STUN Usage for Consent Freshness            May 2014
+
+
    2.  A packet receipt timer, Tr, whose value is determined by the
        application.  Tr can be greater than 1 but less than 30 seconds
        and has a default value of 5 seconds.
@@ -385,14 +407,6 @@ Appendix A.  Example Implementation
        times of ( 500 ms or the smoothened round-trip time (from
        previous consent freshness checks or RTP round-trip time)),
        whichever is less.
-
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 7]
-
-Internet-Draft      STUN Usage for Consent Freshness            May 2014
-
 
    A WebRTC browser performs a combined consent freshness and session
    liveness test using STUN request/response as described below:
@@ -428,6 +442,14 @@ Authors' Addresses
    Email: mperumal@cisco.com
 
 
+
+
+
+Perumal, et al.         Expires November 27, 2014               [Page 8]
+
+Internet-Draft      STUN Usage for Consent Freshness            May 2014
+
+
    Dan Wing
    Cisco Systems
    821 Alder Drive
@@ -435,19 +457,6 @@ Authors' Addresses
    USA
 
    Email: dwing@cisco.com
-
-
-
-
-
-
-
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 8]
-
-Internet-Draft      STUN Usage for Consent Freshness            May 2014
 
 
    Ram Mohan Ravindranath
@@ -492,13 +501,4 @@ Internet-Draft      STUN Usage for Consent Freshness            May 2014
 
 
 
-
-
-
-
-
-
-
-
-
-Perumal, et al.         Expires November 20, 2014               [Page 9]
+Perumal, et al.         Expires November 27, 2014               [Page 9]

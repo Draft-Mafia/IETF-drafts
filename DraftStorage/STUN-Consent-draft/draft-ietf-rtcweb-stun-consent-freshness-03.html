@@ -398,7 +398,7 @@
 
   <meta name="dct.creator" content="Perumal, M., Wing, D., Ravindranath, R., Reddy, T., and M. Thomson" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-rtcweb-stun-consent-freshness-03" />
-  <meta name="dct.issued" scheme="ISO8601" content="2014-5-19" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-5-26" />
   <meta name="dct.abstract" content="To prevent sending excessive traffic to an endpoint, periodic consent needs to be obtained from that remote endpoint." />
   <meta name="description" content="To prevent sending excessive traffic to an endpoint, periodic consent needs to be obtained from that remote endpoint." />
 
@@ -422,7 +422,7 @@
   <td class="right">R. Ravindranath</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 20, 2014</td>
+  <td class="left">Expires: November 27, 2014</td>
   <td class="right">T. Reddy</td>
 </tr>
 <tr>
@@ -439,7 +439,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">May 19, 2014</td>
+  <td class="right">May 26, 2014</td>
 </tr>
 
     	
@@ -460,7 +460,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 20, 2014.</p>
+<p>This Internet-Draft will expire on November 27, 2014.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -498,6 +498,7 @@
 <p id="rfc.section.1.p.2">When a session is first established, WebRTC implementations are required to perform STUN connectivity checks as part of <a href="#RFC5245">ICE</a> <cite title="NONE">[RFC5245]</cite>. That initial consent is not described further in this document and it is assumed that ICE is being used for that initial consent.</p>
 <p id="rfc.section.1.p.3">Related to consent is loss of connectivity ("liveness"). Many applications want notification of connection loss to take appropriate actions (e.g., alert the user, try switching to a different interface).</p>
 <p id="rfc.section.1.p.4">This document describes a new STUN usage with a request and response messages which verifies the remote peer's consent to receive traffic, and can also detect loss of liveness.</p>
+<p id="rfc.section.1.p.5">Consent is done irrespective of transport protocol used for media. When TCP is used as transport for media from a TURN client to a TURN server and UDP is used from the server to the remote peer, Consent MUST be done by the TURN Client. For other cases where TCP is used for media, Consent MAY be done by the endpoints.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#sec-term" id="sec-term">Terminology</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
 <p/>
@@ -519,7 +520,7 @@
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> Expiration of Consent</h1>
 <p id="rfc.section.4.1.p.1">A WebRTC browser performs a combined consent freshness and session liveness test using STUN request/response as described below:</p>
 <p id="rfc.section.4.1.p.2">An endpoint MUST NOT send application data (e.g., RTP, RTCP, SCTP, DTLS) on an ICE-initiated connection unless the receiving endpoint consents to receive the data. After a successful ICE connectivity check on a particular transport address, subsequent consent MUST be obtained following the procedure described in this document. The consent expires after a fixed amount of time.</p>
-<p id="rfc.section.4.1.p.3">Explicit consent to send is indicated by sending an ICE binding request to the remote peer's Transport Address and receiving a matching and authenticated ICE binding response from the inverted remote peer's Transport Address. These ICE binding requests and responses are authenticated using the same short-term credentials as the initial ICE exchange, but using a new (fresh) transaction-id each time consent needs to be refreshed.  Implementations MUST obtain fresh consent before their existing consent expires.  If an ICE binding response is not received within 1.5 times the previous round trip time, another ICE binding request is sent using the a new (fresh) transaction-id (so that round-trip time can be calculated), and re-transmissions MUST NOT be sent more frequently than every 500ms or the smoothed round-trip time (from previous consent freshness checks or RTP round-trip time), whichever is less. For the purposes of this document, receipt of an ICE response with the matching transaction-id of its request with a valid MESSAGE-INTEGRITY is considered a consent response.</p>
+<p id="rfc.section.4.1.p.3">Explicit consent to send is indicated by sending an ICE binding request to the remote peer's Transport Address and receiving a matching and authenticated ICE binding response from the inverted remote peer's Transport Address. These ICE binding requests and responses are authenticated using the same short-term credentials as the initial ICE exchange, but using a new (fresh) transaction-id each time consent needs to be refreshed.  Implementations MUST obtain fresh consent before their existing consent expires.  If an ICE binding response is not received after waiting for 5 (+/-1) seconds (giving ample time for the response to be received), another ICE binding request is sent using a new (fresh) transaction-id (so that round-trip time can be calculated), and re-transmissions MUST NOT be sent more frequently than every 500ms or the smoothed round-trip time (from previous consent freshness checks or RTP round-trip time), whichever is less. For the purposes of this document, receipt of an ICE response with the matching transaction-id of its request with a valid MESSAGE-INTEGRITY is considered a consent response.</p>
 <p id="rfc.section.4.1.p.4">The initial Consent to send traffic is obtained by ICE. Consent expires after 30 seconds. That is, if a valid STUN binding response corresponding to one of the STUN requests sent in the last 30 seconds has not been received from the inverted 5-tuple, the endpoint MUST cease transmission on that 5-tuple.</p>
 <p id="rfc.section.4.1.p.5">To meet the security needs of consent, an untrusted application (e.g., JavaScript) MUST NOT be able to obtain or control the ICE transaction-id, because that enables spoofing STUN responses, falsifying consent</p>
 <p id="rfc.section.4.1.p.6">An endpoint that is only receiving application traffic (recvonly) does not need to obtain consent which can slightly conserve its resources.  However, the endpoint needs to ensure its NAT or firewall mappings persist which can be done using keepalive or other techniques (see Section 10 of <a href="#RFC5245">[RFC5245]</a> and see <a href="#RFC6263">[RFC6263]</a>).  If the endpoint wants send application traffic, it needs to first obtain consent if its consent expired.</p>
