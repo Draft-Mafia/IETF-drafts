@@ -384,9 +384,9 @@
   <meta name="generator" content="xml2rfc version 2.4.7 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Williams, B., Fan, P., Reddy, T., and C. Eckel" />
+  <meta name="dct.creator" content="Fan, P., Deng, H., Boucadair, M., Williams, B., Reddy, T., and C. Eckel" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-conet-aeon-requirements-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2014-7-1" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-7-2" />
   <meta name="dct.abstract" content="Identification and treatment of application flows are important to many application providers and network operators. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy. The document states requirements for a solution that enables identification and treatment of application flows without suffering the limitations that plague existing solutions." />
   <meta name="description" content="Identification and treatment of application flows are important to many application providers and network operators. Historically, this functionality has been implemented to the extent possible using heuristics, which inspect and infer flow characteristics. But many application flows in current usages are dynamic, adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and have different priorities depending on direction of flow, user preferences, and other factors. Any combination of these properties renders heuristic based techniques less effective and may result in compromises to application security or user privacy. The document states requirements for a solution that enables identification and treatment of application flows without suffering the limitations that plague existing solutions." />
 
@@ -399,19 +399,31 @@
     
     	<tr>
   <td class="left">Internet Engineering Task Force</td>
-  <td class="right">B. Williams</td>
-</tr>
-<tr>
-  <td class="left">Internet-Draft</td>
-  <td class="right">Akamai, Inc.</td>
-</tr>
-<tr>
-  <td class="left">Intended status: Informational</td>
   <td class="right">P. Fan</td>
 </tr>
 <tr>
-  <td class="left">Expires: January 2, 2015</td>
+  <td class="left">Internet-Draft</td>
+  <td class="right">H. Deng</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Informational</td>
   <td class="right">China Mobile</td>
+</tr>
+<tr>
+  <td class="left">Expires: January 3, 2015</td>
+  <td class="right">M. Boucadair</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">France Telecom</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">B. Williams</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">Akamai, Inc.</td>
 </tr>
 <tr>
   <td class="left"></td>
@@ -427,7 +439,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">July 1, 2014</td>
+  <td class="right">July 2, 2014</td>
 </tr>
 
     	
@@ -447,7 +459,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 2, 2015.</p>
+<p>This Internet-Draft will expire on January 3, 2015.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -470,15 +482,16 @@
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
 <p id="rfc.section.1.p.1">Identification and treatment of application flows are important to many application providers and network operators. The problems faced by existing solutions that try to provide such visibility and to enable appropriate treatment of application flows are described in detail in <a href="#I-D.conet-aeon-problem-statement">[I-D.conet-aeon-problem-statement]</a>.</p>
-<p id="rfc.section.1.p.2">As the IETF establishes default behaviors that thwart pervasive surveillance (e.g. <a href="#RFC7258">[RFC7258]</a>), it will be important to provide mechanisms for applications that want to have the network provide differential flow treatment for their data. The intent is to have applications protect the contents of their flows, yet have the ability to opt-in to information exchanges that provide a more precise allocation of network resources and thus a better user experience. The document provide a complete set of requirements for such a solution.</p>
+<p id="rfc.section.1.p.2">As the IETF establishes default behaviors that thwart pervasive surveillance (e.g. <a href="#RFC7258">[RFC7258]</a>), it will be important to provide mechanisms for applications that want to have the network provide differential flow treatment for their data. The intent is to have applications protect the contents of their flows, yet have the ability to opt-in to information exchanges that provide a more precise allocation of network resources and thus better user experience. The document provide a complete set of requirements for such a solution.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> Terminology</h1>
 <p id="rfc.section.2.p.1">The section clarifies the intended meaning of specific terms used within this document.</p>
 <p/>
 
 <ul>
-  <li>Application: An instance of an application running on end user's device, such as a web application running on an laptop or a mobile application running on a mobile device.</li>
-  <li>Flow characteristics: Characteristics of individual application flows, such as tolerance to delay, loss, or jitter, anticipated average or maximum rate, relative priority with respect to the application's other flows, etc. Examples of individual application flows include an audio flow, a video flow, a data flow, etc.</li>
-  <li>Network node: A network elements, such as a router, switch, wireless access point, firewall, etc., that is in the path of one or more of an application's flows.</li>
+  <li>5-tuple: The combination of source IP address and port, destination IP address and port, and transport protocol used to transport an application flow.</li>
+  <li>Application: An instance of an application running on end user's device, such as a web application running on an laptop or an application running on a mobile device.</li>
+  <li>Flow characteristics: Characteristics of an individual application flow, such as 5-tuple used to transport the flow, tolerance to delay, loss, or jitter, anticipated average or maximum rate, relative priority with respect to the application's other flows, etc. Examples of individual application flows include an audio flow, a video flow, a data flow, etc.</li>
+  <li>Network node: A network element, such as a router, switch, wireless access point, firewall, etc., that is in the path of one or more application flows.</li>
 </ul>
 <p id="rfc.section.2.p.3">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> Requirements</h1>
@@ -486,40 +499,37 @@
 
 <dl>
   <dt>Req-1:</dt>
-  <dd style="margin-left: 8">MUST provide a mechanism for applications to explicitly signal their flow characteristics for individual application flows to the network.</dd>
+  <dd style="margin-left: 8">MUST provide a mechanism for applications to explicitly signal the flow characteristics for their flows to the network.</dd>
   <dt>Req-2:</dt>
-  <dd style="margin-left: 8">MUST provide network nodes visibility to application flow characteristics</dd>
+  <dd style="margin-left: 8">MUST provide network nodes visibility to the flow characteristics signaled by applications.</dd>
   <dt>Req-3:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism for network nodes to contribute to application flow descriptions.</dd>
+  <dd style="margin-left: 8">MUST provide mechanism for applications to receive feedback from the network. This feedback communicates anticipated ability of the network node to accommodate the corresponding flow.</dd>
   <dt>Req-4:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism for applications to receive resulting flow descriptions as feedback from the network.  This feedback is not a guarantee nor an allocation of network resources. Rather, it communicates anticipated ability of the network node to accommodate the corresponding flow.</dd>
-  <dt>Req-5:</dt>
-  <dd style="margin-left: 8">MUST complement existing heuristic based mechanisms. Such mechanisms are used in many networks and SHOULD continue to work as portions of applications and networks nodes are enabled with functionality provided by this solution.</dd>
-  <dt>Req-6:</dt>
   <dd style="margin-left: 8">MUST provide visibility for both directions of a flow, including flows that cross administrative boundaries.</dd>
+  <dt>Req-5:</dt>
+  <dd style="margin-left: 8">MUST provides mechanism for mutual authentication between applications and network nodes, such that applications signal flow characteristics and receive feedback from trusted network nodes and network nodes process flow characteristics signaled by authorized applications.</dd>
+  <dt>Req-6:</dt>
+  <dd style="margin-left: 8">MUST provide mechanism for 3rd party authentication and authorization for over-the-top (OTT) applications.</dd>
   <dt>Req-7:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism to authenticate and authorize endpoints/applications to signal flow characteristics, including 3rd party authentication and authorization for over-the-top (OTT) applications.</dd>
+  <dd style="margin-left: 8">MUST provide mechanism for integrity protection and replay protection of exchanges between the application and the network.</dd>
   <dt>Req-8:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism for integrity protection and replay protection of messages exchanged between the application and the network.</dd>
-  <dt>Req-9:</dt>
   <dd style="margin-left: 8">MUST provide mechanism for applications to opt-out of any explicit signaling of their flow characteristics to the network.</dd>
+  <dt>Req-9:</dt>
+  <dd style="margin-left: 8">MUST provide mechanism for flow characteristics signaled by applications to change over time, and in a timely manner, in response to changes in application operation.</dd>
   <dt>Req-10:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism for information signaled by applications to be repeated over time to accommodate changes in network routing.</dd>
+  <dd style="margin-left: 8">MUST provide mechanism for feedback provided by network nodes to change over time, and in a timely manner, in response to changes in network conditions.</dd>
   <dt>Req-11:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism for information signaled by applications to change over time and in a timely manner in response to changes in application operation.</dd>
+  <dd style="margin-left: 8">SHOULD provide mechanism for application flow characteristics to be propagated to all network nodes within a network.</dd>
   <dt>Req-12:</dt>
-  <dd style="margin-left: 8">MUST provide mechanism for feedback provided by network nodes to change over time and in a timely manner in response to changes in network conditions.</dd>
+  <dd style="margin-left: 8">MUST NOT dramatically affect the performance of participating network nodes and other network infrastructure propagating the flow characteristics.</dd>
   <dt>Req-13:</dt>
-  <dd style="margin-left: 8">SHOULD provide mechanism for application flow characteristics to be propagated to all network nodes.</dd>
-  <dt>Req-14:</dt>
-  <dd style="margin-left: 8">MUST NOT dramatically affect the performance of participating network nodes and other network infrastructure propagating the information.</dd>
-  <dt>Req-15:</dt>
   <dd style="margin-left: 8">MUST be applicable for both IPv4 and IPv6 deployments.</dd>
-  <dt>Req-16:</dt>
-  <dd style="margin-left: 8">SHOULD reuse or extend existing IETF standard protocols where possible.</dd>
-  <dt>Req-17:</dt>
-  <dd style="margin-left: 8">MUST provide considerations for protection against denial of service attacks.</dd>
+  <dt>Req-14:</dt>
+  <dd style="margin-left: 8">SHOULD reuse or extend existing IETF standard protocols wherever possible.</dd>
+  <dt>Req-15:</dt>
+  <dd style="margin-left: 8">MUST provide considerations for protection against denial of service attacks against network nodes.</dd>
 </dl>
+<p id="rfc.section.3.p.2">In designing a solution that meets these requirements, considerations should be made for existing deployments of heuristic based mechanisms.  Such mechanisms are used in many networks and it is desirable that they continue to work as applications and networks nodes are incrementally enabled with functionality provided by this solution.</p>
 <h1 id="rfc.references"><a href="#rfc.references">4.</a> Informative References</h1>
 <table>
   <tbody>
@@ -549,28 +559,6 @@
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">Brandon Williams</span> 
-	  <span class="n hidden">
-		<span class="family-name">Williams</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Akamai, Inc.</span>
-	<span class="adr">
-	  <span class="vcardline">8 Cambridge Center</span>
-
-	  <span class="vcardline">
-		<span class="locality">Cambridge</span>,  
-		<span class="region">MA</span> 
-		<span class="code">02142</span>
-	  </span>
-	  <span class="country-name vcardline">USA</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:brandon.williams@akamai.com">brandon.williams@akamai.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
 	  <span class="fn">Peng Fan</span> 
 	  <span class="n hidden">
 		<span class="family-name">Fan</span>
@@ -588,6 +576,71 @@
 	  <span class="country-name vcardline">P.R. China</span>
 	</span>
 	<span class="vcardline">EMail: <a href="mailto:fanpeng@chinamobile.com">fanpeng@chinamobile.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Hui Deng</span> 
+	  <span class="n hidden">
+		<span class="family-name">Deng</span>
+	  </span>
+	</span>
+	<span class="org vcardline">China Mobile</span>
+	<span class="adr">
+	  <span class="vcardline">32 Xuanwumen West Street, Xicheng District</span>
+
+	  <span class="vcardline">
+		<span class="locality">Beijing</span>,  
+		<span class="region"></span>
+		<span class="code">100053</span>
+	  </span>
+	  <span class="country-name vcardline">P.R. China</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:denghui@chinamobile.com">denghui@chinamobile.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Mohamed Boucadair</span> 
+	  <span class="n hidden">
+		<span class="family-name">Boucadair</span>
+	  </span>
+	</span>
+	<span class="org vcardline">France Telecom</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality">Rennes</span>,  
+		<span class="region"></span>
+		<span class="code">35000</span>
+	  </span>
+	  <span class="country-name vcardline">France</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:mohamed.boucadair@orange.com">mohamed.boucadair@orange.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Brandon Williams</span> 
+	  <span class="n hidden">
+		<span class="family-name">Williams</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Akamai, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">8 Cambridge Center</span>
+
+	  <span class="vcardline">
+		<span class="locality">Cambridge</span>,  
+		<span class="region">MA</span> 
+		<span class="code">02142</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:brandon.williams@akamai.com">brandon.williams@akamai.com</a></span>
 
   </address>
 </div><div class="avoidbreak">

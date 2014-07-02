@@ -2,14 +2,17 @@
 
 
 
-Internet Engineering Task Force                              B. Williams
-Internet-Draft                                              Akamai, Inc.
-Intended status: Informational                                    P. Fan
-Expires: January 2, 2015                                    China Mobile
+Internet Engineering Task Force                                   P. Fan
+Internet-Draft                                                   H. Deng
+Intended status: Informational                              China Mobile
+Expires: January 3, 2015                                    M. Boucadair
+                                                          France Telecom
+                                                             B. Williams
+                                                            Akamai, Inc.
                                                                 T. Reddy
                                                                 C. Eckel
                                                      Cisco Systems, Inc.
-                                                            July 1, 2014
+                                                            July 2, 2014
 
 
        Application Enabled Collaborative Networking Requirements
@@ -46,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 2, 2015.
+   This Internet-Draft will expire on January 3, 2015.
 
 Copyright Notice
 
@@ -85,7 +88,7 @@ Table of Contents
    differential flow treatment for their data.  The intent is to have
    applications protect the contents of their flows, yet have the
    ability to opt-in to information exchanges that provide a more
-   precise allocation of network resources and thus a better user
+   precise allocation of network resources and thus better user
    experience.  The document provide a complete set of requirements for
    such a solution.
 
@@ -94,20 +97,24 @@ Table of Contents
    The section clarifies the intended meaning of specific terms used
    within this document.
 
+   o  5-tuple: The combination of source IP address and port,
+      destination IP address and port, and transport protocol used to
+      transport an application flow.
+
    o  Application: An instance of an application running on end user's
-      device, such as a web application running on an laptop or a mobile
+      device, such as a web application running on an laptop or an
       application running on a mobile device.
 
-   o  Flow characteristics: Characteristics of individual application
-      flows, such as tolerance to delay, loss, or jitter, anticipated
-      average or maximum rate, relative priority with respect to the
-      application's other flows, etc.  Examples of individual
-      application flows include an audio flow, a video flow, a data
-      flow, etc.
+   o  Flow characteristics: Characteristics of an individual application
+      flow, such as 5-tuple used to transport the flow, tolerance to
+      delay, loss, or jitter, anticipated average or maximum rate,
+      relative priority with respect to the application's other flows,
+      etc.  Examples of individual application flows include an audio
+      flow, a video flow, a data flow, etc.
 
-   o  Network node: A network elements, such as a router, switch,
+   o  Network node: A network element, such as a router, switch,
       wireless access point, firewall, etc., that is in the path of one
-      or more of an application's flows.
+      or more application flows.
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
@@ -123,67 +130,63 @@ Table of Contents
    on which they are used.  The requirements are:
 
    Req-1:  MUST provide a mechanism for applications to explicitly
-      signal their flow characteristics for individual application flows
-      to the network.
+      signal the flow characteristics for their flows to the network.
 
-   Req-2:  MUST provide network nodes visibility to application flow
-      characteristics
+   Req-2:  MUST provide network nodes visibility to the flow
+      characteristics signaled by applications.
 
-   Req-3:  MUST provide mechanism for network nodes to contribute to
-      application flow descriptions.
+   Req-3:  MUST provide mechanism for applications to receive feedback
+      from the network.  This feedback communicates anticipated ability
+      of the network node to accommodate the corresponding flow.
 
-   Req-4:  MUST provide mechanism for applications to receive resulting
-      flow descriptions as feedback from the network.  This feedback is
-      not a guarantee nor an allocation of network resources.  Rather,
-      it communicates anticipated ability of the network node to
-      accommodate the corresponding flow.
-
-   Req-5:  MUST complement existing heuristic based mechanisms.  Such
-      mechanisms are used in many networks and SHOULD continue to work
-      as portions of applications and networks nodes are enabled with
-      functionality provided by this solution.
-
-   Req-6:  MUST provide visibility for both directions of a flow,
+   Req-4:  MUST provide visibility for both directions of a flow,
       including flows that cross administrative boundaries.
 
-   Req-7:  MUST provide mechanism to authenticate and authorize
-      endpoints/applications to signal flow characteristics, including
-      3rd party authentication and authorization for over-the-top (OTT)
-      applications.
+   Req-5:  MUST provides mechanism for mutual authentication between
+      applications and network nodes, such that applications signal flow
+      characteristics and receive feedback from trusted network nodes
+      and network nodes process flow characteristics signaled by
+      authorized applications.
 
-   Req-8:  MUST provide mechanism for integrity protection and replay
-      protection of messages exchanged between the application and the
-      network.
+   Req-6:  MUST provide mechanism for 3rd party authentication and
+      authorization for over-the-top (OTT) applications.
 
-   Req-9:  MUST provide mechanism for applications to opt-out of any
+   Req-7:  MUST provide mechanism for integrity protection and replay
+      protection of exchanges between the application and the network.
+
+   Req-8:  MUST provide mechanism for applications to opt-out of any
       explicit signaling of their flow characteristics to the network.
 
-   Req-10:  MUST provide mechanism for information signaled by
-      applications to be repeated over time to accommodate changes in
-      network routing.
-
-   Req-11:  MUST provide mechanism for information signaled by
-      applications to change over time and in a timely manner in
+   Req-9:  MUST provide mechanism for flow characteristics signaled by
+      applications to change over time, and in a timely manner, in
       response to changes in application operation.
 
-   Req-12:  MUST provide mechanism for feedback provided by network
-      nodes to change over time and in a timely manner in response to
+   Req-10:  MUST provide mechanism for feedback provided by network
+      nodes to change over time, and in a timely manner, in response to
       changes in network conditions.
 
-   Req-13:  SHOULD provide mechanism for application flow
-      characteristics to be propagated to all network nodes.
+   Req-11:  SHOULD provide mechanism for application flow
+      characteristics to be propagated to all network nodes within a
+      network.
 
-   Req-14:  MUST NOT dramatically affect the performance of
+   Req-12:  MUST NOT dramatically affect the performance of
       participating network nodes and other network infrastructure
-      propagating the information.
+      propagating the flow characteristics.
 
-   Req-15:  MUST be applicable for both IPv4 and IPv6 deployments.
+   Req-13:  MUST be applicable for both IPv4 and IPv6 deployments.
 
-   Req-16:  SHOULD reuse or extend existing IETF standard protocols
-      where possible.
+   Req-14:  SHOULD reuse or extend existing IETF standard protocols
+      wherever possible.
 
-   Req-17:  MUST provide considerations for protection against denial of
-      service attacks.
+   Req-15:  MUST provide considerations for protection against denial of
+      service attacks against network nodes.
+
+   In designing a solution that meets these requirements, considerations
+   should be made for existing deployments of heuristic based
+   mechanisms.  Such mechanisms are used in many networks and it is
+   desirable that they continue to work as applications and networks
+   nodes are incrementally enabled with functionality provided by this
+   solution.
 
 4.  Informative References
 
@@ -201,15 +204,6 @@ Table of Contents
 
 Authors' Addresses
 
-   Brandon Williams
-   Akamai, Inc.
-   8 Cambridge Center
-   Cambridge, MA  02142
-   USA
-
-   Email: brandon.williams@akamai.com
-
-
    Peng Fan
    China Mobile
    32 Xuanwumen West Street, Xicheng District
@@ -217,6 +211,32 @@ Authors' Addresses
    P.R. China
 
    Email: fanpeng@chinamobile.com
+
+
+   Hui Deng
+   China Mobile
+   32 Xuanwumen West Street, Xicheng District
+   Beijing  100053
+   P.R. China
+
+   Email: denghui@chinamobile.com
+
+
+   Mohamed Boucadair
+   France Telecom
+   Rennes  35000
+   France
+
+   Email: mohamed.boucadair@orange.com
+
+
+   Brandon Williams
+   Akamai, Inc.
+   8 Cambridge Center
+   Cambridge, MA  02142
+   USA
+
+   Email: brandon.williams@akamai.com
 
 
    Tirumaleswar Reddy
