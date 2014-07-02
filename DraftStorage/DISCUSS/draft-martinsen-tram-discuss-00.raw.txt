@@ -546,7 +546,7 @@ Table of Contents
    [I-D.dhesikan-tsvwg-rtcweb-qos]
               Dhesikan, S., Druta, D., Jones, P., and J. Polk, "DSCP and
               other packet markings for RTCWeb QoS", draft-dhesikan-
-              tsvwg-rtcweb-qos-06 (work in progress), March 2014.
+              tsvwg-rtcweb-qos-04 (work in progress), January 2014.
 
    [I-D.ietf-mmusic-sdp-bundle-negotiation]
               Holmberg, C., Alvestrand, H., and C. Jennings,

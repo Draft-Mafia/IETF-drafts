@@ -793,8 +793,8 @@ Internet-Draft      TURN for 3rd party Authorization            May 2014
 
    [I-D.ietf-tram-auth-problems]
               Reddy, T., R, R., Perumal, M., and A. Yegin, "Problems
-              with STUN Authentication for TURN", draft-ietf-tram-auth-
-              problems-00 (work in progress), March 2014.
+              with STUN long-term Authentication for TURN", draft-ietf-
+              tram-auth-problems-01 (work in progress), May 2014.
 
    [I-D.mcgrew-aead-aes-cbc-hmac-sha2]
               McGrew, D., Foley, J., and K. Paterson, "Authenticated

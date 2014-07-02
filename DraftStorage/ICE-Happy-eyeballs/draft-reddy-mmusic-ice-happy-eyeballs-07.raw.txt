@@ -5,8 +5,8 @@
 MMUSIC                                                          T. Reddy
 Internet-Draft                                                  P. Patil
 Intended status: Standards Track                            P. Martinsen
-Expires: November 28, 2014                                         Cisco
-                                                            May 27, 2014
+Expires: December 22, 2014                                         Cisco
+                                                           June 20, 2014
 
 
                     Happy Eyeballs Extension for ICE
@@ -16,7 +16,8 @@ Abstract
 
    This document provides guidelines on how to make Interactive
    Connectivity Establishment (ICE) conclude faster in IPv4/IPv6 dual-
-   stack scenarios where broken paths exist.
+   stack scenarios where broken paths exist.  The provided guidelines
+   are backwards compatible with the original ICE specification.
 
 Status of This Memo
 
@@ -33,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 28, 2014.
+   This Internet-Draft will expire on December 22, 2014.
 
 Copyright Notice
 
@@ -72,19 +73,27 @@ Table of Contents
    [RFC3484] is obsoleted by [RFC6724] but following the recommendations
    from the updated RFC will lead to prioritization of IPv6 over IPv4
    for the same candidate type.  Due to this, connectivity checks for
-   candidates of the same type (HOST, RFLX, RELAY) are sent such that an
-   IP address family is completely depleted before checks on the other
-   address family are started.  This results in user noticeable setup
-   delays if the path for the prioritized address family is broken.
+   candidates of the same type (host, reflexive or relay) are sent such
+   that an IP address family is completely depleted before checks from
+   the other address family are started.  This results in user
+   noticeable setup delays if the path for the prioritized address
+   family is broken.
 
    To avoid such user noticeable delays when either IPv6 or IPv4 path is
-   broken, this specification encourages intermingling the different
-   address families when connectivity checks are conducted.  Introducing
-   IP address family fairness into ICE connectivity checks will lead to
-   more sustained dual-stack IPv4/IPv6 deployment as users will no
-   longer have an incentive to disable IPv6.  The cost is a small
-   penalty to the address type that otherwise would have been
-   prioritized.
+   broken or excessive slow, this specification encourages intermingling
+   the different address families when connectivity checks are
+   performed.  Introducing IP address family fairness into ICE
+   connectivity checks will lead to more sustained dual-stack IPv4/IPv6
+   deployment as users will no longer have an incentive to disable IPv6.
+   The cost is a small penalty to the address type that otherwise would
+   have been prioritized.
+
+   The guidelines outlined in this specification are backward compatible
+   with a standard ICE implementation.  This specification only alters
+   the values used to create the resulting checklists in such a way that
+   the core mechanisms from ICE [RFC5245] are still in effect.  The
+   introduced fairness might be better, but not worse than what exists
+   today.
 
 2.  Notational Conventions
 
@@ -126,57 +135,65 @@ Table of Contents
 
    ICE [RFC5245] section 4.1.2.2 has guidelines for how the type
    preference and local preference value should be chosen.  Instead of
-   having a static value for IPv4 and a static value for IPv6 type of
-   addresses for the local preference, it is possible to choose this
-   value dynamically in such a way that IPv4 and IPv6 address candidate
-   priorities ends up intermingled within the same candidate type (HOST,
-   RFLX or RELAY).
+   having a static local preference value for IPv4 and IPv6 addresses,
+   it is possible to choose this value dynamically in such a way that
+   IPv4 and IPv6 address candidate priorities ends up intermingled
+   within the same candidate type.
 
-   It is also possible to dynamically change the type preference in in
-   such a way that IPv4 and IPv6 address candidates ends up intermingled
-   regardless of candidate type (HOST, RFLX or RELAY).  This can for
-   example be useful if there are a lot of IPv6 HOST candidates
-   effectively blocking for testing any IPv4 RFLX candidates.
+   It is also possible to dynamically change the type preference in such
+   a way that IPv4 and IPv6 address candidates end up intermingled
+   regardless of candidate type.  This is useful if there are a lot of
+   IPv6 host candidates effectively blocking connectivity checks for
+   IPv4 server reflexive candidates.
 
    The list below shows a sorted local candidate list where the priority
    is calculated in such a way that the IPv4 and IPv6 candidates are
    intermingled.  To allow for earlier connectivity checks for the IPv4
-   RFLX candidates, some of the IPv6 HOST candidates was demoted.
+   server reflexive candidates, some of the IPv6 host candidates was
+   demoted.  This is just an example of how a candidate priorities can
+   be calculated to provide better fairness between IPv4 and IPv6
+   candidates without breaking any of the ICE connectivity checks.
 
 
-                         Type  Addr cmp Priority
-                     ------------------------------
-                    (1)  HOST  IPv6 (1) 2129289471
-                    (2)  HOST  IPv6 (2) 2129289470
-                    (3)  HOST  IPv4 (1) 2129033471
-                    (4)  HOST  IPv4 (2) 2129033470
-                    (5)  HOST  IPv6 (1) 2128777471
-                    (6)  HOST  IPv6 (2) 2128777470
-                    (7)  HOST  IPv4 (1) 2128521471
-                    (8)  HOST  IPv4 (2) 2128521470
-                    (9)  HOST  IPv6 (1) 2127753471
-                    (10) HOST  IPv6 (2) 2127753470
-                    (11) SRFLX IPv6 (1) 1693081855
-                    (12) SRFLX IPv6 (2) 1693081854
-                    (13) SRFLX IPv4 (1) 1692825855
-                    (14) SRFLX IPv4 (2) 1692825854
-                    (15) HOST  IPv6 (1) 1692057855
-                    (16) HOST  IPv6 (2) 1692057854
-                    (17) RELAY IPv6 (1) 15360255
-                    (18) RELAY IPv6 (2) 15360254
-                    (19) RELAY IPv4 (1) 15104255
-                    (20) RELAY IPv4 (2) 15104254
+                     Candidate   Address Component
+                       Type       Type      ID     Priority
+                  -------------------------------------------
+                  (1)  HOST       IPv6      (1)    212928947
+                  (2)  HOST       IPv6      (2)    2129289470
+                  (3)  HOST       IPv4      (1)    2129033471
+                  (4)  HOST       IPv4      (2)    2129033470
+                  (5)  HOST       IPv6      (1)    2128777471
+                  (6)  HOST       IPv6      (2)    2128777470
+                  (7)  HOST       IPv4      (1)    2128521471
+                  (8)  HOST       IPv4      (2)    2128521470
+                  (9)  HOST       IPv6      (1)    2127753471
+                  (10) HOST       IPv6      (2)    2127753470
+                  (11) SRFLX      IPv6      (1)    1693081855
+                  (12) SRFLX      IPv6      (2)    1693081854
+                  (13) SRFLX      IPv4      (1)    1692825855
+                  (14) SRFLX      IPv4      (2)    1692825854
+                  (15) HOST       IPv6      (1)    1692057855
+                  (16) HOST       IPv6      (2)    1692057854
+                  (17) RELAY      IPv6      (1)    15360255
+                  (18) RELAY      IPv6      (2)    15360254
+                  (19) RELAY      IPv4      (1)    15104255
+                  (20) RELAY      IPv4      (2)    15104254
 
-   Note that the list does not alter the component id part of the
+                   SRFLX = server reflexive
+
+
+   Note that the list does not alter the component ID part of the
    formula.  This keeps the different components (RTP and RTCP) close in
-   the list.
-
-   [[Q1: Need to take a closer look at how the unfreezing happens and
-   how this affects the component id is the sorting above. --palmarti]]
+   the list.  What matters is the ordering of the candidates with
+   component ID 1.  Once the checklist is formed for a media stream the
+   candidate pair with component ID 1 will be tested first.  If ICE
+   connectivity check is successful then other candidate pairs with the
+   same foundation will be unfrozen ([RFC5245] section 5.7.4.  Computing
+   States).
 
    The local and remote agent can have different algorithms for choosing
-   the local preference value without impacting the synchronization
-   between the local and remote check list.
+   the local preference and type preference values without impacting the
+   synchronization between the local and remote check lists.
 
    The check list is made up by candidate pairs.  A candidate pair is
    two candidates paired up and given a candidate pair priority as
@@ -199,10 +216,9 @@ Table of Contents
    list the most due to (2^32*MIN(G,D)) in the formula.
 
    These recommendations are backward compatible with a standard ICE
-   implementation.  If the other agent have IPv4 candidates with higher
-   priorities due to intermingling, the effect is canceled when the
-   checklist is formed and the pair priority formula is used to
-   calculate the pair priority.
+   implementation.  The resulting local and remote checklist will still
+   be synchronized.  The introduced fairness might be better, but not
+   worse than what exists today
 
 5.  IANA Considerations
 
@@ -246,12 +262,12 @@ Appendix A.  Example Algorithm for Choosing the Local Preference
 
    An IPv6 and IPv4 start priority must be given.  In this example IPv6
    starts at 60000 and IPv4 at 59000.  This leaves enough address space
-   to further play with the values if pr interface priorities needs to
-   be added.  The highest value should be given to the address family
-   that should be prioritized.
+   to further play with the values if different interface priorities
+   needs to be added.  The highest value should be given to the address
+   family that should be prioritized.
 
-    IPv6    IPv4
-   Start   Start
+          IPv6    IPv4
+          Start   Start
    65535  60k     59k    58k    57k    56k    55k                    0
    +--------+------+------+------+------+------+---------------------+
    |        | IPv6 | IPv4 | IPv6 | IPv4 | IPv6 |                     |
@@ -269,7 +285,7 @@ Appendix A.  Example Algorithm for Choosing the Local Preference
       number even if IPv4 is the highest priority.
 
    Cn:  Number of current candidates of a specific IP address type and
-      candidate type (HOST, SRFLX, RELAY).
+      candidate type (host, server reflexive or relay).
 
    Cmax:  Number of allowed consecutive candidates of the same IP
       address type.
@@ -297,16 +313,8 @@ Appendix A.  Example Algorithm for Choosing the Local Preference
     (18) RELAY IPv4 (2) Priority: 15104254
 
    The result is an even spread of IPv6 and IPv4 candidates among the
-   different candidate types (HOST, SRFLX, RELAY).  The local_preference
-   value is calculated separately for each candidate type.
-
-   The resulting checklist will depend on the priorities of the remote
-   candidates.  It is not possible to ensure an even spread of IPv4 and
-   IPv6 addresses unless both the remote and local sides uses the simple
-   recommendations in this draft.  It is worth noting that there is a
-   good chance it will some effect even if the remote side does not
-   support this.  It will not break interoperability with other ICE
-   implementations.
+   different candidate types (host, server reflexive, relay).  The local
+   preference value is calculated separately for each candidate type.
 
 Authors' Addresses
 

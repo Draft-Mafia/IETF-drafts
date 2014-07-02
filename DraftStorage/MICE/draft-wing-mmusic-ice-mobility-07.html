@@ -1,0 +1,856 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>Mobility with ICE (MICE)</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Notational Conventions"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Break Before Make"/>
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Absence of other interfaces in Valid list"/>
+<link href="#rfc.section.3.1.1" rel="Chapter" title="3.1.1 Receiving ICE Mobility event"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Keeping unused relayed candidates active"/>
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 New STUN Attributes"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Make Before Break"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Comparison to ICE Restart and Trickle ICE"/>
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Break Before Make - ICE Restart"/>
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Break Before Make - Trickle ICE"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations"/>
+<link href="#rfc.section.8" rel="Chapter" title="8 Acknowledgements"/>
+<link href="#rfc.section.9" rel="Chapter" title="9 Change History"/>
+<link href="#rfc.section.9.1" rel="Chapter" title="9.1 Changes from draft-wing-mmusic-ice-mobility-00 to -01"/>
+<link href="#rfc.section.9.2" rel="Chapter" title="9.2 Changes from draft-wing-mmusic-ice-mobility-01 to -02"/>
+<link href="#rfc.section.9.3" rel="Chapter" title="9.3 Changes from draft-wing-mmusic-ice-mobility-02 to -03"/>
+<link href="#rfc.section.9.4" rel="Chapter" title="9.4 Changes from draft-wing-mmusic-ice-mobility-03 to -04"/>
+<link href="#rfc.section.9.5" rel="Chapter" title="9.5 Changes from draft-wing-mmusic-ice-mobility-04 to -05"/>
+<link href="#rfc.section.9.6" rel="Chapter" title="9.6 Changes from draft-wing-mmusic-ice-mobility-05 to -06"/>
+<link href="#rfc.section.9.7" rel="Chapter" title="9.7 Changes from draft-wing-mmusic-ice-mobility-06 to -07"/>
+<link href="#rfc.references" rel="Chapter" title="10 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="10.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="10.2 Informative References"/>
+<link href="#rfc.appendix.A" rel="Chapter"/>
+<link href="#rfc.appendix.A.1" rel="Chapter" title="A.1 Presence of other interfaces in Valid list"/>
+<link href="#rfc.appendix.A.1.1" rel="Chapter" title="A.1.1 Receiving ICE Mobility event"/>
+<link href="#rfc.appendix.A.2" rel="Chapter" title="A.2 Losing an Interface"/>
+<link href="#rfc.appendix.A.2.1" rel="Chapter" title="A.2.1 Keeping unused candidates in the valid list active"/>
+<link href="#rfc.authors" rel="Chapter"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.4.7 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Wing, D., Reddy, T., Patil, P., and P. Martinsen" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-wing-mmusic-ice-mobility-06" />
+  <meta name="dct.issued" scheme="ISO8601" content="2014-6-8" />
+  <meta name="dct.abstract" content="This specification describes how endpoint mobility can be achieved using ICE." />
+  <meta name="description" content="This specification describes how endpoint mobility can be achieved using ICE." />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">MMUSIC</td>
+  <td class="right">D. Wing</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">T. Reddy</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Standards Track</td>
+  <td class="right">P. Patil</td>
+</tr>
+<tr>
+  <td class="left">Expires: December 10, 2014</td>
+  <td class="right">P. Martinsen</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">Cisco</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">June 8, 2014</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">Mobility with ICE (MICE)<br />
+  <span class="filename">draft-wing-mmusic-ice-mobility-06</span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>This specification describes how endpoint mobility can be achieved using ICE.</p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on December 10, 2014.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2014 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<li>2.   <a href="#rfc.section.2">Notational Conventions</a></li>
+<li>3.   <a href="#rfc.section.3">Break Before Make</a></li>
+<li>3.1.   <a href="#rfc.section.3.1">Absence of other interfaces in Valid list</a></li>
+<li>3.1.1.   <a href="#rfc.section.3.1.1">Receiving ICE Mobility event</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">Keeping unused relayed candidates active</a></li>
+<li>3.3.   <a href="#rfc.section.3.3">New STUN Attributes</a></li>
+<li>4.   <a href="#rfc.section.4">Make Before Break</a></li>
+<li>5.   <a href="#rfc.section.5">Comparison to ICE Restart and Trickle ICE</a></li>
+<li>5.1.   <a href="#rfc.section.5.1">Break Before Make - ICE Restart</a></li>
+<li>5.2.   <a href="#rfc.section.5.2">Break Before Make - Trickle ICE</a></li>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a></li>
+<li>7.   <a href="#rfc.section.7">Security Considerations</a></li>
+<li>8.   <a href="#rfc.section.8">Acknowledgements</a></li>
+<li>9.   <a href="#rfc.section.9">Change History</a></li>
+<li>9.1.   <a href="#rfc.section.9.1">Changes from draft-wing-mmusic-ice-mobility-00 to -01</a></li>
+<li>9.2.   <a href="#rfc.section.9.2">Changes from draft-wing-mmusic-ice-mobility-01 to -02</a></li>
+<li>9.3.   <a href="#rfc.section.9.3">Changes from draft-wing-mmusic-ice-mobility-02 to -03</a></li>
+<li>9.4.   <a href="#rfc.section.9.4">Changes from draft-wing-mmusic-ice-mobility-03 to -04</a></li>
+<li>9.5.   <a href="#rfc.section.9.5">Changes from draft-wing-mmusic-ice-mobility-04 to -05</a></li>
+<li>9.6.   <a href="#rfc.section.9.6">Changes from draft-wing-mmusic-ice-mobility-05 to -06</a></li>
+<li>9.7.   <a href="#rfc.section.9.7">Changes from draft-wing-mmusic-ice-mobility-06 to -07</a></li>
+<li>10.   <a href="#rfc.references">References</a></li>
+<li>10.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>10.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li>Appendix A.   <a href="#rfc.appendix.A"></a></li>
+<li>A.1.   <a href="#rfc.appendix.A.1">Presence of other interfaces in Valid list</a></li>
+<li>A.1.1.   <a href="#rfc.appendix.A.1.1">Receiving ICE Mobility event</a></li>
+<li>A.2.   <a href="#rfc.appendix.A.2">Losing an Interface</a></li>
+<li>A.2.1.   <a href="#rfc.appendix.A.2.1">Keeping unused candidates in the valid list active</a></li>
+<li><a href="#rfc.authors">Authors' Addresses</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
+<p id="rfc.section.1.p.1">When moving between networks, an endpoint has to change its IP address. This change breaks upper layer protocols such as TCP and RTP.  Various techniques exist to prevent this breakage, all tied to making the endpoint's IP address static (e.g., Mobile IP, Proxy Mobile IP, LISP). Other techniques exist, which make the upper layer protocol ambivalent to IP address changes (e.g., SCTP). The mechanisms described in this document are in that last category.</p>
+<p id="rfc.section.1.p.2">ICE <a href="#RFC5245">[RFC5245]</a> ensures two endpoints have a working media path between them, and is typically used by Internet-connected interactive media systems (e.g., SIP endpoints). ICE does not expect either the local host or the remote host to change their IP addresses.  Although ICE does allow an "ICE restart", this is done by sending a re-INVITE which goes over the SIP signaling path. The SIP signaling path is often slower than the media path (which needs to be recovered as quickly as possible), consumes an extra half round trip, and incurs an additional delay if the mobility event forces the endpoint to re-connect with its SIP proxy. When a device changes its IP address, it is necessary for it to re-establish connectivity with its SIP proxy, which can be performed in parallel with the steps described in this document.  This document describes how mobility is performed entirely in the media path, without the additional delay of re-establishing SIP connectivity, issuing a new offer/answer, or the complications of multiple SIP offers.  This document considers re-establishing bi-directional media the most critical aspect of a successful mobility event, and its efforts are towards meeting that goal.</p>
+<p id="rfc.section.1.p.3">This document proposes a mechanism to achieve RTP mobility when both endpoints support MICE. When both endpoints support MICE, ICE itself can be used to provide mobility. When only one endpoint supports MICE, a TURN server provides mobility as described in &lt;turn_mobility_draft&gt;. Both mobility techniques work across and between network types (e.g., between 3G and wired Internet access), so long as the client can still access the remote ICE peer or TURN server.</p>
+<p id="rfc.section.1.p.4">Readers are assumed to be familiar with <a href="#RFC5245">ICE</a> <cite title="NONE">[RFC5245]</cite>.</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#notation" id="notation">Notational Conventions</a></h1>
+<p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
+<p id="rfc.section.2.p.2">This note uses terminology defined in <a href="#RFC5245">[RFC5245]</a>, and the following additional terminology: </p>
+
+<dl>
+  <dt>Break Before Make:</dt>
+  <dd style="margin-left: 8">The initially selected interface for communication may become unavailable (e.g due to loss of coverage when moving out of a WiFi hotspot) and new interfaces may become available due to administrative action (e.g manual activation of a specific connectivity technology) or due to dynamic conditions (e.g. Entering coverage area of a wireless network).</dd>
+  <dt>Make Before Break:</dt>
+  <dd style="margin-left: 8">The initially selected interface for communication may become deprioritized (e.g new interface becoming available and it's per bit cost is cheaper and the connection speed is faster than existing interface used for communication).</dd>
+  <dt>Simultaneous Mobility:</dt>
+  <dd style="margin-left: 8">If both the endpoints are mobile and roam at the same time between networks.</dd>
+</dl>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#IntfGain" id="IntfGain">Break Before Make</a></h1>
+<p id="rfc.section.3.p.1">When both endpoints support ICE, ICE itself can provide mobility functions. One of the primary aspects of ICE is its address gathering, wherein ICE has each endpoint determine all of the IP addresses and ports that might be usable for that endpoint and communicate that list of addresses and ports to its peer, usually over SDP. That enables the next primary aspect of ICE, which is its connectivity checks: each ICE endpoint sends a connectivity check from a checklist created by the local and remote candidates exchanged in the initial offer/answer exchange. When the ICE endpoint checks the mapped address from the STUN response during ICE connectivity checks and finds that the transport address does not match any of the local candidates that the ICE agent knows about, the mapped address represents a new candidate -- a peer reflexive candidate. This will cause the endpoint to construct a new pair and insert it into the local checklist (Section 7.2.1.3 of <a href="#RFC5245">[RFC5245]</a>). ICE Mobility (MICE) takes advantage of that existing ICE functionality to provide faster mobility.</p>
+<p id="rfc.section.3.p.2">Endpoints that support ICE Mobility perform ICE normally, and MUST also include the MOBILITY-SUPPORT attribute in all of their STUN requests and their STUN responses. The inclusion of this attribute allows the ICE peer to determine if it can achieve mobility using ICE or needs to use TURN. To force the use of TURN to achieve ICE mobility, the ICE endpoint SHOULD NOT respond to ICE connectivity checks that have an IP address and port different from the TURN server, unless those connectivity checks contain the MOBILITY-SUPPORT attribute. In this way, the remote peer will think those other candidates are invalid (because its connectivity checks did not succeed).</p>
+<p id="rfc.section.3.p.3">After concluding ICE and moving to the ICE completed state (see Section 8 of <a href="#RFC5245">[RFC5245]</a>) either endpoint or both endpoints can initiate ICE Mobility, no matter if it was the Controlling Agent or the Controlled Agent during normal ICE processing.</p>
+<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#Mob" id="Mob">Absence of other interfaces in Valid list</a></h1>
+<p id="rfc.section.3.1.p.1">When the interface currently being used for communication becomes unavailable then ICE agent acquires a list of interfaces that are available and based on the locally configured host policy preferences, the ICE endpoint performs ICE Mobility using one of the available interfaces. In this case local candidates from the selected interface are not present in the valid list. ICE Mobility is performed by:</p>
+<p/>
+
+<ol>
+  <li>The ICE agent remembers the remote host/server reflexive/peer reflexive candidates for each component of the media streams previously used from the valid list before clearing its ICE check list and ICE Valid List.</li>
+  <li>The ICE endpoint gathers host candidates of the same address family as the remote peer on the new interface, forms a check list by creating candidate pairs with local host candidates and remote host/server-reflexive candidates collected in step 1, performs "Computing Pair Priority and Ordering Pairs" (Section 5.7.2 of <a href="#RFC5245">[RFC5245]</a>), "Pruning the Pairs" (Section 5.7.3 of <a href="#RFC5245">[RFC5245]</a>, "Computing states" (Section 5.7.4 of <a href="#RFC5245">[RFC5245]</a>).</li>
+  <li>The ICE endpoint initiates ICE connectivity checks on those candidates from the check list in the previous step, and includes the MOBILITY-EVENT attribute in those connectivity checks.</li>
+  <li>The ICE endpoint acts as controlling agent and the ICE connectivity check from the previous step SHOULD also include the USE-CANDIDATE attribute to signal an aggressive nomination (see Section 2.6 of <a href="#RFC5245">[RFC5245]</a>).</li>
+  <li>The ICE endpoint performs "Discovering Peer Reflexive Candidates" (Section 7.1.3.2.1 of <a href="#RFC5245">[RFC5245]</a>), "Constructing a Valid Pair" (Section 7.1.3.2.2 of <a href="#RFC5245">[RFC5245]</a>), "Updating Pair States" (Section 7.1.3.2.3 of <a href="#RFC5245">[RFC5245]</a>), and "Updating the Nominated Flag" (Section 7.1.3.2.4 of <a href="#RFC5245">[RFC5245]</a>). When the valid list contains a candidate pair for each component then ICE processing is considered complete for the media stream and ICE agent can start sending media using the nominated candidate pair.</li>
+  <li>Once ICE connectivity checks for all of the media streams are completed, the controlling ICE endpoint follows the procedures in Section 11.1 of <a href="#RFC5245">[RFC5245]</a>, specifically to send updated offer if the candidates in the m and c lines for the media stream (called the DEFAULT CANDIDATES) do not match ICE's SELECTED CANDIDATES (also see Appendix B.9 of <a href="#RFC5245">[RFC5245]</a>).</li>
+</ol>
+<p id="rfc.section.3.1.p.3">The ICE endpoint even after Mobility using ICE is successful can issue an updated offer indicating ICE restart if connectivity checks using higher priority candidate pairs are not successful.</p>
+<p id="rfc.section.3.1.p.4">Mobility using ICE could fail in case of Simultaneous Mobility or if the ICE peer is behind NAT that performs Address-Dependent Filtering (see Section 5 of <a href="#RFC5245">[RFC5245]</a>). Hence the ICE endpoint in parallel will re-establish connection with the SIP proxy.  It will then determine whether to initiate ICE restart under the following conditions:</p>
+<p/>
+
+<ol style="list-style-type: lower-alpha">
+  <li>After re-establishing connection with the SIP proxy and before sending new offer to initiate ICE restart if Mobility using ICE is successful then stop sending the new offer.</li>
+  <li>After successful negotiation of updated offer/answer to initiate ICE restart, proceed with ICE restart and stop Mobility using ICE if ICE checks are in the Running/Failed states or ICE is partially successful and not yet reached ICE complete state. It's not implementation friendly to have to two checks running in parallel. ICE restart can re-use partial successful ICE connectivity check results from Mobility using ICE if required as optimization.</li>
+</ol>
+<h1 id="rfc.section.3.1.1"><a href="#rfc.section.3.1.1">3.1.1.</a> <a href="#recvMob" id="recvMob">Receiving ICE Mobility event</a></h1>
+<p id="rfc.section.3.1.1.p.1">A STUN Binding Request containing the MOBILITY-EVENT attribute MAY be received by an ICE endpoint. The agent MUST use short-term credential to authenticate the STUN request containing the MOBILITY-EVENT attribute and perform a message integrity check. The ICE endpoint will generate STUN Binding Response containing the MOBILE-SUPPORT attribute and the ICE agent takes role of controlled agent. If STUN Request containing the MOBILITY-EVENT attribute is received before the endpoint is in the ICE Completed state, it should be silently discarded.</p>
+<p id="rfc.section.3.1.1.p.2">The agent remembers the highest-priority nominated pairs in the Valid list for each component of the media stream, called the previous selected pairs before removing all the selected candidate pairs from the Valid List . It continues sending media to that address until it finishes with the steps described below. Because those packets might not be received due to the mobility event, it MAY cache a copy of those packets.</p>
+<p/>
+
+<ol>
+  <li>The ICE endpoint constructs a pair whose local candidate is equal to the transport address on which the STUN request was received with MOBILITY-EVENT, USE-CANDIDATE attributes and a remote candidate equal to the source transport address where the STUN request came from.</li>
+  <li>The ICE endpoint will add this pair to the valid list if not already present.</li>
+  <li>The agent sets the nominated flag for that pair in the valid pair to true. ICE processing is considered complete for a media stream if the valid list contains a selected candidate pair for each component and ICE agent can start sending media.</li>
+</ol>
+<p id="rfc.section.3.1.1.p.4">The ICE endpoint will follow Steps 1 to 3 when subsequent STUN Binding Requests are received with MOBILITY-EVENT and USE-CANDIDATE attributes.</p>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> Keeping unused relayed candidates active</h1>
+<p id="rfc.section.3.2.p.1">The ICE endpoints can maintain the relayed candidates active even when not actively used, so that relayed candidates can be tried if ICE connectivity checks using other candidate types fails. The ICE agent will have to create permissions in the TURN server for the remote relayed candidate IP addresses and perform the following steps:</p>
+<p/>
+
+<ol>
+  <li>The ICE agent will keep the relayed candidates alive using Refresh transaction, as described in <a href="#RFC5766">[RFC5766]</a>.</li>
+  <li>When the endpoint IP address changes due to mobility, the ICE agent will refresh it's allocation with TURN server using &lt;turn_mobility_draft&gt;.</li>
+  <li>The ICE agent will pair local and remote relayed candidates for connectivity checks when performing the steps in <a href="#Mob">Section 3.1</a>.</li>
+  <li>If the ICE connectivity check succeeds only with local and remote relayed candidates, it suggests that either other peer is roaming at the same time or is behind Address-Dependent Filtering NAT. The ICE agent adds the relayed candidate pair to the valid list and marks it as selected. The ICE agent can now send media using the newly selected relayed candidate pair. The Mobile device must re-establish connection with SIP proxy, issue an updated offer indicating ICE restart so that media can switched to higher-priority candidate pairs.</li>
+</ol>
+<p id="rfc.section.3.2.p.3">This approach assists Mobility using ICE to succeed but brings in additional overhead of maintaining relayed candidates.In case of Simultaneous Mobility, host candidates can change for both the endpoints by maintaining relayed candidates and using &lt;turn_mobility_draft&gt;, media session can be established using the relayed candidate pair.</p>
+<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> New STUN Attributes</h1>
+<p id="rfc.section.3.3.p.1">Three new attributes are defined by this section: MOBILITY-EVENT, MOBILITY-SUPPORT.</p>
+<p id="rfc.section.3.3.p.2">The MOBILITY-EVENT attribute indicate the sender experienced a mobility event. This attribute has no value, thus the attribute length field MUST always be 0. Rules for sending and interpretation of receiving are described above.</p>
+<p id="rfc.section.3.3.p.3">The MOBILITY-SUPPORT attribute indicates the sender supports ICE Mobility, as defined in this document. This attribute has no value, thus the attribute length field MUST always be 0. Rules for sending and interpretation of receiving are described above.</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Make Before Break</h1>
+<p id="rfc.section.4.p.1">When a new interface comes up and initially selected interface becomes deprioritized (e.g due to a low cost interface becoming available). The ICE endpoint re-connects to the SIP proxy using the new interface, gather candidates, exchange updated offer/exchange to restart ICE. Once ICE processing has reached the Completed state then the ICE endpoint can successfully switch the media over to the new interface.  The interface initially used for communication can now be turned off without disrupting communications.</p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#compare" id="compare">Comparison to ICE Restart and Trickle ICE</a></h1>
+<p id="rfc.section.5.p.1">There has been some concern that ICE Mobility is unnecessary, and that an ICE restart (section 9.1.1.1 of <a href="#RFC5245">[RFC5245]</a>) would provide exactly the same functionality as ICE Mobility. These sections examine how ICE restart and Trickle ICE <a href="#I-D.rescorla-mmusic-ice-trickle">[I-D.rescorla-mmusic-ice-trickle]</a> compare with ICE Mobility.</p>
+<h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#diff" id="diff">Break Before Make - ICE Restart</a></h1>
+<p/>
+
+<ul>
+  <li>If ICE Restart is used for RTP Mobility then in case of Break before Make,<ol><li>Before the endpoint can send an ICE restart message, it has to first re-establish communication with its SIP proxy. This consumes one round-trip for both TCP and UDP. If the connection is protected with TLS (TCP) or DTLS (UDP), we can assume TLS session resumption <a href="#RFC5077">[RFC5077]</a> will be used to reduce the number of TLS messages. With TLS session resumption, this consumes 1 round trip. If TLS session resumption is not available, a full TLS handshake consumes 2 round trips. This is a total of 2 round trips (with session resumption) to 3 round trips (without session resumption), which is multiplied by the round trip time to the SIP proxy.  The round trip time is dependent on a particular network or deployment, for example in second (2.5G), third (3G) generation wireless networks and satellite communication round trip time could be higher than 250ms. These calculations are only considering the network round-trip time and do not consider the wall-clock time to validate the TLS certificates or generate the TLS keys on the TLS client or the TLS server, which would make this longer.</li><li>While performing the above steps to re-establish SIP connectivity with its SIP proxy, the endpoint will gather host candidates which incur no network traffic, server-reflexive candidates which incur a round-trip to a STUN server, and relayed candidates which incurs three round trips (two for re-authentication and one for creating the TURN permission).  The STUN and TURN communications can be performed in parallel with the SIP connectivity check from step (1), above.</li><li>The endpoints through the SIP server will exchange offer/answer. The SIP server could also be located halfway around the world from the endpoints and the delay could be significant. For SIP over UDP the endpoint will have send a SIP request and wait for the response to arrive.</li><li>ICE restart requires sending a new INVITE. A new INVITE cannot be sent if there is an open SIP dialog, such as a previous INVITE. This means rapid mobility events will not work well, and there is also an increased likelihood for glare (both endpoints sending INVITEs at the same time).</li></ol></li>
+</ul>
+<h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> Break Before Make - Trickle ICE</h1>
+<p/>
+
+<ul>
+  <li>If Trickle ICE <a href="#I-D.rescorla-mmusic-ice-trickle">[I-D.rescorla-mmusic-ice-trickle]</a> is used for RTP Mobility then in case of Break before Make,<ol><li>Trickle ICE can begin connectivity checks while the endpoint is still gathering candidates and can considerably shorten the time necessary for ICE processing to complete. It still involves the overhead of step 1 explained in section <a href="#diff">Section 5.1</a>.</li><li>The endpoint would learn host candidates and inform them to the remote peer in offer, the remote peer will provide its candidates in answer. The host, server reflexive, peer reflexive and relayed candidates of the remote peer may not change and the remote peer does not have to gather the candidates again. Trickle ICE will test local host candidates with all types of remote candidates provided by the remote peer in the answer. <ol style="list-style-type: lower-alpha"><li>If the endpoint is not behind NAT and the ICE peer is behind NAT performing endpoint dependent filtering (or firewall blocking unsolicited incoming traffic) then ICE connectivity checks initiated by the endpoint to the remote peer will succeed as a consequence of suicide ICE connectivitivy check packets.</li><li>If the endpoint is behind NAT and ICE peer is behind endpoint-dependent filtering NAT then ICE connectivity checks using the first offer/answer will fail but will later succeed in subsequent offer/answer where the endpoint provides server-reflexive candidates.</li></ol></li><li>Trickle ICE must be supported by both endpoints for it be used.</li></ol></li>
+  <li>If both endpoints support TRICKLE ICE then it is RECOMMENDED that TRICKLE ICE be tried instead of ICE restart in steps (a) and (b) of <a href="#Mob">Section 3.1</a>.</li>
+</ul>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> IANA Considerations</h1>
+<p id="rfc.section.6.p.1">IANA is requested to add the following attributes to the <a href="#iana-stun">STUN attribute registry</a> <cite title="NONE">[iana-stun]</cite>, </p>
+
+<ul>
+  <li>MOBILITY-EVENT (0x802, in the comprehension-required range)</li>
+  <li>MOBILITY-SUPPORT (0x8000, in the comprehension-optional range)</li>
+</ul>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> Security Considerations</h1>
+<p id="rfc.section.7.p.1">A mobility event only occurs after both ICE endpoints have exchanged their ICE information. Thus, both username fragments are already known to both endpoints. Each endpoint contributes at least 24 bits of randomness to the ice-ufrag (Section 15.4 of <a href="#RFC5245">[RFC5245]</a>), which provides 48 bits of randomness. An off-path attacker would have to guess those 48 bits to cause the endpoints to perform HMAC-SHA1 validation of the MESSAGE-INTEGRITY attribute.</p>
+<p id="rfc.section.7.p.2">An attacker on the path between the ICE endpoints will see both ice-ufrags, and can cause the endpoints to perform HMAC-SHA1 validation by sending messages from any IP address.</p>
+<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> Acknowledgements</h1>
+<p id="rfc.section.8.p.1">Thanks to Alfred Heggestad, Lishitao, Sujing Zhou, Martin Thomson, Emil Ivov for review and comments.</p>
+<h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> Change History</h1>
+<p id="rfc.section.9.p.1">[Note to RFC Editor: Please remove this section prior to publication.]</p>
+<h1 id="rfc.section.9.1"><a href="#rfc.section.9.1">9.1.</a> Changes from draft-wing-mmusic-ice-mobility-00 to -01</h1>
+<p/>
+
+<ul>
+  <li>Updated section 3</li>
+</ul>
+<h1 id="rfc.section.9.2"><a href="#rfc.section.9.2">9.2.</a> Changes from draft-wing-mmusic-ice-mobility-01 to -02</h1>
+<p/>
+
+<ul>
+  <li>Updated Introduction, Notational Conventions, sections 3.1, 3.2.</li>
+  <li>Updated section 3.5</li>
+</ul>
+<h1 id="rfc.section.9.3"><a href="#rfc.section.9.3">9.3.</a> Changes from draft-wing-mmusic-ice-mobility-02 to -03</h1>
+<p/>
+
+<ul>
+  <li>Moved sections Presence of other interfaces in Valid list, Losing an Interface to Appendix.</li>
+</ul>
+<h1 id="rfc.section.9.4"><a href="#rfc.section.9.4">9.4.</a> Changes from draft-wing-mmusic-ice-mobility-03 to -04</h1>
+<p/>
+
+<ul>
+  <li>Added Section 6.</li>
+</ul>
+<h1 id="rfc.section.9.5"><a href="#rfc.section.9.5">9.5.</a> Changes from draft-wing-mmusic-ice-mobility-04 to -05</h1>
+<p/>
+
+<ul>
+  <li>Updated Section 6.</li>
+</ul>
+<h1 id="rfc.section.9.6"><a href="#rfc.section.9.6">9.6.</a> Changes from draft-wing-mmusic-ice-mobility-05 to -06</h1>
+<p/>
+
+<ul>
+  <li>Updated Section 5.</li>
+  <li>Added Implementation Status section.</li>
+</ul>
+<h1 id="rfc.section.9.7"><a href="#rfc.section.9.7">9.7.</a> Changes from draft-wing-mmusic-ice-mobility-06 to -07</h1>
+<p/>
+
+<ul>
+  <li>Removed Turn Mobility</li>
+</ul>
+<h1 id="rfc.references"><a href="#rfc.references">10.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">10.1.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5245">[RFC5245]</b>
+      </td>
+      <td class="top"><a>Rosenberg, J.</a>, "<a href="http://tools.ietf.org/html/rfc5245">Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal for Offer/Answer Protocols</a>", RFC 5245, April 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5389">[RFC5389]</b>
+      </td>
+      <td class="top"><a>Rosenberg, J.</a>, <a>Mahy, R.</a>, <a>Matthews, P.</a> and <a>D. Wing</a>, "<a href="http://tools.ietf.org/html/rfc5389">Session Traversal Utilities for NAT (STUN)</a>", RFC 5389, October 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5766">[RFC5766]</b>
+      </td>
+      <td class="top"><a>Mahy, R.</a>, <a>Matthews, P.</a> and <a>J. Rosenberg</a>, "<a href="http://tools.ietf.org/html/rfc5766">Traversal Using Relays around NAT (TURN): Relay Extensions to Session Traversal Utilities for NAT (STUN)</a>", RFC 5766, April 2010.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">10.2.</a> Informative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="I-D.rescorla-mmusic-ice-trickle">[I-D.rescorla-mmusic-ice-trickle]</b>
+      </td>
+      <td class="top"><a>Rescorla, E.</a>, <a>Uberti, J.</a> and <a>E. Ivov</a>, "<a href="http://tools.ietf.org/html/draft-rescorla-mmusic-ice-trickle-01">Trickle ICE: Incremental Provisioning of Candidates for the Interactive Connectivity Establishment (ICE) Protocol</a>", Internet-Draft draft-rescorla-mmusic-ice-trickle-01, October 2012.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5077">[RFC5077]</b>
+      </td>
+      <td class="top"><a>Salowey, J.</a>, <a>Zhou, H.</a>, <a>Eronen, P.</a> and <a>H. Tschofenig</a>, "<a href="http://tools.ietf.org/html/rfc5077">Transport Layer Security (TLS) Session Resumption without Server-Side State</a>", RFC 5077, January 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5763">[RFC5763]</b>
+      </td>
+      <td class="top"><a>Fischl, J.</a>, <a>Tschofenig, H.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5763">Framework for Establishing a Secure Real-time Transport Protocol (SRTP) Security Context Using Datagram Transport Layer Security (DTLS)</a>", RFC 5763, May 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5780">[RFC5780]</b>
+      </td>
+      <td class="top"><a>MacDonald, D.</a> and <a>B. Lowekamp</a>, "<a href="http://tools.ietf.org/html/rfc5780">NAT Behavior Discovery Using Session Traversal Utilities for NAT (STUN)</a>", RFC 5780, May 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6263">[RFC6263]</b>
+      </td>
+      <td class="top"><a>Marjou, X.</a> and <a>A. Sollaud</a>, "<a href="http://tools.ietf.org/html/rfc6263">Application Mechanism for Keeping Alive the NAT Mappings Associated with RTP / RTP Control Protocol (RTCP) Flows</a>", RFC 6263, June 2011.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6982">[RFC6982]</b>
+      </td>
+      <td class="top"><a>Sheffer, Y.</a> and <a>A. Farrel</a>, "<a href="http://tools.ietf.org/html/rfc6982">Improving Awareness of Running Code: The Implementation Status Section</a>", RFC 6982, July 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="iana-stun">[iana-stun]</b>
+      </td>
+      <td class="top"><a>IANA, </a>, "<a href="http://www.iana.org/assignments/stun-parameters/stun-pa rameters.xml">IANA: STUN Attributes</a>", April 2011.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.appendix.A"><a href="#rfc.appendix.A">Appendix A.</a> </h1>
+<p/>
+<h1 id="rfc.appendix.A.1"><a href="#rfc.appendix.A.1">A.1.</a> <a href="#reuse" id="reuse">Presence of other interfaces in Valid list</a></h1>
+<p id="rfc.section.A.1.p.1">This technique is optional and only relevant if there is a host policy to maintain unused candidates on other interfaces using the steps in <a href="#keep">Appendix A.2.1</a>. ICE Agent can maintain unused candidates on other interfaces if it detects that it is behind Address-Dependent Filtering NAT or Firewall. ICE Agent can detect NAT, Firewall behaviour using the procedure explained in <a href="#RFC5780">[RFC5780]</a>. When the interface currently being used for media communication becomes unavailable. If other interfaces are available and local candidates from these interfaces are already present in the valid list then ICE endpoint will perform the following steps:</p>
+<p/>
+
+<ol>
+  <li>The ICE endpoint based on the locally configured host policy preferences, will select a interface whose candidates are already present in the valid list.</li>
+  <li>The ICE endpoint clears all the pairs in the valid list containing the IP addresses from the interface that become unavailable.</li>
+  <li>The ICE endpoint initiates ICE connectivity checks on the selected interface. The ICE endpoint acts as controlling agent and MUST include MOBILITY-EVENT attribute to signal mobility event and SHOULD also include the USE-CANDIDATE attribute to signal an aggressive nomination (see Section 2.6 of <a href="#RFC5245">[RFC5245]</a>). When all components have a nominated pair in the valid list, media can begin to flow using the highest priority nominated pair.</li>
+  <li>The ICE endpoint will re-establish connection with the SIP proxy. Once ICE connectivity checks for all of the media streams are completed, the controlling ICE endpoint follows the procedures in Section 11.1 of <a href="#RFC5245">[RFC5245]</a>, specifically to send updated offer if the candidates in the m and c lines for the media stream (called the DEFAULT CANDIDATES) do not match ICE's SELECTED CANDIDATES (also see Appendix B.9 of <a href="#RFC5245">[RFC5245]</a>).</li>
+</ol>
+<p id="rfc.section.A.1.p.3">The ICE endpoint after Mobility using ICE is successful can issue an updated offer indicating ICE restart if higher priority interface becomes available.</p>
+<h1 id="rfc.appendix.A.1.1"><a href="#rfc.appendix.A.1.1">A.1.1.</a> <a href="#recvMob1" id="recvMob1">Receiving ICE Mobility event</a></h1>
+<p id="rfc.section.A.1.1.p.1">The ICE endpoint that receives ICE Mobility Event will perform the steps in <a href="#recvMob">Section 3.1.1</a>.</p>
+<h1 id="rfc.appendix.A.2"><a href="#rfc.appendix.A.2">A.2.</a> Losing an Interface</h1>
+<p id="rfc.section.A.2.p.1">When an interface is lost, the SDP MAY be updated, so that the remote ICE host does not waste its efforts with connectivity checks to that address, as those checks will fail. Because it can be argued that this is merely an optimization, and that the interface loss might be temporary (and soon regained), and that ICE has reasonable accommodation for candidates where connectivity checks timeout, this specification does not strongly encourage updating the SDP to remove a lost interface.</p>
+<p id="rfc.section.A.2.p.2">Likewise, this specification recommends that ICE candidate addresses in valid list be maintained actively, subject to the host's policy. For example, battery operated hosts have a strong incentive to not maintain NAT binding for server reflexive candidates learnt through STUN Binding Request, as the maintenance requires sending periodic STUN Binding Indication. As another example, a host that is receiving media over IPv6 may not want to persist with keeping a NATted IPv4 mapping alive (because that consumes a NAT mapping that could be more useful to a host actively utilizing the mapping for real traffic).</p>
+<p id="rfc.section.A.2.p.3">Note: this differs from Section 8.3 of <a href="#RFC5245">[RFC5245]</a>, which encourages abandoning unused candidates.</p>
+<h1 id="rfc.appendix.A.2.1"><a href="#rfc.appendix.A.2.1">A.2.1.</a> <a href="#keep" id="keep">Keeping unused candidates in the valid list active</a></h1>
+<p id="rfc.section.A.2.1.p.1">ICE endpoint subject to host policy can continue performing ICE connectivity checks using candidates from other interfaces on the host even after ICE is complete. If valid list contains unused candidate pairs from other interfaces and one of these interfaces can be selected to send to media in case the existing interface used for media is unavailable then ICE endpoint can keep the unused candidate pairs from other interface{s} alive by sending keepalives every NN seconds. It is recommended to only keep host/server-reflexive candidates active in the valid list and not the relayed candidates.</p>
+<h1 id="rfc.appendix.A.2.1.1"><a href="#rfc.appendix.A.2.1.1">A.2.1.1.</a> Sending keep alive requests</h1>
+<p id="rfc.section.A.2.1.1.p.1">Application Mechanism for Keeping Alive the NAT Mappings Associated with RTP / RTP Control Protocol (RTCP) Flows <a href="#RFC6263">[RFC6263]</a> describes various reasons for doing keepalives on inactive streams and how to keep NAT mapping alive. However this specification requires some additional functionality associated with the keepalives.</p>
+<p id="rfc.section.A.2.1.1.p.2">STUN binding requests MUST be used as the keepalive message instead of the STUN Binding indication as specified in <a href="#RFC5245">[RFC5245]</a>. This is to ensure positive peer consent from the remote side that the candidate pair is still active and in future mobility can be achieved using the steps in <a href="#reuse">Appendix A.1</a> . The request must include the MOBILITY-SUPPORT attribute. If the STUN binding response matches a pair in the checklist then that candidate pair should be kept in the list. If the STUN transaction fails then the candidate pair will be removed from valid list.</p>
+<h1 id="rfc.appendix.A.2.1.2"><a href="#rfc.appendix.A.2.1.2">A.2.1.2.</a> Receiving keep alive requests</h1>
+<p id="rfc.section.A.2.1.2.p.1">Upon receiving a STUN binding request containing a MOBILITY-SUPPORT attribute even when ICE processing is in the Completed state, the ICE endpoint will add this pair to the valid list if not already present and generate STUN Binding Response containing the MOBILE-SUPPORT attribute.</p>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Authors' Addresses</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Dan Wing</span> 
+	  <span class="n hidden">
+		<span class="family-name">Wing</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">170 West Tasman Drive</span>
+
+	  <span class="vcardline">
+		<span class="locality">San Jose</span>,  
+		<span class="region">California</span> 
+		<span class="code">95134</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:dwing@cisco.com">dwing@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Tirumaleswar Reddy</span> 
+	  <span class="n hidden">
+		<span class="family-name">Reddy</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park, Varthur Hobli</span>
+<span class="vcardline">Sarjapur Marathalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:tireddy@cisco.com">tireddy@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Prashanth Patil</span> 
+	  <span class="n hidden">
+		<span class="family-name">Patil</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">Cessna Business Park, Varthur Hobli</span>
+<span class="vcardline">Sarjapur Marthalli Outer Ring Road</span>
+
+	  <span class="vcardline">
+		<span class="locality">Bangalore</span>,  
+		<span class="region">Karnataka</span> 
+		<span class="code">560103</span>
+	  </span>
+	  <span class="country-name vcardline">India</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:praspati@cisco.com">praspati@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Paal-Erik Martinsen</span> 
+	  <span class="n hidden">
+		<span class="family-name">Martinsen</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">Philip Pedersens vei 22</span>
+
+	  <span class="vcardline">
+		<span class="locality">Lysaker</span>,  
+		<span class="region">Akershus</span> 
+		<span class="code">1325</span>
+	  </span>
+	  <span class="country-name vcardline">Norway</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:palmarti@cisco.com">palmarti@cisco.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>

@@ -427,9 +427,9 @@ Table of Contents
 13.2.  Informative References
 
    [I-D.bortzmeyer-dnsop-dns-privacy]
-              Bortzmeyer, S., "DNS privacy problem statement", draft-
-              bortzmeyer-dnsop-dns-privacy-01 (work in progress),
-              December 2013.
+              Bortzmeyer, S., "DNS privacy considerations", draft-
+              bortzmeyer-dnsop-dns-privacy-02 (work in progress), April
+              2014.
 
    [I-D.hzhwm-start-tls-for-dns]
               Zi, Z., Zhu, L., Heidemann, J., Mankin, A., and D.

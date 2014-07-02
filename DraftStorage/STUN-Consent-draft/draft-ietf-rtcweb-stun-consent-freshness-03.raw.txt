@@ -5,11 +5,11 @@
 RTCWEB                                                        M. Perumal
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                         R. Ravindranath
-Expires: November 27, 2014                                      T. Reddy
+Expires: December 15, 2014                                      T. Reddy
                                                            Cisco Systems
                                                               M. Thomson
                                                                  Mozilla
-                                                            May 26, 2014
+                                                           June 13, 2014
 
 
                     STUN Usage for Consent Freshness
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 27, 2014.
+   This Internet-Draft will expire on December 15, 2014.
 
 Copyright Notice
 
@@ -95,9 +95,10 @@ Table of Contents
    actions (e.g., alert the user, try switching to a different
    interface).
 
-   This document describes a new STUN usage with a request and response
-   messages which verifies the remote peer's consent to receive traffic,
-   and can also detect loss of liveness.
+   This document describes a new STUN usage with exchange of request and
+   response messages to verify the remote peer's consent to receive
+   traffic, and the absence of which for a period of time indicates a
+   loss of liveness.
 
    Consent is done irrespective of transport protocol used for media.
    When TCP is used as transport for media from a TURN client to a TURN
@@ -156,7 +157,7 @@ Table of Contents
    obtained following the procedure described in this document.  The
    consent expires after a fixed amount of time.
 
-   Explicit consent to send is indicated by sending an ICE binding
+   Explicit consent to send is obtained by sending an ICE binding
    request to the remote peer's Transport Address and receiving a
    matching and authenticated ICE binding response from the inverted
    remote peer's Transport Address.  These ICE binding requests and
@@ -185,13 +186,13 @@ Table of Contents
    transaction-id, because that enables spoofing STUN responses,
    falsifying consent
 
-   An endpoint that is only receiving application traffic (recvonly)
-   does not need to obtain consent which can slightly conserve its
-   resources.  However, the endpoint needs to ensure its NAT or firewall
-   mappings persist which can be done using keepalive or other
-   techniques (see Section 10 of [RFC5245] and see [RFC6263]).  If the
-   endpoint wants send application traffic, it needs to first obtain
-   consent if its consent expired.
+   An endpoint that is not sending any application traffic does not need
+   to obtain consent which can slightly conserve its resources.
+   However, the endpoint needs to ensure its NAT or firewall mappings
+   persist which can be done using keepalive or other techniques (see
+   Section 10 of [RFC5245] and see [RFC6263]).  If the endpoint wants
+   send application traffic, it needs to first obtain consent if its
+   consent has expired.
 
 4.2.  Immediate Revocation of Consent
 
@@ -226,19 +227,18 @@ Table of Contents
 
    Sending consent checks (heartbeats) at a high rate could allow a
    malicious application to generate congestion, so applications MUST
-   NOT be able to send heartbeats faster than 1 per second.
+   NOT send heartbeats at an average rate of more than 1 per second.
 
 6.  DiffServ Treatment for Consent packets
 
    It is RECOMMENDED that STUN consent checks use the same Diffserv
-   Codepoint markings as the media packets sent on that transport
-   address.  This follows the recommendation of ICE connectivity check
-   described in section 7.1.2.4 of [RFC5245].
+   Codepoint markings as the ICE connectivity checks described in
+   section 7.1.2.4 of [RFC5245] for a given 5-tuple.
 
    Note: It is possible that different Diffserv Codepoints are used by
    different media over the same transport address
-   [I-D.ietf-tsvwg-rtcweb-qos].  In that case, what should this document
-   recommend as the Codepoint for STUN consent packets ?
+   [I-D.ietf-tsvwg-rtcweb-qos].  Such a case is outside the scope of
+   this document.
 
 7.  W3C API Implications
 

@@ -1,0 +1,560 @@
+
+
+
+
+STRAW                                                    R. Ravindranath
+Internet-Draft                                                  T. Reddy
+Intended status: Standards Track                            G. Salgueiro
+Expires: December 22, 2014                                         Cisco
+                                                           June 20, 2014
+
+
+STUN message handling in Session Initiation Protocol (SIP) Back-to-Back
+                          User Agents (B2BUAs)
+                     draft-ram-straw-b2bua-stun-00
+
+Abstract
+
+   SIP Back-to-Back User Agents (B2BUAs) are often envisaged to be on
+   the media path, rather than just intercepting signaling.  This means
+   that B2BUAs often act on the media path leading to separate media
+   legs that the B2BUA correlates and bridges together.  When acting on
+   the media path, the B2BUAs are likely to receive packets like STUN
+   for ICE apart from the media packets.  It is critical that the B2BUAs
+   handle these STUN messages properly.
+
+   This document defines the proper behavior B2BUAs should follow when
+   STUN messages are sent on the media path.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on December 22, 2014.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 1]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Media Plane B2BUAs  . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Media Relay or Media aware or Media Termination . . . . .   4
+     3.2.  STUN interaction with DTLS-SRTP in B2BUA  . . . . . . . .   6
+     3.3.  STUN Handling in B2BUA with Forked Signaling  . . . . . .   8
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
+   6.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+
+1.  Introduction
+
+   Protocols using offer/answer like the Session Initiation Protocol
+   (SIP) [RFC3261] are difficult to operate through Network Address
+   Translators (NAT) because they carry IP addresses within their
+   messages.  To remedy this, an extension to SDP [RFC4566], called
+   Interactive Connectivity Establishment (ICE) has been defined
+   [RFC5245].  ICE defines procedures by which agents gather a
+   multiplicity of addresses, include all of them in an SDP offer or
+   answer, and then use peer-to-peer connectivity checks using Session
+   Traversal Utilities for NAT (STUN) [RFC5389]  to determine a valid
+   candidate pair for each media stream.
+
+   In many SIP deployments, SIP entities exist in the SIP signaling path
+   between the originating and final terminating endpoints.  These SIP
+   entities, as described in [RFC7092], modify SIP headers, SDP bodies
+   and also are likely to be on the media path.  Such entities, when
+   present in the media path, are likely to do several things.  For
+   example, some B2BUAs modify parts of the SDP body (like IP address,
+   port) and subsequently modify the transport headers as well.  There
+   are other types of B2BUAs that completely modify the transport
+   payload.  (e.g., a media transcoder).
+
+
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 2]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+   Section 18.6 of ICE [RFC5245] explains about two different behaviors
+   when B2BUAs are present.  Some B2BUAs are likely to remove all the
+   SDP ICE attributes before sending the SDP across to the other side.
+   Consequently, the call will appear to both endpoints as if the other
+   side doesn't support ICE.  There are other types of B2BUAs that
+   passes the ICE attributes without modification, yet modifies the
+   default destination for media (contained in the m and c lines and
+   rtcp attribute), this will be detected as an ICE mismatch, and ICE
+   processing is aborted for the call.  This behavior of disabling ICE
+   is not always desirable especially when one of the endpoints is
+   behind a NAT.
+
+   [RFC7092] describes three different categories of such B2BUAs,
+   according to the level of activities performed on the media plane:
+
+      A B2BUA that acts as a simple media relay effectively unaware of
+      anything that is transported and only modifies the transport
+      header (could be UDP/IP) of the media packets.
+
+      A B2BUA that performs a media-aware role.  It inspects and
+      potentially modifies RTP or RTP Control Protocol (RTCP) headers;
+      but it does not modify the payload of RTP/RTCP.
+
+      A B2BUA that performs a media-termination role and operates at the
+      media payload layer, such as RTP/RTCP payload (e.g., a
+      transcoder).
+
+   When such a B2BUA operating on a media plane is involved a call
+   between two endpoints that performs ICE, then it SHOULD follow the
+   behavior mentioned in this specification.
+
+2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+   The following generalized terms are defined in [RFC3261], Section 6.
+
+      B2BUA: A SIP Back-to-Back User Agent, which is the logical
+      combination of a User Agent Server (UAS) and User Agent Client
+      (UAC).
+
+      UAS: A SIP User Agent Server.
+
+      UAC: A SIP User Agent Client.
+
+
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 3]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+   All of the pertinent B2BUA terminology and taxonomy used in this
+   document is based on [RFC7092].
+
+3.  Media Plane B2BUAs
+
+3.1.  Media Relay or Media aware or Media Termination
+
+   When one or both the endpoints are behind NAT, and there is a B2BUA
+   between the endpoints, it is desirable to have the B2BUA support ICE
+   or at the minimum support ICE LITE functionality as described in
+   [RFC5245].  Such B2BUAs MUST implement ICE and STUN and handle STUN
+   messages sent by the endpoints on the media path.  B2BUAs MUST use
+   the mechanism described in section 5.1.2 of [RFC5764] to demultiplex
+   STUN packets that arrive on the RTP/RTCP port.
+
+   A B2BUA operating on a media plane MUST follow the below steps when
+   it receives a SDP with ICE semantics.
+
+      When a B2BUA receives a SDP OFFER with ICE semantics it MUST
+      respond with a SDP ANSWER having ICE candidates.  A B2BUA MAY be
+      in ICE lite mode as described in section 2.7 of [RFC5245] in which
+      case it MUST send a=ice-lite and MUST include host candidates for
+      each component of each media stream.
+
+      If the B2BUA supports full ICE, then it MAY include candidates of
+      different types for each component of each media stream in the SDP
+      offer/answer.
+
+      A B2BUA when it sends out SDP with OFFER, it MUST advertise
+      support for ICE and MAY include candidates of different types for
+      each component of each media stream.
+
+      The B2BUA MUST generate new username, password values for ice-
+      ufrag and ice-pwd attributes when it sends out the SDP and MUST
+      NOT propagate the ufrag/password values it received in the
+      incoming SDP.  This ensures that the short-term credentials used
+      for both the legs are different.  B2BUA terminates the STUN
+      message on each leg, generates new STUN message using new
+      cryptographically-random [RFC4086] STUN transaction ID and
+      computes the message integrity for STUN messages using the new
+      credentials.
+
+      The B2BUA MUST generate and/or respond to ICE connectivity checks
+      after offer/answer is completed.
+
+
+
+
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 4]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+       +-------+            +------------------+              +-----+
+       | Alice |            | Mediaplane B2BUA |              | Bob |
+       +-------+            +------------------+              +-----+
+           |(1) INVITE               |  (3)INVITE                |
+           |   a=ice-ufrag1          |    a=ice-ufrag2           |
+           |   a=ice-pwd1            |     a=ice-pwd2            |
+           |   (alice's IP/port)     |   (B2BUA's IP, port)      |
+           |(Alice's candidate list )|   (B2BUA's candidate list)|
+           |------------------------>|-------------------------->|
+           |                         |                           |
+           |    (2)  100 trying      |                           |
+           |<------------------------|                           |
+           |                         | (4) 100 trying            |
+           |                         |<--------------------------|
+           |                         |  (5)200 OK                |
+           |                         |   a=ice-ufrag3            |
+           |                         |    a=ice-pwd3             |
+           |                         |   a=setup:active          |
+           |                         |    a=fingerprint2         |
+           |                         |  (Bob's IP, port)         |
+           |                         | (Bob's candidate list)    |
+           |                         | <-------------------------|
+           |    (6) 200 OK           |                           |
+           |    a=ice-ufrag4         | ----------ACK------------>|
+           |    a=ice-pwd4           |           (7)             |
+           |    a=setup:active       |                           |
+           |    a=fingerprint2       |                           |
+           |    B2BUA's address,port |                           |
+           | (B2BUA's cand list1)    |                           |
+           |<------------------------|                           |
+           | -------ACK------------->|                           |
+           |              (8)        |                           |
+           |                         |                           |
+           |<----ICE Connectivity 1->|                           |
+           |      checks+conclusion  |<-----ICE Connectivity 2-->|
+           |         (9)             |        checks +conclusion |
+           |                         |         (10)              |
+           |<-------Media packets -->|<----Media packets-------->|
+           |      (13)               |         (14)              |
+           |                         |                           |
+           |<---ICE keepalives 1---->|                           |
+           |        (15)             |<----ICE keep alives 2---->|
+                                            (16)
+
+     Figure 1: INVITE with SDP having ICE and with a Media Plane B2BUA
+
+   Above figure shows a sample call flow with two endpoints Alice and
+   Bob doing ICE and a B2BUA handing STUN messages from both the
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 5]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+   endpoints.  For the sake of brevity the entire ICE SDP attributes are
+   not shown.  Also the STUN messages exchanged as part of ICE
+   connectivity checks are not shown.  Key steps to note from the call
+   flow are:
+
+   1.  Alice sends an INVITE with SDP offer having ICE candidates.
+
+   2.  B2BUA modifies the received SDP from Alice by removing the
+       received candidates, gathers its own candidates, updates ice-
+       ufrag, ice-password attributes with new username, password values
+       and forwards the INVITE (3) to Bob.
+
+   3.  Bobs responds(5) to the INVITE with his own list of candidates.
+
+   4.  B2BUA responds to the INVITE from Alice with SDP having B2BUA's
+       candidate list.  B2BUA would also convey ice-ufrag, ice-password
+       attributes with new username, password values in the 200 OK
+       response(6).
+
+   5.  ICE Connectivity checks happen between Alice and B2BUA in step 9.
+       Depending on whether the B2BUA supports ICE or ICE lite it will
+       follow the appropriate procedures mentioned in [RFC5245].  The
+       B2BUA MUST process the STUN request sent by Alice and respond to
+       the same without forwarding it to the other side (Bob).
+
+   6.  ICE Connectivity checks also happen between Bob and B2BUA in step
+       10.  Step 9, 10 happens in parallel and STUN messages on each
+       side MUST NOT be forwarded to the other side by the B2BUA.
+
+   7.  Once ICE is completed on each side, there MAY be a updated SIP
+       offer/answer (steps 11 to 14).
+
+   8.  Media flows between Alice and Bob via B2BUA (Step 13, 14).
+
+   9.  STUN keepalives would be used between Alice and B2BUA (step 15)
+       and between Bob and B2BUA (step 16) to keep NAT, Firewall
+       bindings alive.
+
+3.2.  STUN interaction with DTLS-SRTP in B2BUA
+
+   (TODO: Add reference to DTLS-STRAW draft) describes the behavior of
+   B2BUAs when DTLS-SRTP [RFC5764] is used by Session Initiation
+   Protocol (SIP) [RFC3261] endpoints to establish a Secure Real-time
+   Transport Protocol (SRTP) [RFC3711] session.  When ICE is used by
+   such endpoints, it needs to take care of the following things:
+
+      If Aggressive nomination is used in ICE, DTLS session is setup as
+      soon as connectivity check for a media stream is complete.  If a
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 6]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+      different candidate pair is selected after ICE conclusion, then
+      the previously setup DTLS session could be re-used using session
+      resumption as mentioned in Appendix B of [RFC5764].
+
+        +------+          +-------------------+             +-------+
+        | Alice|          | Media Plane B2BUA |             |   Bob |
+        +------+          +-------------------+             +-------+
+          |(1) INVITE               |  (3)INVITE                |
+          |   a=ice-ufrag1          |    a=ice-ufrag2           |
+          |   a=ice-pwd1            |     a=ice-pwd2            |
+          |   a=setup:actpass       |   a=setup:actpass         |
+          |   a=fingerprint1        |   a= fingerprint1         |
+          |   (alice's IP/port)     |   (B2BUA's IP, port)      |
+          |(Alice's candidate list )|   (B2BUA's candidate list)|
+          |------------------------>|  ------------------------>|
+          |                         |                           |
+          |    (2)  100 trying      |                           |
+          | <-----------------------|                           |
+          |                         | (4) 100 trying            |
+          |                         | <-------------------------|
+          |                         |                           |
+          |                         |  (5)200 OK                |
+          |                         |   a=ice-ufrag3            |
+          |                         |    a=ice-pwd3             |
+          |                         |   a=setup:active          |
+          |                         |    a=fingerprint2         |
+          |                         |  (Bob's IP, port)         |
+          |                         | (Bob's candidate list)    |
+          |                         | <-------------------------|
+          |    (6) 200 OK           |                           |
+          |    a=ice-ufrag4         |                           |
+          |    a=ice-pwd4           |                           |
+          |    a=setup:active       |                           |
+          |    a=fingerprint2       |                           |
+          |    B2BUA's address,port |                           |
+          | (B2BUA's cand list1)    |                           |
+          |<------------------------|                           |
+          |                         |                           |
+          |<----ICE Connectivity--->|                           |
+          |      checks+conclusion  |<-----ICE Connectivity---->|
+          |         (7)             |        checks +conclusion |
+          |                         |          (8)              |
+          |                         |                           |
+          |    (9)    ClientHello + use_srtp on nominated pair  |
+          |<------------------------|---------------------------|
+          |                         |                           |
+          |           (10)    ServerHello + use_srtp            |
+          | ------------------------|-------------------------->|
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 7]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+          |                 (11)    |                           |
+          |  [Certificate exchange between Alice and Bob over   |
+          |   DTLS or DTLS-SRTP channel as described in RFC5764]|
+          |                         |                           |
+          |                         |                           |
+          |<---------SRTP/SRTCP---->|<----SRTP/SRTCP----------->|
+          |                 (12)    |      (13)                 |
+
+
+    Figure 2: INVITE with SDP having both ICE and DTLS and with a Media
+                                Plane B2BUA
+
+   Below call flows shows a example of how a B2BUA works when both DTLS
+   and ICE are used.  In this example, the B2BUA is in media relay mode
+   for DTLS session and passes across the fingerprint attribute in SDP
+   from Alice to Bob without any modification.
+
+   The above example shows a call flow where endpoints use ICE and
+   DTLS..  The example here shows an early offer call, however the same
+   is applicable for delay media scenarios as well.  For the sake of
+   brevity the entire candidate list is not shown.  After ICE concludes,
+   DTLS session is setup.  DTLS session can be re-used across multiple
+   media streams using session resumption.  DTLS-SRTP RFC also allows
+   peers to establish multiple DTLS sessions, refer to Appendix of
+   [RFC5764] for alternative approach.
+
+3.3.  STUN Handling in B2BUA with Forked Signaling
+
+   B2BUA's may receive multiple answers for an outbound INVITE due to a
+   downstream proxy forking the INVITE to multiple targets.  It is
+   possible that each of these responses have ICE parameters signaled in
+   the SDP.  In such cases, the B2BUA SHOULD take care of doing ICE
+   connectivity checks for each of the forked target.
+
+4.  Security Considerations
+
+   TBA
+
+5.  IANA Considerations
+
+   This document makes no request of IANA.
+
+6.  Acknowledgments
+
+   TBD
+
+
+
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 8]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC3711]  Baugher, M., McGrew, D., Naslund, M., Carrara, E., and K.
+              Norrman, "The Secure Real-time Transport Protocol (SRTP)",
+              RFC 3711, March 2004.
+
+   [RFC4086]  Eastlake, D., Schiller, J., and S. Crocker, "Randomness
+              Requirements for Security", BCP 106, RFC 4086, June 2005.
+
+   [RFC5245]  Rosenberg, J., "Interactive Connectivity Establishment
+              (ICE): A Protocol for Network Address Translator (NAT)
+              Traversal for Offer/Answer Protocols", RFC 5245, April
+              2010.
+
+   [RFC5389]  Rosenberg, J., Mahy, R., Matthews, P., and D. Wing,
+              "Session Traversal Utilities for NAT (STUN)", RFC 5389,
+              October 2008.
+
+   [RFC5763]  Fischl, J., Tschofenig, H., and E. Rescorla, "Framework
+              for Establishing a Secure Real-time Transport Protocol
+              (SRTP) Security Context Using Datagram Transport Layer
+              Security (DTLS)", RFC 5763, May 2010.
+
+   [RFC5764]  McGrew, D. and E. Rescorla, "Datagram Transport Layer
+              Security (DTLS) Extension to Establish Keys for the Secure
+              Real-time Transport Protocol (SRTP)", RFC 5764, May 2010.
+
+7.2.  Informative References
+
+   [RFC3261]  Rosenberg, J., Schulzrinne, H., Camarillo, G., Johnston,
+              A., Peterson, J., Sparks, R., Handley, M., and E.
+              Schooler, "SIP: Session Initiation Protocol", RFC 3261,
+              June 2002.
+
+   [RFC4566]  Handley, M., Jacobson, V., and C. Perkins, "SDP: Session
+              Description Protocol", RFC 4566, July 2006.
+
+   [RFC7092]  Kaplan, H. and V. Pascual, "A Taxonomy of Session
+              Initiation Protocol (SIP) Back-to-Back User Agents", RFC
+              7092, December 2013.
+
+
+
+
+
+
+Ravindranath, et al.    Expires December 22, 2014               [Page 9]
+
+Internet-Draft         STUN handling in SIP B2BUA              June 2014
+
+
+Authors' Addresses
+
+   Ram Mohan Ravindranath
+   Cisco
+   Cessna Business Park
+   Sarjapur-Marathahalli Outer Ring Road
+   Bangalore, Karnataka  560103
+   India
+
+   Email: rmohanr@cisco.com
+
+
+   Tirumaleswar Reddy
+   Cisco
+   Cessna Business Park, Varthur Hobli
+   Sarjapur Marathalli Outer Ring Road
+   Bangalore, Karnataka  560103
+   India
+
+   Email: tireddy@cisco.com
+
+
+   Gonzalo Salgueiro
+   Cisco Systems, Inc.
+   7200-12 Kit Creek Road
+   Research Triangle Park, NC  27709
+   US
+
+   Email: gsalguei@cisco.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ravindranath, et al.    Expires December 22, 2014              [Page 10]
