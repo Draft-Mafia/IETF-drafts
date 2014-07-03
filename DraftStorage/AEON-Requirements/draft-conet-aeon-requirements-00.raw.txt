@@ -3,16 +3,15 @@
 
 
 Internet Engineering Task Force                                   P. Fan
-Internet-Draft                                                   H. Deng
-Intended status: Informational                              China Mobile
-Expires: January 3, 2015                                    M. Boucadair
-                                                          France Telecom
+Internet-Draft                                              China Mobile
+Intended status: Informational                              M. Boucadair
+Expires: January 4, 2015                                  France Telecom
                                                              B. Williams
                                                             Akamai, Inc.
                                                                 T. Reddy
                                                                 C. Eckel
                                                      Cisco Systems, Inc.
-                                                            July 2, 2014
+                                                            July 3, 2014
 
 
        Application Enabled Collaborative Networking Requirements
@@ -49,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 3, 2015.
+   This Internet-Draft will expire on January 4, 2015.
 
 Copyright Notice
 
@@ -181,6 +180,10 @@ Table of Contents
    Req-15:  MUST provide considerations for protection against denial of
       service attacks against network nodes.
 
+   Req-16:  MUST provide mechanism(s) that can be implemented as part of
+      a user process or library that does NOT require any special
+      privileges.
+
    In designing a solution that meets these requirements, considerations
    should be made for existing deployments of heuristic based
    mechanisms.  Such mechanisms are used in many networks and it is
@@ -211,15 +214,6 @@ Authors' Addresses
    P.R. China
 
    Email: fanpeng@chinamobile.com
-
-
-   Hui Deng
-   China Mobile
-   32 Xuanwumen West Street, Xicheng District
-   Beijing  100053
-   P.R. China
-
-   Email: denghui@chinamobile.com
 
 
    Mohamed Boucadair
