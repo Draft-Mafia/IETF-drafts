@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-  <title>Aplication Enabled Collaborative Networking: Security Overview</title>
+  <title>Application Enabled Collaborative Networking: Security Overview</title>
 
   <style type="text/css" title="Xml2Rfc (sans serif)">
   /*<![CDATA[*/
@@ -397,11 +397,11 @@
   <meta name="generator" content="xml2rfc version 2.4.7 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Wing, D., Reddy, T., and P. Patil" />
+  <meta name="dct.creator" content="Wing, D., Reddy, T., Patil, P., and C. Eckel" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-conet-aeon-security-overview-00" />
   <meta name="dct.issued" scheme="ISO8601" content="2014-8-25" />
-  <meta name="dct.abstract" content="Application Enabled Collaborative Networking (AECON) discusses the need for mechanisms using which applications signal the network to provide differential flow treatment for application data traffic. The intent is to have applications protect the content of their flows, yet have the ability to opt-in information exchanges that provide a more precise allocation of network resources and thus get better user experience. This document discusses security implications of such a solution." />
-  <meta name="description" content="Application Enabled Collaborative Networking (AECON) discusses the need for mechanisms using which applications signal the network to provide differential flow treatment for application data traffic. The intent is to have applications protect the content of their flows, yet have the ability to opt-in information exchanges that provide a more precise allocation of network resources and thus get better user experience. This document discusses security implications of such a solution." />
+  <meta name="dct.abstract" content="Application Enabled Collaborative Networking (AECON) discusses the need for mechanisms through which applications exchange information about their flows with the network to achieve better application operation under existing network conditions. The intent is to have applications protect the content of their flows, yet have the ability to opt-in information exchanges that enable a more precise allocation of network resources and thus achieve better user experience. This document discusses security implications of such a solution." />
+  <meta name="description" content="Application Enabled Collaborative Networking (AECON) discusses the need for mechanisms through which applications exchange information about their flows with the network to achieve better application operation under existing network conditions. The intent is to have applications protect the content of their flows, yet have the ability to opt-in information exchanges that enable a more precise allocation of network resources and thus achieve better user experience. This document discusses security implications of such a solution." />
 
 </head>
 
@@ -424,6 +424,10 @@
 </tr>
 <tr>
   <td class="left">Expires: February 26, 2015</td>
+  <td class="right">C. Eckel</td>
+</tr>
+<tr>
+  <td class="left"></td>
   <td class="right">Cisco</td>
 </tr>
 <tr>
@@ -435,13 +439,13 @@
     </tbody>
   </table>
 
-  <p class="title">Aplication Enabled Collaborative Networking: Security Overview<br />
+  <p class="title">Application Enabled Collaborative Networking: Security Overview<br />
   <span class="filename">draft-conet-aeon-security-overview-00</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>Application Enabled Collaborative Networking (AECON) discusses the need for mechanisms using which applications signal the network to provide differential flow treatment for application data traffic. The intent is to have applications protect the content of their flows, yet have the ability to opt-in information exchanges that provide a more precise allocation of network resources and thus get better user experience. This document discusses security implications of such a solution.</p>
+<p>Application Enabled Collaborative Networking (AECON) discusses the need for mechanisms through which applications exchange information about their flows with the network to achieve better application operation under existing network conditions. The intent is to have applications protect the content of their flows, yet have the ability to opt-in information exchanges that enable a more precise allocation of network resources and thus achieve better user experience. This document discusses security implications of such a solution.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
@@ -485,11 +489,11 @@
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
 <p id="rfc.section.1.p.1">Identification and treatment of application flows are important to many application providers and network operators. The problems faced by existing solutions that try to provide such visibility to enable appropriate treatment of application flows are described in detail in <a href="#I-D.conet-aeon-problem-statement">[I-D.conet-aeon-problem-statement]</a>.</p>
 <p id="rfc.section.1.p.2">As the IETF establishes default behaviors that thwart pervasive surveillance (e.g. <a href="#RFC7258">[RFC7258]</a>), it will be important to provide secure mechanism for applications that want to have the network provide differential flow treatment for their data.</p>
-<p id="rfc.section.1.p.3">It is essential that this model considers security and privacy implications to ensure that false claims and unwarranted differentiated treatment for flows are disallowed. For example, the solution should ensure that network be able to trust the application/user/end-point before providing differential treatment. Similarly an application or a client must be able to trust the network before providing flow information. </p>
+<p id="rfc.section.1.p.3">It is essential that this model considers security and privacy implications to provide protection again false claims, leakage of private information, and unwarranted differentiated treatment of flows.  For example, the network may need to validate application provided flow information before using it to provide differential treatment of the application's flows. Similarly, an application may need assurance of confidentiality protection before providing potentially sensitive information.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#notation" id="notation">Notational Conventions</a></h1>
 <p id="rfc.section.2.p.1">TODO</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#AECON" id="AECON">AECON approach</a></h1>
-<p id="rfc.section.3.p.1">The goal of AECON is to offer mechanisms that allow applications to request network services for better user experience. AECON approach towards finding solutions to the use cases described in the <a href="#I-D.conet-aeon-use-cases">[I-D.conet-aeon-use-cases]</a> includes the following steps:</p>
+<p id="rfc.section.3.p.1">The goal of AECON is to offer mechanisms to achieve better application operation under existing network conditions. AECON's approach toward finding solutions to the use cases described in <a href="#I-D.conet-aeon-use-cases">[I-D.conet-aeon-use-cases]</a> includes the following steps:</p>
 <p/>
 
 <ul>
@@ -506,19 +510,19 @@
   <li>On-path application protocol: STUN with flow meta data extensions between hosts. Handles UDP flows.</li>
 </ul>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> Flow Metadata Handling</h1>
-<p id="rfc.section.3.2.p.1">In AECON, applications signal the flow characteristics to the network. The network responds back to applications with the result of processing the request. Depending on its nature and needs, the application may request different flow characteristics. As the application requirements change, the flow characteristics communicated to the network may be revised. When network state changes or when different events occur, if needed, network element sends update that the flow can no longer be accommodated. For example an application may send at startup certain bandwidth, delay and jitter requirements. The network performs bandwidth accounting against the matching service class and sends an acknowledgment to the application. </p>
+<p id="rfc.section.3.2.p.1">In AECON, applications signal their flow characteristics to the network. The network responds back to applications with information regarding its ability to transport those flows. Depending on its nature and needs, the application may provide different flow characteristics. As the application requirements change, the flow characteristics communicated to the network may be revised. When network state changes or when different events occur, a network element may provide updated information about its ability to transport flows. For example an application may send at startup certain bandwidth, delay and jitter requirements for each of its flows. The network performs bandwidth accounting against the matching service class and sends an acknowledgment to the application.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#sec_overview" id="sec_overview">Security overview</a></h1>
-<p id="rfc.section.4.p.1">As described earlier, it is essential that the AECON solution considers all security implications and the mechanism/protocol that is chosen for the solution complies to the required security requirements.  This section lists a set of basic security requirements that any such mechanism/protocol must support.</p>
+<p id="rfc.section.4.p.1">As described previously, AECON addresses a wide range of use cases with varying security implications and requirements. It is essential that the AECON solution considers all security implications, and that the protocols and mechanisms chosen for the solution meet this requirements. This section lists a set of basic security requirements that any such mechanism/protocol must support.</p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> Mutual authentication</h1>
-<p id="rfc.section.4.1.p.1">A basic security requirement is that there must be a mechanism for mutual authentication between the application signaling flow information and the network entity that uses this flow information to provide differential treatment for flows. Without this, the solution is open for attacks with fake applications falsely claiming to be legitimate applications that require special treatment i.e. The network infrastructure is at risk of being misused. Should the network entity be spoofed, applications could be misled that the network has accommodated the requested flow characteristics.</p>
+<p id="rfc.section.4.1.p.1">A basic security requirement is that there must be a mechanism for mutual authentication between the application signaling flow information and the network entity that uses this flow information to provide differential treatment for flows as well as feedback to applications about such treatment. Without this, the solution is open for attacks with fake applications falsely claiming to be legitimate applications that require special treatment i.e. The network infrastructure is at risk of being misused. Should the network entity be spoofed, applications could be misled that the network has accommodated the requested flow characteristics.</p>
 <h1 id="rfc.section.4.1.1"><a href="#rfc.section.4.1.1">4.1.1.</a> Integrity protection</h1>
-<p id="rfc.section.4.1.1.p.1">Integrity protection is necessary to ensure that a man-in-middle device does not alter the signaling information, thus ensuring that the network receives the flow characteristics as sent by the client and the client receives flow characteristics accommodated by the network. Compromise in integrity could result in applications flows not receiving the intented treatment.</p>
+<p id="rfc.section.4.1.1.p.1">Integrity protection is necessary to ensure that a man-in-the-middle device does not alter the signaling information, thus ensuring that the network receives the flow characteristics as sent by the client and the client receives flow characteristics accommodated by the network. Compromise in integrity could result in applications flows not receiving the intended treatment.</p>
 <h1 id="rfc.section.4.1.2"><a href="#rfc.section.4.1.2">4.1.2.</a> Replay Protection</h1>
 <p id="rfc.section.4.1.2.p.1">The mechanism should have replay protection i.e a network attack in which flow characteristics requested by the client and accommodated by the network is maliciously or fraudulently repeated or delayed. Security guarantees are not possible if the mechanism cannot detect and protect itself from replay attacks possibly as part of a masquerade attack by IP packet substitution.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> Security with browser-based applications</h1>
 <p id="rfc.section.4.2.p.1">The basic assumption is that browser serves as the user's TRUSTED COMPUTING BASE (TCB). Any security property which the user wishes to have enforced must be ultimately guaranteed by the browser (or transitively by some property the browser verifies). Conversely, if the browser is compromised, then no security guarantees are possible.  Browser must validate the flow characteristics signaled via a JavaScript (JS) API and discard any request seeking far more resources than actually required or requests far less resources but consumes far more resources than the requested flow characteristics.</p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> Privacy</h1>
-<p id="rfc.section.4.3.p.1">An eavesdropping entity should not be able to glean any information that could leak privacy-related information like application name from the protocol signaling flow characteristics to the network.</p>
+<p id="rfc.section.4.3.p.1">An eavesdropping entity should not be able to glean any information that could leak privacy-related information like application name from the protocol signaling flow characteristics to the network. The best protection against privacy related information leakage is to not include any such information in the flow characteristics communicated between the applications and the network. If a specific use case requires communication of privacy related information, that information needs confidentiality protection.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> IANA Considerations</h1>
 <p id="rfc.section.5.p.1">None.</p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#security" id="security">Security Considerations</a></h1>
@@ -621,6 +625,28 @@
 	  <span class="country-name vcardline">India</span>
 	</span>
 	<span class="vcardline">EMail: <a href="mailto:praspati@cisco.com">praspati@cisco.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Charles Eckel</span> 
+	  <span class="n hidden">
+		<span class="family-name">Eckel</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Cisco Systems, Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">170 West Tasman Drive</span>
+
+	  <span class="vcardline">
+		<span class="locality">San Jose</span>,  
+		<span class="region">California</span> 
+		<span class="code">95134</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:eckelcu@cisco.com">eckelcu@cisco.com</a></span>
 
   </address>
 </div>
