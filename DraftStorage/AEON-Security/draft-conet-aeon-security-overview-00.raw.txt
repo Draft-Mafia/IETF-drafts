@@ -1,0 +1,278 @@
+
+
+
+
+Network Working Group                                            D. Wing
+Internet-Draft                                                  T. Reddy
+Intended status: Informational                                  P. Patil
+Expires: February 26, 2015                                         Cisco
+                                                         August 25, 2014
+
+
+     Aplication Enabled Collaborative Networking: Security Overview
+                 draft-conet-aeon-security-overview-00
+
+Abstract
+
+   Application Enabled Collaborative Networking (AECON) discusses the
+   need for mechanisms using which applications signal the network to
+   provide differential flow treatment for application data traffic.
+   The intent is to have applications protect the content of their
+   flows, yet have the ability to opt-in information exchanges that
+   provide a more precise allocation of network resources and thus get
+   better user experience.  This document discusses security
+   implications of such a solution.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on February 26, 2015.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Notational Conventions
+   3.  AECON approach
+     3.1.  Protocol selection
+     3.2.  Flow Metadata Handling
+   4.  Security overview
+     4.1.  Mutual authentication
+       4.1.1.  Integrity protection
+       4.1.2.  Replay Protection
+     4.2.  Security with browser-based applications
+     4.3.  Privacy
+   5.  IANA Considerations
+   6.  Security Considerations
+   7.  Acknowledgements
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
+   Authors' Addresses
+
+1.  Introduction
+
+   Identification and treatment of application flows are important to
+   many application providers and network operators.  The problems faced
+   by existing solutions that try to provide such visibility to enable
+   appropriate treatment of application flows are described in detail in
+   [I-D.conet-aeon-problem-statement].
+
+   As the IETF establishes default behaviors that thwart pervasive
+   surveillance (e.g.  [RFC7258]), it will be important to provide
+   secure mechanism for applications that want to have the network
+   provide differential flow treatment for their data.
+
+   It is essential that this model considers security and privacy
+   implications to ensure that false claims and unwarranted
+   differentiated treatment for flows are disallowed.  For example, the
+   solution should ensure that network be able to trust the application/
+   user/end-point before providing differential treatment.  Similarly an
+   application or a client must be able to trust the network before
+   providing flow information.
+
+2.  Notational Conventions
+
+   TODO
+
+3.  AECON approach
+
+   The goal of AECON is to offer mechanisms that allow applications to
+   request network services for better user experience.  AECON approach
+   towards finding solutions to the use cases described in the
+   [I-D.conet-aeon-use-cases] includes the following steps:
+
+   o  Identify the protocol(s) best fit to solve the problem depending
+      on the use case, application that is going to use it, connectivity
+      and network type, trust level present in the running environment,
+      etc.
+
+   o  Provide the specification on how the protocol is used to solve the
+      problem and describe the required extensions.
+
+3.1.  Protocol selection
+
+   Applications continue to grow in number, type and diversity.  They
+   are running on a multitude of host types and Operating Systems,
+   following different delivery models (native, web, cloud).  Many use
+   peer-to-peer or client-server models and open standard protocols for
+   establishing connectivity.  Applications run in various environments
+   like enterprise, home network, home automation, factory floors,
+   hospital setting, utilities etc.  Devices hosting the applications
+   may connect to the network in various ways, using different
+   technologies, having multiple interfaces to the same or different
+   network devices, connecting over cable, DSL, FTTH, wireless etc.  In
+   order to operate in these environments, some applications already run
+   lightweight client-server network protocols (e.g.  STUN to discover
+   public addresses when behind NAT devices, PCP to create explicit port
+   forwarding rules etc).
+
+   The AECON solution requires a protocol to be used for signaling the
+   application flow characteristics to the network and getting feedback
+   from the network.  A few existing protocols with new extensions can
+   be considered:
+
+   o  Client-server network protocol: PCP with flow meta data
+      extensions: Handles both TCP and UDP flows.
+
+   o  On-path application protocol: STUN with flow meta data extensions
+      between hosts.  Handles UDP flows.
+
+3.2.  Flow Metadata Handling
+
+   In AECON, applications signal the flow characteristics to the
+   network.  The network responds back to applications with the result
+   of processing the request.  Depending on its nature and needs, the
+   application may request different flow characteristics.  As the
+   application requirements change, the flow characteristics
+   communicated to the network may be revised.  When network state
+   changes or when different events occur, if needed, network element
+   sends update that the flow can no longer be accommodated.  For
+   example an application may send at startup certain bandwidth, delay
+   and jitter requirements.  The network performs bandwidth accounting
+   against the matching service class and sends an acknowledgment to the
+   application.
+
+4.  Security overview
+
+   As described earlier, it is essential that the AECON solution
+   considers all security implications and the mechanism/protocol that
+   is chosen for the solution complies to the required security
+   requirements.  This section lists a set of basic security
+   requirements that any such mechanism/protocol must support.
+
+4.1.  Mutual authentication
+
+   A basic security requirement is that there must be a mechanism for
+   mutual authentication between the application signaling flow
+   information and the network entity that uses this flow information to
+   provide differential treatment for flows.  Without this, the solution
+   is open for attacks with fake applications falsely claiming to be
+   legitimate applications that require special treatment i.e.  The
+   network infrastructure is at risk of being misused.  Should the
+   network entity be spoofed, applications could be misled that the
+   network has accommodated the requested flow characteristics.
+
+4.1.1.  Integrity protection
+
+   Integrity protection is necessary to ensure that a man-in-middle
+   device does not alter the signaling information, thus ensuring that
+   the network receives the flow characteristics as sent by the client
+   and the client receives flow characteristics accommodated by the
+   network.  Compromise in integrity could result in applications flows
+   not receiving the intented treatment.
+
+4.1.2.  Replay Protection
+
+   The mechanism should have replay protection i.e a network attack in
+   which flow characteristics requested by the client and accommodated
+   by the network is maliciously or fraudulently repeated or delayed.
+   Security guarantees are not possible if the mechanism cannot detect
+   and protect itself from replay attacks possibly as part of a
+   masquerade attack by IP packet substitution.
+
+4.2.  Security with browser-based applications
+
+   The basic assumption is that browser serves as the user's TRUSTED
+   COMPUTING BASE (TCB).  Any security property which the user wishes to
+   have enforced must be ultimately guaranteed by the browser (or
+   transitively by some property the browser verifies).  Conversely, if
+   the browser is compromised, then no security guarantees are possible.
+   Browser must validate the flow characteristics signaled via a
+   JavaScript (JS) API and discard any request seeking far more
+   resources than actually required or requests far less resources but
+   consumes far more resources than the requested flow characteristics.
+
+4.3.  Privacy
+
+   An eavesdropping entity should not be able to glean any information
+   that could leak privacy-related information like application name
+   from the protocol signaling flow characteristics to the network.
+
+5.  IANA Considerations
+
+   None.
+
+6.  Security Considerations
+
+   The entire document discusses security overview for AECON.
+
+7.  Acknowledgements
+
+   TODO
+
+8.  References
+
+8.1.  Normative References
+
+   [I-D.conet-aeon-problem-statement]
+              Fan, P., Deng, H., Boucadair, M., Reddy, T., and C. Eckel,
+              "Application Enabled Collaborative Networking: Problem
+              Statement and Requirements", draft-conet-aeon-problem-
+              statement-00 (work in progress), May 2014.
+
+   [I-D.conet-aeon-use-cases]
+              George, W., Fan, P., Matsushima, S., Reddy, T., and C.
+              Eckel, "Application Enabled Collaborative Networking Use
+              Cases", draft-conet-aeon-use-cases-01 (work in progress),
+              July 2014.
+
+8.2.  Informative References
+
+   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
+              Attack", BCP 188, RFC 7258, May 2014.
+
+Authors' Addresses
+
+   Dan Wing
+   Cisco Systems, Inc.
+   170 West Tasman Drive
+   San Jose, California  95134
+   USA
+
+   Email: dwing@cisco.com
+
+
+   Tirumaleswar Reddy
+   Cisco Systems, Inc.
+   Cessna Business Park, Varthur Hobli
+   Sarjapur Marathalli Outer Ring Road
+   Bangalore, Karnataka  560103
+   India
+
+   Email: tireddy@cisco.com
+
+
+   Prashanth Patil
+   Cisco Systems, Inc.
+   Bangalore
+   India
+
+   Email: praspati@cisco.com
+

@@ -5,7 +5,7 @@
 TRAM                                                        P. Martinsen
 Internet-Draft                                              H. Wildfeuer
 Intended status: Standards Track                                   Cisco
-Expires: October 4, 2014                                   April 2, 2014
+Expires: February 14, 2015                               August 13, 2014
 
 
  Differentiated prIorities and Status Code-points Using Stun Signalling
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 4, 2014.
+   This Internet-Draft will expire on February 14, 2015.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 1]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 1]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -82,11 +82,15 @@ Table of Contents
      6.2.  BANDWIDTH-USAGE . . . . . . . . . . . . . . . . . . . . .   9
      6.3.  STREAM-PRIORITY . . . . . . . . . . . . . . . . . . . . .  10
      6.4.  NETWORK-STATUS  . . . . . . . . . . . . . . . . . . . . .  11
-   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
-     8.2.  Informational References  . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+   8.  Implementation Status . . . . . . . . . . . . . . . . . . . .  12
+     8.1.  NATtools  . . . . . . . . . . . . . . . . . . . . . . . .  13
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .  14
+     11.2.  Informational References . . . . . . . . . . . . . . . .  14
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
 
 1.  Introduction
 
@@ -101,19 +105,25 @@ Table of Contents
    information is known only to the endpoint.  These considerations,
    coupled with the trend to use encryption for browser-to-browser
    communication [I-D.ietf-rtcweb-security-arch], imply that access
+
+
+
+
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 2]
+
+Internet-Draft                   DISCUSS                     August 2014
+
+
    lists, deep packet inspection and other static prioritization methods
    cannot be employed successfully to prioritize packet flows.
 
+   The lack of congestion control in UDP may lead to problems as
+   described in [I-D.eggert-tsvwg-rfc5405bis].  The mechanism described
+   in this document can be used to introduce fairness and congestion
+   control for UDP streams.
+
    There is a need for a solution that is easy for the application
-   developer to use.  That means consistent behaviour on all supported
-
-
-
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 2]
-
-Internet-Draft                   DISCUSS                      April 2014
-
-
+   developer to use.  That means consistent behavior on all supported
    platforms and preferably without need of administrative privileges to
    set and read values.  The solution also needs to be able to cross
    administrative domains without the risk of being rewritten.  [[Q1:
@@ -137,13 +147,6 @@ Internet-Draft                   DISCUSS                      April 2014
    information in network status attribute to influence rate stating
    points or rate adaption mechanisms.
 
-   The functionality described here is referred to as DISCUSS.  Due to
-   the security implications described in
-   [I-D.thomson-mmusic-ice-webrtc] where large STUN packet are used
-   amplify an attack, keeping the added STUN attributes is an important
-   design consideration.  To avoid unwanted information leakage the new
-   defined STUN attributes are strictly defined in this draft.
-
 2.  General Usage
 
    This draft defines several attributes that can be added to a STUN
@@ -159,17 +162,17 @@ Internet-Draft                   DISCUSS                      April 2014
    these attributes to STUN messages containing a INTEGRITY attribute as
    this prevents tampering with the content of the attribute.
 
+
+
+
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 3]
+
+Internet-Draft                   DISCUSS                     August 2014
+
+
    If the client wants to receive feedback from the network it must add
    a null NETWORK-STATUS attribute.  A null NETWORK_STATUS attribute is
    created by filling in the all the fields in the attribute with 0x0
-
-
-
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 3]
-
-Internet-Draft                   DISCUSS                      April 2014
-
-
    values.  This attribute MUST be added after the INTEGRITY attribute,
    as on-path devices may write information into this attribute.  Having
    a readily available attribute to write into will save the the on-path
@@ -218,12 +221,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-
-
-
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 4]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 4]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
      Alice                router1            router2              Bob
@@ -277,9 +277,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 5]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 5]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
 3.  Network Processing
@@ -333,9 +333,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 6]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 6]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
    switch to embedded encoding.  Devices SHOULD ensure that the DISCUSS
@@ -389,9 +389,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 7]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 7]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
    This limits the information the STUN messages are able to convey
@@ -418,8 +418,8 @@ Internet-Draft                   DISCUSS                      April 2014
    application data.
 
    The other attributes BANDWIDTH-USAGE, STREAM-PRIORITY and NETWORK-
-   STATUS SHOULD only be added once as they describe the behaviour of
-   the 5-tuple and not individual streams.
+   STATUS SHOULD only be added once as they describe the behavior of the
+   5-tuple and not individual streams.
 
 6.  New STUN attributes
 
@@ -445,9 +445,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 8]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 8]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
    0                   1                   2                   3
@@ -501,9 +501,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014                [Page 9]
+Martinsen & Wildfeuer   Expires February 14, 2015               [Page 9]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
        0                   1                   2                   3
@@ -557,9 +557,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014               [Page 10]
+Martinsen & Wildfeuer   Expires February 14, 2015              [Page 10]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
       streams the application wants to give differentiated services.
@@ -613,9 +613,9 @@ Internet-Draft                   DISCUSS                      April 2014
 
 
 
-Martinsen & Wildfeuer    Expires October 4, 2014               [Page 11]
+Martinsen & Wildfeuer   Expires February 14, 2015              [Page 11]
 
-Internet-Draft                   DISCUSS                      April 2014
+Internet-Draft                   DISCUSS                     August 2014
 
 
    Up MAX Bitrate:  Available MAX bit-rate the router is able to handle
@@ -626,14 +626,118 @@ Internet-Draft                   DISCUSS                      April 2014
       handle for the 5-tuple in the DOWN direction.  (Opposite direction
       as the packet is moving)
 
-7.  Acknowledgements
+7.  IANA Considerations
+
+   IANA is requested to add the following attributes to the STUN
+   attribute registry [iana-stun],
+
+   o  0xXXX0: STREAM-TYPE (0xXXX0, in the comprehension-optional range)
+
+   o  0xXXX1: BANDWIDTH-USAGE (0xXXX1, in the comprehension-optional
+      range)
+
+   o  0xXXX2: STREAM-PRIORITY (0xXXX2, in the comprehension-optional
+      range)
+
+   o  0xYYYY: NETWORK-STATUS (0xYYYY, in the comprehension-optional
+      range)
+
+8.  Implementation Status
+
+   [Note to RFC Editor: Please remove this section and reference to
+   [RFC6982] prior to publication.]
+
+   This section records the status of known implementations of the
+   protocol defined by this specification at the time of posting of this
+   Internet-Draft, and is based on a proposal described in [RFC6982].
+   The description of implementations in this section is intended to
+   assist the IETF in its decision processes in progressing drafts to
+   RFCs.  Please note that the listing of any individual implementation
+   here does not imply endorsement by the IETF.  Furthermore, no effort
+   has been spent to verify the information presented here that was
+   supplied by IETF contributors.  This is not intended as, and must not
+   be construed to be, a catalog of available implementations or their
+   features.  Readers are advised to note that other implementations may
+   exist.
+
+   According to [RFC6982], "this will allow reviewers and working groups
+   to assign due consideration to documents that have the benefit of
+   running code, which may serve as evidence of valuable experimentation
+   and feedback that have made the implemented protocols more mature.
+   It is up to the individual working groups to use this information as
+   they see fit".
+
+
+
+Martinsen & Wildfeuer   Expires February 14, 2015              [Page 12]
+
+Internet-Draft                   DISCUSS                     August 2014
+
+
+8.1.  NATtools
+
+   Organization:   Cisco
+
+   Description:   Open-Source ICE, TURN and STUN implementation.
+
+   Implementation:   https://github.com/cisco/NATTools
+
+   Level of maturity:   Code is stable.  Tests being run to learn more
+      on how to leverage the information shared between client and
+      network.
+
+   Coverage:   Implements the DISCUSS attributes
+
+   Licensing:   BSD
+
+   Implementation experience:   Draft was implemented with internal
+      video test clients.  Wireless access point implemented STUN
+      detection in the media path and acted on the information in the
+      DISCUSS attributes.  After running tests in different congestion
+      scenarios it is clear that sharing information between endpoint
+      and network can help with congestion and end-user experience.
+      This approach required little effort to implement on the client
+      side.
+
+   Contact:   Paal-Erik Martinsen <palmarti@cisco.com>.
+
+9.  Security Considerations
+
+   Due to the security implications described in
+   [I-D.thomson-mmusic-ice-webrtc] where large STUN packet are used to
+   amplify an attack, keeping the added STUN attributes small is a
+   important design consideration.
+
+   To avoid unwanted information leakage the new defined STUN attributes
+   defined in this draft are strictly defined.  No more information
+   should be leaked that an on-path device could learn by observing the
+   stream over time or do some deep packet analysis.  This draft would
+   benefit from more discussions on this topic.
+
+   It is also worth noticing that the STUN attributes defined should be
+   treated as hints, and more work is needed regarding how to deal with
+   misbehaving clients or network devices.
+
+
+
+
+
+
+
+
+Martinsen & Wildfeuer   Expires February 14, 2015              [Page 13]
+
+Internet-Draft                   DISCUSS                     August 2014
+
+
+10.  Acknowledgements
 
    Authors would like to thank Dan Wing, Anca Zamfir and Cullen Jennings
    for their comments and review.
 
-8.  References
+11.  References
 
-8.1.  Normative References
+11.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -652,7 +756,11 @@ Internet-Draft                   DISCUSS                      April 2014
               Traversal for Offer/Answer Protocols", RFC 5245, April
               2010.
 
-8.2.  Informational References
+   [RFC6982]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", RFC 6982, July
+              2013.
+
+11.2.  Informational References
 
    [I-D.ietf-rtcweb-security-arch]
               Rescorla, E., "WebRTC Security Architecture", draft-ietf-
@@ -664,26 +772,35 @@ Internet-Draft                   DISCUSS                      April 2014
               thomson-mmusic-ice-webrtc-01 (work in progress), October
               2013.
 
-
-
-
-
-
-Martinsen & Wildfeuer    Expires October 4, 2014               [Page 12]
-
-Internet-Draft                   DISCUSS                      April 2014
-
-
    [I-D.dhesikan-tsvwg-rtcweb-qos]
               Dhesikan, S., Druta, D., Jones, P., and J. Polk, "DSCP and
               other packet markings for RTCWeb QoS", draft-dhesikan-
               tsvwg-rtcweb-qos-04 (work in progress), January 2014.
+
+
+
+
+
+Martinsen & Wildfeuer   Expires February 14, 2015              [Page 14]
+
+Internet-Draft                   DISCUSS                     August 2014
+
 
    [I-D.ietf-mmusic-sdp-bundle-negotiation]
               Holmberg, C., Alvestrand, H., and C. Jennings,
               "Multiplexing Negotiation Using Session Description
               Protocol (SDP) Port Numbers", draft-ietf-mmusic-sdp-
               bundle-negotiation-05 (work in progress), October 2013.
+
+   [I-D.eggert-tsvwg-rfc5405bis]
+              Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", draft-eggert-tsvwg-rfc5405bis-01 (work in
+              progress), June 2014.
+
+   [iana-stun]
+              IANA, , "IANA: STUN Attributes", April 2011,
+              <http://www.iana.org/assignments/stun-parameters/stun-pa
+              rameters.xml>.
 
 Authors' Addresses
 
@@ -720,9 +837,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Martinsen & Wildfeuer    Expires October 4, 2014               [Page 13]
+Martinsen & Wildfeuer   Expires February 14, 2015              [Page 15]
