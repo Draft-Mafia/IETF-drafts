@@ -100,22 +100,14 @@
 
     <author fullname="Martin Thomson" initials="M." surname="Thomson">
       <organization>Mozilla</organization>
-
       <address>
         <postal>
-          <street>Suite 300</street>
-
-          <street>650 Castro Street</street>
-
+          <street>330 E Evelyn Street</street>
           <city>Mountain View</city>
-
           <region>California</region>
-
           <code>94041</code>
-
           <country>US</country>
         </postal>
-
         <email>martin.thomson@gmail.com</email>
       </address>
     </author>
@@ -190,7 +182,7 @@ peer.</t>
 
           <t hangText="Transport Address:">The remote peer's IP address and
           (UDP or TCP) port number.</t>
-          
+
         </list></t>
     </section>
 
