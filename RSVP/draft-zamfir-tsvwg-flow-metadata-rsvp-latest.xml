@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced.
+     An alternate method (rfc include) is described in the references. -->
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<?rfc autobreaks="yes"?>
+<!-- Prevent automatic page break -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="std" docName="draft-zamfir-tsvwg-flow-metadata-rsvp-latest"
+     ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN"
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
+         full title is longer than 39 characters -->
+
+    <title abbrev="FMD-RSVP">Flow Metadata Signaling with RSVP</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor-->
+
+    <author fullname="Toerless Eckert" initials="T." role="editor"
+            surname="Eckert">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city>San Jose</city>
+
+          <region/>
+
+          <code/>
+
+          <country>US</country>
+        </postal>
+
+        <email>eckert@cisco.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Anca Zamfir" initials="A." surname="Zamfir">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>EPFL, Quartier de l'Innovation</street>
+
+          <city>Ecublens</city>
+
+          <region>Vaud</region>
+
+          <code>1015</code>
+
+          <country>Switzerland</country>
+        </postal>
+
+        <email>ancaz@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Amine Choukir" initials="A." surname="Choukir">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>EPFL, Quartier de l'Innovation</street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city>Ecublens</city>
+
+          <region>Vaud</region>
+
+          <code>1015</code>
+
+          <country>CH</country>
+        </postal>
+
+        <phone>+41 78 75 98 561</phone>
+
+        <email>amchouki@cisco.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date day="6" month="July" year="2013"/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+         in the current day for you. If only the current year is specified, xml2rfc will fill
+         in the current day and month for you. If the year is not the current one, it is
+         necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+         purpose of calculating the expiry date).  With drafts it is normally sufficient to
+         specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+         IETF is fine for individual submissions.
+         If this element is not present, the default is "Network Working Group",
+         which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>template</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This specification proposes RSVP protocol extensions for signaling
+      flow metadata attributes.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>Flow Metadata attributes are information elements (attributes) that
+      identify flow characteristics, such as the type of media carried by
+      application flows (e.g. video), the service class, the application that
+      originated the flow, and others. The description of the Flow Metadata
+      technology and some of the attribute definitions can be found in <xref
+      target="I-D.eckert-intarea-flow-metadata-framework"/>. The flow
+      attributes can be signaled over the flow path and inspected by
+      intermediate network nodes for the purpose of applying differentiated
+      flow treatment or collect network analytics. This specification proposes
+      the use of RSVP as signaling protocol to carry the Flow Metadata using a
+      new RSVP object. Two C-Type values are proposed for this object to allow
+      for two possible encodings.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref
+        target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section title="Flow Metadata Object">
+      <t>This specification proposes a new RSVP object with Class-Num from the
+      0x11bbbbbb range. To support informational metadata attribute processing
+      on the path to the receiver, the sender inserts the Metadata object into
+      an IPv4 or IPv6 Path message (i.e. Path messages with SESSION Class = 1
+      and SENDER_TEMPLATE Class = 11). The Metadata object SHOULD appear only
+      once in the message.</t>
+
+      <t>The object definition is given in Section 2.1 while the details of
+      processing are covered in Section 2.2</t>
+
+      <section title="FLOW_METADATA Class ">
+        <t>FLOW_METADATA Class = 234</t>
+
+        <t>Two encodings are defined, both of which carry the same IPFIX
+        registered attributes as defined in <xref
+        target="I-D.eckert-intarea-flow-metadata-framework"/>. The first
+        encoding (Basic IPFIX FLOW_METADATA) has less flexibility and lower
+        encoding efficiency. This version of the encoding is refrenced here
+        for legacy reasons. It does not suport a range of options that the
+        second one does, including the signaling of sender and receiver
+        attributes, security elements, distinction of originator of the
+        attributes and ease of extensibility.</t>
+
+        <section title="Basic IPFIX FLOW_METADATA Object">
+          <t>Basic IPFIX FLOW_METADATA Object: Class = 234, C-Type = 1</t>
+
+          <t><list style="symbols">
+              <t>The metadata attributes are encoded in IPFIX format, as
+              described in <xref target="RFC5101"/>, with the following
+              restrictions when creating the object:<list style="symbols">
+                  <t>Options Template Record MUST NOT be present</t>
+
+                  <t>One and only one Template Record MUST be present</t>
+
+                  <t>One and only one Data Record MUST be included</t>
+                </list></t>
+
+              <t>An intermediate node that supports this specification SHOULD
+              ignore any Options Template Record. It SHOULD only decode and
+              process the first occurring Template and Data Records.</t>
+            </list></t>
+        </section>
+
+        <section title="Enhanced Protocol Independent FLOW_METADATA Object">
+          <t>Enhanced Protocol Independent FLOW_METADATA Object: Class = 234,
+          C-Type = 2</t>
+
+          <t><list style="symbols">
+              <t>The contents and encoding rules for this object are specified
+              in <xref target="I-D.eckert-intarea-flow-metadata-framework"/>
+              and <xref
+              target="I-D.choukir-tsvwg-flow-metadata-encoding"/>.</t>
+            </list></t>
+        </section>
+      </section>
+
+      <section title="Semantic of carrying the Metadata Object">
+        <t>The Metadata Object included in the Path message carries attributes
+        from the sender of the flow towards the receiver. In some cases, e.g.
+        if the sender does not support the generation and signaling of
+        Metadata attribute, these attributes may be inserted by a proxy along
+        the path of the flow. Metadata RSVP nodes on path may modify the
+        metadata attributes for purpose of influencing policy toward the
+        receiver.</t>
+
+        <t>The node that originates Metadata information in a Path message may
+        do so for the sole purpose of signaling Metadata information. In this
+        case, the SENDER_TSPEC objects fields (as defined by <xref
+        target="RFC2210"/>) should be set to 0:<list style="symbols">
+            <t>Token Bucket Rate [r]</t>
+
+            <t>Token Bucket Size [b]</t>
+
+            <t>Peak Data Rate [p]</t>
+
+            <t>Minimum Policed Unit [m]</t>
+          </list></t>
+
+        <t>If the Metadata object is inserted in a Path message used for
+        IntServ service [<xref target="RFC2210"/>] reservation requests, then
+        all the rules of RSVP reservation request apply and in addition any
+        actions driven purely by the metadata attributes may equally take
+        place.</t>
+
+        <t>While the Metadata Object may be included in a Resv message, the
+        specific processing rules for this option is left for followup
+        documents or future versions of this specification.</t>
+      </section>
+
+      <section title="Processing by a Non-Metadata Capable RSVP Router">
+        <t>As described in <xref target="RFC2205"/>, a node that does not
+        understand the Metadata object, should ignore but forward it,
+        unexamined and unmodified. When received in Path or Resv messages, it
+        should be saved with the corresponding state and forwarded in any
+        refresh message resulting from that state.</t>
+      </section>
+
+      <section title="Processing by a Metadata Capable RSVP Router">
+        <t>The Metadata object may be inserted by the data flow initiating
+        endpoint or network nodes along the path. The means by which an
+        implementation determines the content of the Metadata object is
+        outside the scope of this document.</t>
+
+        <t>Intermediate nodes that support this specification, decode the Flow
+        Metadata information as indicated by the C-Type field only when
+        received in Path message. Depending on the attributes, local
+        configuration and policies, the node may take some actions. The
+        Metadata attribute semantics are described in <xref
+        target="I-D.eckert-intarea-flow-metadata-framework"/>. The received
+        Flow Metadata object is stored against the Path state. When a
+        subsequent Path message is received with a modified Metadata object,
+        the intermediate node determines the attributes that have been
+        removed, modified and/or added by comparing the old and new objects,
+        and takes appropriate actions.</t>
+
+        <t>As a result of these actions, an intermediate node may add new
+        attributes to the Metadata object received in the Path message and
+        signal them downstream. It can also modify some of the attributes
+        present in the Flow Metadata object. RSVP does not have any transport
+        protocol specific restrictions and the exact set of attributes that
+        can be inserted and modified by intermediate nodes is described in
+        <xref target="I-D.eckert-intarea-flow-metadata-framework"/>. Depending
+        on local policies, an intermediate node may also remove some of the
+        attributes received in the Metadata object of a Path message before
+        forwarding downstream.</t>
+
+        <t>An intermediate node that receives a Resv message with a Metadata
+        Object SHOULD store the object against the state and forward it
+        unexamined and unmodified.</t>
+      </section>
+    </section>
+    
+    <section title="Security considerations ">
+      <t>RSVP message security is described in <xref target="RFC2747"/>and
+      provides message integrity and host-based authentication using the
+      INTEGRITY object. In addition, user-based authentication is available as
+      described in <xref target="RFC3182"/> using the AUTH_DATA policy
+      element. Confidentiality is not provided by <xref target="RFC2747"/>.
+      There are some environments (e.g. enterprise, single administrative
+      domain scope) where signaling metadata in clear is acceptable. The
+      legacy encoding should be limited to these environments. When leaving
+      such environments and forwarding to untrusted or unsecured networks,
+      edge egress nodes should remove the metadata that is confidential in
+      nature. If metadata confidentiality is required, IPSEC encapsulation
+      should be considered. RSVP, however, uses special processing of
+      signaling messages that complicates IPsec protection. More details can
+      be found in <xref target="RFC4230"/> section 5.6.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+
+      <?rfc include="reference.RFC.2205"?>
+
+      <?rfc include="reference.RFC.2210"?>
+
+      <?rfc include="reference.RFC.5101"?>
+      
+      <?rfc include="reference.RFC.2747"?>
+
+      <?rfc include="reference.RFC.3182"?>
+
+      <?rfc include="reference.RFC.4230"?>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include='reference.I-D.eckert-intarea-flow-metadata-framework' ?>
+
+      <?rfc include='reference.I-D.choukir-tsvwg-flow-metadata-encoding' ?>
+    </references>
+  </back>
+</rfc>

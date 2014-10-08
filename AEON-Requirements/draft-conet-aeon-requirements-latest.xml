@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC7258 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7258.xml">
+<!ENTITY I-D.ietf-rtcweb-use-cases-and-requirements SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-use-cases-and-requirements.xml">
+<!ENTITY I-D.conet-aeon-problem-statement SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.conet-aeon-problem-statement.xml">
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced.
+     An alternate method (rfc include) is described in the references. -->
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="info" docName="draft-conet-aeon-requirements-latest"
+     ipr="trust200902">
+  <!--  category values: std, bcp
+, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN"
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
+         full title is longer than 39 characters -->
+
+    <title abbrev="AEON/CONET Requirements">Application Enabled Collaborative
+    Networking Requirements</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Peng Fan" initials="P." surname="Fan">
+      <organization>China Mobile</organization>
+
+      <address>
+        <postal>
+          <street>32 Xuanwumen West Street, Xicheng District</street>
+
+          <city>Beijing</city>
+
+          <code>100053</code>
+
+          <country>P.R. China</country>
+        </postal>
+
+        <email>fanpeng@chinamobile.com</email>
+      </address>
+    </author>
+
+    <author fullname="Mohamed Boucadair" initials="M." surname="Boucadair">
+      <organization>France Telecom</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city>Rennes</city>
+
+          <code>35000</code>
+
+          <country>France</country>
+        </postal>
+
+        <email>mohamed.boucadair@orange.com</email>
+      </address>
+    </author>
+
+    <author fullname="Brandon Williams" initials="B." surname="Williams">
+      <organization>Akamai, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>8 Cambridge Center</street>
+
+          <city>Cambridge</city>
+
+          <region>MA</region>
+
+          <code>02142</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>brandon.williams@akamai.com</email>
+      </address>
+    </author>
+
+    <author fullname="Tirumaleswar Reddy" initials="T." surname="Reddy">
+      <organization>Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park, Varthur Hobli</street>
+
+          <street>Sarjapur Marathalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>tireddy@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Charles Eckel" initials="C." surname="Eckel">
+      <organization>Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>170 West Tasman Drive</street>
+
+          <city>San Jose</city>
+
+          <region>CA</region>
+
+          <code>95134</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>eckelcu@cisco.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+         in the current day for you. If only the current year is specified, xml2rfc will fill
+	 in the current day and month for you. If the year is not the current one, it is
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+         IETF is fine for individual submissions.
+	 If this element is not present, the default is "Network Working Group",
+         which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <keyword>aeon conet visibility heuristics</keyword>
+
+    <abstract>
+      <t>Identification and treatment of application flows are important to
+      many application providers and network operators. Historically, this
+      functionality has been implemented to the extent possible using
+      heuristics, which inspect and infer flow characteristics. But many
+      application flows in current usages are dynamic, adaptive, time-bound,
+      encrypted, peer-to-peer, asymmetric, used on multipurpose devices, and
+      have different priorities depending on direction of flow, user
+      preferences, and other factors. Any combination of these properties
+      renders heuristic based techniques less effective and may result in
+      compromises to application security or user privacy. The document states
+      requirements for a solution that enables identification and treatment of
+      application flows without suffering the limitations that plague existing
+      solutions.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>Identification and treatment of application flows are important to
+      many application providers and network operators. The problems faced by
+      existing solutions that try to provide such visibility and to enable
+      appropriate treatment of application flows are described in detail in
+      <xref target="I-D.conet-aeon-problem-statement"/>.</t>
+
+      <t>As the IETF establishes default behaviors that thwart pervasive
+      surveillance (e.g. <xref target="RFC7258"/>), it will be important to
+      provide mechanisms for applications that want to have the network
+      provide differential flow treatment for their data. The intent is to
+      have applications protect the contents of their flows, yet have the
+      ability to opt-in to information exchanges that provide a more precise
+      allocation of network resources and thus better user experience. The
+      document provide a complete set of requirements for such a solution.</t>
+    </section>
+
+    <section title="Terminology">
+      <t>The section clarifies the intended meaning of specific terms used
+      within this document.</t>
+
+      <t><list style="symbols">
+          <t>5-tuple: The combination of source IP address and port,
+          destination IP address and port, and transport protocol used to
+          transport an application flow.</t>
+
+          <t>Application: An instance of an application running on end user's
+          device, such as a web application running on an laptop or an
+          application running on a mobile device.</t>
+
+          <t>Flow characteristics: Characteristics of an individual
+          application flow, such as 5-tuple used to transport the flow,
+          tolerance to delay, loss, or jitter, anticipated average or maximum
+          rate, relative priority with respect to the application's other
+          flows, etc. Examples of individual application flows include an
+          audio flow, a video flow, a data flow, etc.</t>
+
+          <t>Network node: A network element, such as a router, switch,
+          wireless access point, firewall, etc., that is in the path of one or
+          more application flows.</t>
+        </list></t>
+
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"/>.</t>
+    </section>
+
+    <section title="Requirements">
+      <t>Rather than encourage independent, protocol specific solutions to
+      this problem, this document advocates a protocol and application
+      independent information model and individual data models that can be
+      applied in a consistent fashion across a variety of protocols to enable
+      explicit communication between applications and the networks on which
+      they are used. The requirements are:<list style="hanging">
+          <t hangText="Req-1:">MUST provide a mechanism for applications to
+          explicitly signal the flow characteristics for their flows to the
+          network.</t>
+
+          <t hangText="Req-2:">MUST provide network nodes visibility to the
+          flow characteristics signaled by applications.</t>
+
+          <t hangText="Req-3:">MUST provide mechanism for applications to
+          receive feedback from the network. This feedback communicates
+          anticipated ability of the network node to accommodate the
+          corresponding flow.</t>
+
+          <t hangText="Req-4:">MUST provide visibility for both directions of
+          a flow, including flows that cross administrative boundaries.</t>
+
+          <t hangText="Req-5:">MUST provides mechanism for mutual
+          authentication between applications and network nodes, such that
+          applications signal flow characteristics and receive feedback from
+          trusted network nodes and network nodes process flow characteristics
+          signaled by authorized applications.</t>
+
+          <t hangText="Req-6:">MUST provide mechanism for 3rd party
+          authentication and authorization for over-the-top (OTT)
+          applications.</t>
+
+          <t hangText="Req-7:">MUST provide mechanism for integrity protection
+          and replay protection of exchanges between the application and the
+          network.</t>
+
+          <t hangText="Req-8:">MUST provide mechanism for applications to
+          opt-out of any explicit signaling of their flow characteristics to
+          the network.</t>
+
+          <t hangText="Req-9:">MUST provide mechanism for flow characteristics
+          signaled by applications to change over time, and in a timely
+          manner, in response to changes in application operation.</t>
+
+          <t hangText="Req-10:">MUST provide mechanism for feedback provided
+          by network nodes to change over time, and in a timely manner, in
+          response to changes in network conditions.</t>
+
+          <t hangText="Req-11:">SHOULD provide mechanism for application flow
+          characteristics to be propagated to all network nodes within a
+          network.</t>
+
+          <t hangText="Req-12:">MUST NOT dramatically affect the performance
+          of participating network nodes and other network infrastructure
+          propagating the flow characteristics.</t>
+
+          <t hangText="Req-13:">MUST be applicable for both IPv4 and IPv6
+          deployments.</t>
+
+          <t hangText="Req-14:">SHOULD reuse or extend existing IETF standard
+          protocols wherever possible.</t>
+
+          <t hangText="Req-15:">MUST provide considerations for protection
+          against denial of service attacks against network nodes.</t>
+
+          <t hangText="Req-16:">MUST provide mechanism(s) that can be
+          implemented as part of a user process or library that does NOT
+          require any special privileges.</t>
+        </list></t>
+
+      <t>In designing a solution that meets these requirements, considerations
+      should be made for existing deployments of heuristic based mechanisms.
+      Such mechanisms are used in many networks and it is desirable that they
+      continue to work as applications and networks nodes are incrementally
+      enabled with functionality provided by this solution.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Informative References">
+      &RFC2119;
+
+      &RFC7258;
+
+      &I-D.conet-aeon-problem-statement;
+    </references>
+  </back>
+</rfc>

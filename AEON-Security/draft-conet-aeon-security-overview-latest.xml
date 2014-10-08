@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="info" docName="draft-conet-aeon-security-overview-latest"
+     ipr="trust200902">
+  <front>
+    <title abbrev="AEON/CONET: Security Overview">Application Enabled
+    Collaborative Networking: Security Overview</title>
+
+    <author fullname="Dan Wing" initials="D." surname="Wing">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>170 West Tasman Drive</street>
+
+          <city>San Jose</city>
+
+          <region>California</region>
+
+          <code>95134</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>dwing@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Tirumaleswar Reddy" initials="T." surname="Reddy">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park, Varthur Hobli</street>
+
+          <street>Sarjapur Marathalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>tireddy@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Prashanth Patil" initials="P." surname="Patil">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <street/>
+
+          <city>Bangalore</city>
+
+          <country>India</country>
+        </postal>
+
+        <email>praspati@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Charles Eckel" initials="C." surname="Eckel">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>170 West Tasman Drive</street>
+
+          <city>San Jose</city>
+
+          <region>California</region>
+
+          <code>95134</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>eckelcu@cisco.com</email>
+      </address>
+    </author>
+
+    <date/>
+
+    <abstract>
+      <t>Application Enabled Collaborative Networking (AECON) discusses the
+      need for mechanisms through which applications exchange information
+      about their flows with the network to achieve better application
+      operation under existing network conditions. The intent is to have
+      applications protect the content of their flows, yet have the ability to
+      opt-in information exchanges that enable a more precise allocation of
+      network resources and thus achieve better user experience. This document
+      discusses security implications of such a solution.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="introduction" title="Introduction">
+      <t>Identification and treatment of application flows are important to
+      many application providers and network operators. The problems faced by
+      existing solutions that try to provide such visibility to enable
+      appropriate treatment of application flows are described in detail in
+      <xref target="I-D.conet-aeon-problem-statement"/>.</t>
+
+      <t>As the IETF establishes default behaviors that thwart pervasive
+      surveillance (e.g. <xref target="RFC7258"/>), it will be important to
+      provide secure mechanism for applications that want to have the network
+      provide differential flow treatment for their data.</t>
+
+      <t>It is essential that this model considers security and privacy
+      implications to provide protection again false claims, leakage of
+      private information, and unwarranted differentiated treatment of flows.
+      For example, the network may need to validate application provided flow
+      information before using it to provide differential treatment of the
+      application's flows. Similarly, an application may need assurance of
+      confidentiality protection before providing potentially sensitive
+      information.</t>
+    </section>
+
+    <section anchor="notation" title="Notational Conventions">
+      <t>TODO</t>
+    </section>
+
+    <section anchor="AECON" title="AECON approach">
+      <t>The goal of AECON is to offer mechanisms to achieve better
+      application operation under existing network conditions. AECON's
+      approach toward finding solutions to the use cases described in <xref
+      target="I-D.conet-aeon-use-cases"/> includes the following steps:</t>
+
+      <t><list style="symbols">
+          <t>Identify the protocol(s) best fit to solve the problem depending
+          on the use case, application that is going to use it, connectivity
+          and network type, trust level present in the running environment,
+          etc.</t>
+
+          <t>Provide the specification on how the protocol is used to solve
+          the problem and describe the required extensions.</t>
+        </list></t>
+
+      <section title="Protocol selection">
+        <t>Applications continue to grow in number, type and diversity. They
+        are running on a multitude of host types and Operating Systems,
+        following different delivery models (native, web, cloud). Many use
+        peer-to-peer or client-server models and open standard protocols for
+        establishing connectivity. Applications run in various environments
+        like enterprise, home network, home automation, factory floors,
+        hospital setting, utilities etc. Devices hosting the applications may
+        connect to the network in various ways, using different technologies,
+        having multiple interfaces to the same or different network devices,
+        connecting over cable, DSL, FTTH, wireless etc. In order to operate in
+        these environments, some applications already run lightweight
+        client-server network protocols (e.g. STUN to discover public
+        addresses when behind NAT devices, PCP to create explicit port
+        forwarding rules etc).</t>
+
+        <t>The AECON solution requires a protocol to be used for signaling the
+        application flow characteristics to the network and getting feedback
+        from the network. A few existing protocols with new extensions can be
+        considered:</t>
+
+        <t><list style="symbols">
+            <t>Client-server network protocol: PCP with flow meta data
+            extensions: Handles both TCP and UDP flows.</t>
+
+            <t>On-path application protocol: STUN with flow meta data
+            extensions between hosts. Handles UDP flows.</t>
+          </list></t>
+      </section>
+
+      <section title="Flow Metadata Handling">
+        <t>In AECON, applications signal their flow characteristics to the
+        network. The network responds back to applications with information
+        regarding its ability to transport those flows. Depending on its
+        nature and needs, the application may provide different flow
+        characteristics. As the application requirements change, the flow
+        characteristics communicated to the network may be revised. When
+        network state changes or when different events occur, a network
+        element may provide updated information about its ability to transport
+        flows. For example an application may send at startup certain
+        bandwidth, delay and jitter requirements for each of its flows. The
+        network performs bandwidth accounting against the matching service
+        class and sends an acknowledgment to the application.</t>
+      </section>
+    </section>
+
+    <section anchor="sec_overview" title="Security overview">
+      <t>As described previously, AECON addresses a wide range of use cases
+      with varying security implications and requirements. It is essential
+      that the AECON solution considers all security implications, and that
+      the protocols and mechanisms chosen for the solution meet this
+      requirements. This section lists a set of basic security requirements
+      that any such mechanism/protocol must support.</t>
+
+      <section title="Mutual authentication">
+        <t>A basic security requirement is that there must be a mechanism for
+        mutual authentication between the application signaling flow
+        information and the network entity that uses this flow information to
+        provide differential treatment for flows as well as feedback to
+        applications about such treatment. Without this, the solution is open
+        for attacks with fake applications falsely claiming to be legitimate
+        applications that require special treatment i.e. The network
+        infrastructure is at risk of being misused. Should the network entity
+        be spoofed, applications could be misled that the network has
+        accommodated the requested flow characteristics.</t>
+
+        <section title="Integrity protection">
+          <t>Integrity protection is necessary to ensure that a
+          man-in-the-middle device does not alter the signaling information,
+          thus ensuring that the network receives the flow characteristics as
+          sent by the client and the client receives flow characteristics
+          accommodated by the network. Compromise in integrity could result in
+          applications flows not receiving the intended treatment.</t>
+        </section>
+
+        <section title="Replay Protection">
+          <t>The mechanism should have replay protection i.e a network attack
+          in which flow characteristics requested by the client and
+          accommodated by the network is maliciously or fraudulently repeated
+          or delayed. Security guarantees are not possible if the mechanism
+          cannot detect and protect itself from replay attacks possibly as
+          part of a masquerade attack by IP packet substitution.</t>
+        </section>
+      </section>
+
+      <section title="Security with browser-based applications">
+        <t>The basic assumption is that browser serves as the user's TRUSTED
+        COMPUTING BASE (TCB). Any security property which the user wishes to
+        have enforced must be ultimately guaranteed by the browser (or
+        transitively by some property the browser verifies). Conversely, if
+        the browser is compromised, then no security guarantees are possible.
+        Browser must validate the flow characteristics signaled via a
+        JavaScript (JS) API and discard any request seeking far more resources
+        than actually required or requests far less resources but consumes far
+        more resources than the requested flow characteristics.</t>
+      </section>
+
+      <section title="Privacy">
+        <t>An eavesdropping entity should not be able to glean any information
+        that could leak privacy-related information like application name from
+        the protocol signaling flow characteristics to the network. The best
+        protection against privacy related information leakage is to not
+        include any such information in the flow characteristics communicated
+        between the applications and the network. If a specific use case
+        requires communication of privacy related information, that
+        information needs confidentiality protection.</t>
+      </section>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>None.</t>
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>The entire document discusses security overview for AECON.</t>
+    </section>
+
+    <section anchor="ack" title="Acknowledgements">
+      <t>TODO</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='reference.I-D.conet-aeon-problem-statement'?>
+
+      <?rfc include='reference.I-D.conet-aeon-use-cases'?>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include="reference.RFC.7258"?>
+    </references>
+  </back>
+</rfc>

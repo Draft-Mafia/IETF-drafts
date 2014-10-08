@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc='yes'?>
+<?rfc tocdepth="3"?>
+<?rfc compact="yes"?>
+<?rfc tocdepth="yes"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline ="yes"?>
+<?rfc subcompact="no"?>
+<?rfc tocompact="yes"?>
+<rfc category="std" docName="draft-wing-tsvwg-turn-flowdata-latest"
+     ipr="trust200902">
+  <front>
+    <title abbrev="TURN flowdata">TURN extension to convey flow
+    characteristics</title>
+
+    <author fullname="Dan Wing" initials="D" surname="Wing">
+      <organization>Cisco Systems</organization>
+
+      <address>
+        <postal>
+          <street>821 Alder Drive</street>
+
+          <city>Milpitas</city>
+
+          <region>California</region>
+
+          <code>95035</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>dwing@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Tirumaleswar Reddy" initials="T." surname="Reddy">
+      <organization>Cisco Systems</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park, Varthur Hobli</street>
+
+          <street>Sarjapur Marathalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>tireddy@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Brandon Williams" initials="B." surname="Williams">
+      <organization>Akamai, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>8 Cambridge Center</street>
+
+          <city>Cambridge, MA</city>
+
+          <code>02142</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>brandon.williams@akamai.com</email>
+      </address>
+    </author>
+
+    <author fullname="Ram Mohan Ravindranath" initials="R"
+            surname="Ravindranath">
+      <organization>Cisco Systems</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park</street>
+
+          <street>Sarjapur-Marathahalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>rmohanr@cisco.com</email>
+      </address>
+    </author>
+
+    <date />
+
+    <workgroup>TSVWG</workgroup>
+
+    <abstract>
+      <t>TURN server and the network in which it is hosted due to load could
+      adversely impact the traffic relayed through it. During such high load
+      event, it is desirable to shed some traffic but TURN server lack
+      requirements about the flows to prioritize them. This document defines
+      such a mechanism to communicate flow characteristics from the TURN
+      client to its TURN server.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>Traversal Using Relay NAT (TURN) <xref target="RFC5766"></xref> is a
+      protocol that is often used to improve the connectivity of P2P
+      applications. TURN allows a connection to be established when one or
+      both sides is incapable of a direct P2P connection. A TURN server could
+      be provided by an enterprise network, an access network, an application
+      service provider or a third party provider. A TURN server could be used
+      to relay media streams, WebRTC data channels <xref
+      target="I-D.ietf-rtcweb-overview"></xref> , gaming, file transfer etc. A
+      TURN server and the network in which it is hosted could have
+      insufficient bandwidth or other characteristics that could adversely
+      impact the traffic relayed through it and need a mechanism to identify
+      and provide differentiated service to flows relayed through the TURN
+      server.</t>
+
+      <t>This specification provides a mechanism for the client to signal the
+      flow characteristics of a relay channel to the TURN server, so that
+      certain relay channels can receive service that is differentiated from
+      others. The TURN server authorizes the request and signals back to the
+      client that it can (fully or partially) accommodate the flow. This sort
+      of signaling will be useful for long-lived flows such as media streams,
+      WebRTC data channels etc traversing through the TURN server. The TURN
+      server can further communicate the flow information to a number of
+      on-path devices in its network using a Policy decision Point (e.g. SDN
+      controller). This way the network hosting the TURN server can
+      accommodate the flow. With this mechanism, a TURN client can request the
+      TURN server to provide certain characteristics for the relayed channel
+      on both legs (client-to-server, server-to-peer). Applications using TURN
+      as a communication relay would benefit from such an arrangement as it
+      would improve the Quality of Experience (QOE) of the end user.</t>
+
+      <t>Note: It is not the intent of this document to advocate in favor of
+      prioritizing relayed candidates over host, server-reflexive candidates,
+      but to highlight the proposed mechanism only when TURN server is
+      selected for various reasons like privacy, ICE connectivity checks with
+      local host/server-reflexive candidates have failed etc.</t>
+    </section>
+
+    <section anchor="sec-term" title="Terminology">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"></xref>.</t>
+    </section>
+
+    <section anchor="design" title="Design considerations">
+      <t><list style="numbers">
+          <t>TURN client can choose to either use Send and Data indications or
+          channels to exchange data with its peer. For bandwidth intensive
+          applications (like video, audio, WebRTC data channels) using Send
+          indication or Data indication adds 36 bytes overhead to the
+          application data and substantially increases the bandwidth required
+          between the client and the server. Hence channels are commonly used
+          for bandwidth intensive applications to exchange data. The other
+          problem with using Send/Data indications is that if the TURN server
+          determines that a flow can only be partially accommodated then this
+          feedback cannot be conveyed back to the client. Hence in this
+          specification focuses on conveying the flow characteristics only in
+          ChannelBind request/response.</t>
+
+          <t>DSCP style markings can also help provide QOS, but has the
+          following limitations: <list style="symbols">
+              <t>DiffServ style packet marking can help provide QoS in some
+              environments but DSCP markings are often modified or removed at
+              various points in the network or when crossing network
+              boundaries. DSCP markings set by the client may be modified or
+              removed by the intervening network(s) before it reaches the TURN
+              server.</t>
+
+              <t>DSCP values are site specific, with each site selecting its
+              own code points for each QoS level, hence it may not work across
+              domains. However <xref
+              target="I-D.ietf-tsvwg-rtcweb-qos"></xref> recommends default
+              set of DSCP values for browsers when there is no site specific
+              information.</t>
+
+              <t>TURN client may not be able to set DSCP values for outgoing
+              packets because of OS limitations.</t>
+
+              <t>DSCP provides differentiated service only in the outgoing
+              direction of a flow.</t>
+            </list></t>
+        </list></t>
+
+      <t>The mechanism described in this document has none of the above
+      limitations and the following useful properties:</t>
+
+      <t><list style="symbols">
+          <t>Usable at the application level to the TURN client, without
+          needing operating system support.</t>
+
+          <t>Robust metadata support, to convey sufficient information to the
+          TURN server about the flow.</t>
+        </list></t>
+    </section>
+
+    <section title="Solution Overview">
+      <t>When a channel binding is initiated by the client, it may also
+      indicate certain characteristics of its flow to the TURN server. The
+      TURN server uses that information to prioritize the flow in its network
+      and signals back to the client that it can fully or partially
+      accommodate the flow.</t>
+
+      <t>This specification defines one new comprehension-optional STUN
+      attribute: FLOWDATA. If a TURN client wishes to signal the flow
+      characteristics of the relay channel it MUST insert this attribute in
+      ChannelBind request. This attribute if used MUST be sent only in the
+      ChannelBind request. Other specifications in future may extend this
+      attribute to be used in other STUN methods. The TURN server determines
+      if it can accommodate that flow, making configuration changes if
+      necessary to accommodate the flow, and returns information in the
+      FLOWDATA attribute indicating its ability to accommodate the described
+      flow.</t>
+
+      <section title="Sending a ChannelBind Request">
+        <t>The TURN client sends ChannelBind request with the FLOWDATA STUN
+        attribute to signal the flow characteristics of the relay channel to
+        the TURN server. If the flow characteristics of a relay channel change
+        then the client MAY send ChannelBind request with an updated FLOWDATA
+        STUN attribute to refresh the binding. Similarly if the binding is
+        refreshed using ChannelBind request then the client can also signal
+        updated FLOWDATA STUN attribute if the flow characteristics of the
+        relay channel have changed.</t>
+      </section>
+
+      <section title="Receiving a ChannelBind Request">
+        <t>When a TURN server receives a ChannelBind request that includes a
+        FLOWDATA attribute, it processes the request as per the TURN
+        specification <xref target="RFC5766"></xref> plus the specific rules
+        mentioned below.</t>
+
+        <t>The TURN server will determine if it can provide the flow resources
+        requested by the client. The TURN server determines if the flow can be
+        fully or partially accommodated, it returns values in the FLOWDATA
+        fields that it can accommodate or returns 0 in those FLOWDATA fields
+        where it has no information. In other words if the request indicated a
+        low tolerance for delay but the TURN server determines that only high
+        delay is available, the FLOWDATA response indicates high delay is
+        available. The same sort of processing occurs on all of the FLOWDATA
+        fields of the response (upstream and downstream delay tolerance, loss
+        tolerance, jitter tolerance, minimum bandwidth, maximum bandwidth). If
+        the TURN server determines the flow can only be partially accommodated
+        and the client has also signaled CHECK- ALTERNATE attribute <xref
+        target="I-D.williams-peer-redirect"></xref> then the TURN server MAY
+        re-direct the client to an alternate TURN server that could
+        accommodate the flow characteristics conveyed by the client.</t>
+
+        <t>If the TURN server can accommodate the flow as described in the
+        FLOWDATA attribute, it sends a success response and includes the
+        FLOWDATA attribute filled in according to <xref
+        target="FLOWDATA"></xref>. The TURN server SHOULD include the FLOWDATA
+        attribute in ChannelBind response only when the client had signaled
+        FLOWDATA attribute in ChannelBind request.</t>
+
+        <section title="Conflict Resolution">
+          <t>It is possible that two hosts send requests with different
+          thresholds for delay or jitter in each direction for the same flow,
+          and their requests arrive at the same TURN server. If this occurs,
+          it is RECOMMENDED that the TURN server uses the stricter delay/loss
+          tolerance (that is, the lower tolerance to delay or jitter). The
+          diagram below depicts a conflict message flow.</t>
+
+          <t><figure anchor="conflict"
+              title="Message diagram, resolving conflict">
+              <artwork align="left"><![CDATA[
+   
+TURN Client A             TURN server           TURN Client B
+     |                         |                       |
+     |-loss=med, delay=med---->|<-loss=hi, delay=hi----|
+     |                         |                       |
+     |                    (conflict!)                  |
+     |                         |                       |
+     |                         |--loss=med, delay=med->|
+     |                         |                       |
+     |<--loss=med, delay=med---|                       |
+
+]]></artwork>
+            </figure></t>
+
+          <t>In the above example if the TURN server has already responded to
+          client B before it receives the request from client A then the TURN
+          server can correct the conflict only when the client B refreshes the
+          binding.</t>
+        </section>
+      </section>
+
+      <section title="Receiving a ChannelBind Response">
+        <t>When the client receives a ChannelBind success response, it
+        proceeds with processing the response according to the TURN
+        specification <xref target="RFC5766"></xref>. If the message does not
+        include an FLOWDATA attribute, no additional processing is required.
+        The returned FLOWDATA attribute, if present, indicates the
+        accommodation of this flow the TURN server will perform. This document
+        does not define what the TURN client might do with that information,
+        but it could choose among several TURN servers or use it for other
+        purposes.</t>
+      </section>
+    </section>
+
+    <section anchor="FLOWDATA" title="FLOWDATA format">
+      <t>This section describes the format of the new STUN attribute FLOWDATA.
+      FLOWDATA will have a type TBD-CA and length of 4 bytes. The FLOWDATA
+      attribute in the request has the following format.</t>
+
+      <t><figure anchor="Figure1" title="FLOWDATA attribute in request">
+          <artwork align="left"><![CDATA[
+
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | Attribute Type (TBD-CA)   |          Length (4)               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | uDT | uLT | uJT |   RSVD1     | dDT | dLT | dJT |    RSVD2    |
+  +---------------------------------------------------------------+
+  |                  Upstream Minimum Bandwidth                   |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                 Downstream Minimum Bandwidth                  |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                  Upstream Maximum Bandwidth                   |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                 Downstream Maximum Bandwidth                  |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   
+          ]]></artwork>
+        </figure></t>
+
+      <t>Description of the fields:<list style="hanging">
+          <t hangText="uDT:">Upstream Delay Tolerance, 0=no information
+          available, 1=very low, 2=low, 3=medium, 4=high.</t>
+
+          <t hangText="uLT:">Upstream Loss Tolerance, 0=no information
+          available, 1=very low, 2=low, 3=medium, 4=high.</t>
+
+          <t hangText="uJT:">Upstream Jitter Tolerance, 0=no information
+          available, 1=very low, 2=low, 3=medium, 4=high.</t>
+
+          <t hangText="RSVD1:">Reserved (7 bits), MUST be ignored on reception
+          and MUST be 0 on transmission.</t>
+
+          <t hangText="dDT:">Downstream Delay Tolerance, 0=no information
+          available, 1=very low, 2=low, 3=medium, 4=high.</t>
+
+          <t hangText="dLT:">Downstream Loss Tolerance, 0=no information
+          available, 1=very low, 2=low, 3=medium, 4=high.</t>
+
+          <t hangText="dJT:">Downstream Jitter Tolerance, 0=no information
+          available, 1=very low, 2=low, 3=medium, 4=high.</t>
+
+          <t hangText="RSVD2:">Reserved (7 bits), MUST be ignored on reception
+          and MUST be 0 on transmission.</t>
+
+          <t hangText="Upstream Minimum Bandwidth:">Measures bandwidth sent by
+          the client. Value is in octets per second. The value 0 means no
+          information is available.</t>
+
+          <t hangText="Downstream Minimum Bandwidth:">Measures bandwidth sent
+          to the client. Value is in octets per second. The value 0 means no
+          information is available.</t>
+
+          <t hangText="Upstream Maximum Bandwidth:">Measures bandwidth sent by
+          the client. Value is in octets per second. The value 0 means no
+          information is available.</t>
+
+          <t hangText="Downstream Maximum Bandwidth:">Measures bandwidth sent
+          to the client. Value is in octets per second. The value 0 means no
+          information is available.</t>
+        </list></t>
+
+      <t>Different applications have different needs for their flows. The
+      following table is derived from <xref target="RFC4594"></xref> to serve
+      as a guideline for tolerance to loss, delay and jitter for some sample
+      applications. The range 0 to 4 used for the fields in FLOWDATA
+      attribute, meets the need to convey the tolerance levels for the traffic
+      serviced by the service classes in the below table.</t>
+
+      <t><figure anchor="Figure2" title="Flow characteristics">
+          <artwork align="left"><![CDATA[
+
+ -------------------------------------------------------------------
+|Service Class  |                              |    Tolerance to    |
+|    Name       |  Traffic Characteristics     | Loss |Delay |Jitter|
+|===============+==============================+======+======+======|
+|   Network     |Variable size packets, mostly |      |      |      |
+|   Control     |inelastic short messages, but |  Low |  Low | High |
+|               | traffic can also burst       |      |      |      |
+|               | (e.g., OSPF)                 |      |      |      |
+|---------------+------------------------------+------+------+------|
+|               | Fixed-size small packets,    | Very | Very | Very |
+|  Telephony    | constant emission rate,      |  Low |  Low |  Low |
+|               | inelastic and low-rate flows |      |      |      |
+|               | (e.g., G.711, G.729)         |      |      |      |
+|---------------+------------------------------+------+------+------|
+|   Signaling   | Variable size packets, some  | Low  | Low  | High |
+|               | what bursty short-lived flows|      |      |      |
+|---------------+------------------------------+------+------+------|
+|  Multimedia   | Variable size packets,       | Low  | Very |      |
+| Conferencing  | constant transmit interval,  |  -   | Low  | Low  |
+|               |rate adaptive, reacts to loss |Medium|      |      |
+|---------------+------------------------------+------+------+------|
+|   Real-Time   | RTP/UDP streams, inelastic,  | Low  | Very | Low  |
+|  Interactive  | mostly variable rate         |      | Low  |      |
+|---------------+------------------------------+------+------+------|
+|  Multimedia   |  Variable size packets,      |Low - |Medium| High |
+|   Streaming   | elastic with variable rate   |Medium|      |      |
+|---------------+------------------------------+------+------+------|
+|   Broadcast   | Constant and variable rate,  | Very |Medium| Low  |
+|     Video     | inelastic, non-bursty flows  |  Low |      |      |
+|---------------+------------------------------+------+------+------|
+|  Low-Latency  | Variable rate, bursty short- | Low  |Low - | High |
+|      Data     |  lived elastic flows         |      |Medium|      |
+|---------------+------------------------------+------+------+------|
+|      OAM      |  Variable size packets,      | Low  |Medium| High |
+|               |  elastic & inelastic flows   |      |      |      |
+|---------------+------------------------------+------+------+------|
+|High-Throughput| Variable rate, bursty long-  | Low  |Medium| High |
+|      Data     |   lived elastic flows        |      |- High|      |
+|---------------+------------------------------+------+------+------|
+|   Standard    | A bit of everything          |   0     0       0  |
+|---------------+------------------------------+------+------+------|
+| Low-Priority  | Non-real-time and elastic    | High | High | High |
+|      Data     | (e.g., network backup)       |      |      |      |
+ -------------------------------------------------------------------
+   
+          ]]></artwork>
+        </figure></t>
+
+      <t>The FLOWDATA attribute in the response has the following format</t>
+
+      <t><figure anchor="Figure3" title="FLOWDATA attribute in response">
+          <artwork align="left"><![CDATA[
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | Attribute Type (TBD-CA)   |          Length (4)               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | AuDT| AuLT| AuJT|   RSVD1     | AdDT| AdLT| AdJT|    RSVD2    |
+  +---------------------------------------------------------------+
+  |            Accommodated Upstream Minimum Bandwidth            |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           Accommodated Downstream Minimum Bandwidth           |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |            Accommodated Upstream Maximum Bandwidth            |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           Accommodated Downstream Maximum Bandwidth           |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   
+          ]]></artwork>
+        </figure>Description of the fields:<list style="hanging">
+          <t hangText="AuDT:">Accommodated Upstream Delay Tolerance, 0=no
+          information available, 1=able to accommodate very low, 2=able to
+          accommodate low, 3=able to accommodate medium, 4=able to accommodate
+          high.</t>
+
+          <t hangText="AuLT:">Accommodated Upstream Loss Tolerance, 0=no
+          information available, 1=able to accommodate very low, 2=able to
+          accommodate low, 3=able to accommodate medium, 4=able to accommodate
+          high.</t>
+
+          <t hangText="AuJT:">Accommodated Upstream Jitter Tolerance, 0=no
+          information available, 1=able to accommodate very low, 2=able to
+          accommodate low, 3=able to accommodate medium, 4=able to accommodate
+          high.</t>
+
+          <t hangText="RSVD1:">Reserved (7 bits), MUST be ignored on reception
+          and MUST be 0 on transmission.</t>
+
+          <t hangText="AdDT:">Accommodated Downstream Delay Tolerance, 0=no
+          information available, 1=able to accommodate very low, 2=able to
+          accommodate low, 3=able to accommodate medium, 4=able to accommodate
+          high.</t>
+
+          <t hangText="AdLT:">Accommodated Downstream Loss Tolerance, 0=no
+          information available, 1=able to accommodate very low, 2=able to
+          accommodate low, 3=able to accommodate medium, 4=able to accommodate
+          high.</t>
+
+          <t hangText="AdJT:">Accommodated Downstream Jitter Tolerance, 0=no
+          information available, 1=able to accommodate very low, 2=able to
+          accommodate low, 3=able to accommodate medium, 4=able to accommodate
+          high.</t>
+
+          <t hangText="RSVD2:">Reserved (7 bits), MUST be ignored on reception
+          and MUST be 0 on transmission.</t>
+
+          <t hangText="Accommodated Upstream Minimum Bandwidth:">Bandwidth
+          accommodated for this flow. Value in bytes per second. 0 means no
+          information is available.</t>
+
+          <t hangText="Accommodated Downstream Minimum Bandwidth:">Bandwidth
+          accommodated for this flow. Value in bytes per second. 0 means no
+          information is available.</t>
+
+          <t hangText="Accommodated Upstream Maximum Bandwidth:">Bandwidth
+          accommodated for this flow. Value in bytes per second. 0 means no
+          information is available.</t>
+
+          <t hangText="Accommodated Downstream Maximum Bandwidth:">Bandwidth
+          accommodated for this flow Value in bytes per second, 0 means no
+          information is available.</t>
+        </list></t>
+    </section>
+
+    <section title="Security Considerations">
+      <t>On some networks, only certain users or certain applications are
+      authorized to signal the priority of a flow. This authorization can be
+      achieved with STUN long-term authentication <xref
+      target="RFC5389"></xref>.</t>
+    </section>
+
+    <section anchor="sec.iana-considerations" title="IANA Considerations">
+      <t>This document defines the FLOWDATA STUN attribute, described in <xref
+      target="FLOWDATA"></xref>. IANA has allocated the comprehension-optional
+      codepoint TBD-CA for this attribute.</t>
+    </section>
+
+    <section title="Acknowledgement">
+      <t>Authors would like to thank Anca Zamfir and Charles Eckel for their
+      comments and review.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+
+      <?rfc include="reference.RFC.5766"?>
+
+      <?rfc include="reference.RFC.5389"?>
+
+      <?rfc include="reference.I-D.ietf-rtcweb-overview"  ?>
+
+      <?rfc include="reference.I-D.williams-peer-redirect" ?>
+
+      <?rfc include="reference.I-D.ietf-tsvwg-rtcweb-qos"?>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include="reference.RFC.4594"?>
+    </references>
+  </back>
+</rfc>

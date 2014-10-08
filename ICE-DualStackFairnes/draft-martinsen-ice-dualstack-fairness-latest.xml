@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-martinsen-ice-dualstack-fairness-00"
+<rfc category="std" docName="draft-martinsen-ice-dualstack-fairness-latest"
      ipr="trust200902">
   <front>
     <title abbrev="ICE DualStack Fairness ">ICE IPv4/IPv6 Dual Stack Fairness</title>

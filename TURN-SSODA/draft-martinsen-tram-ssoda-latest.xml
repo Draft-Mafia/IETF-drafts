@@ -19,7 +19,7 @@
 <?rfc inline='yes' ?>
 
 <?rfc needLines="yes" ?>
-<rfc category="std" docName="draft-martinsen-tram-ssoda-01" ipr="trust200902">
+<rfc category="std" docName="draft-martinsen-tram-ssoda-latest" ipr="trust200902">
   <front>
     <title abbrev="SSODA">Single SOcket Dual Allocation with TURN</title>
     

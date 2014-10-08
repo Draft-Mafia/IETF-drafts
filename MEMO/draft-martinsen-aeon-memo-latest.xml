@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd' []>
+
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc iprnotified="no" ?>
+<?rfc strict="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<?rfc sortrefs="no" ?>
+<?rfc colonspace='yes' ?>
+<?rfc tocindent='yes' ?>
+
+<?rfc needLines="yes" ?>
+<rfc category="std" docName="draft-martinsen-aeon-memo-latest" ipr="trust200902">
+  <front>
+    <title abbrev="MEMO">Markings for Enhancing Multiplexed Ordonance (MEMO)</title>
+
+    <author fullname="Paal-Erik Martinsen" initials="P.E"
+            role="editor" surname="Martinsen">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street>Philip Pedersens vei 20</street>
+          <city>Lysaker</city>
+          <region>Akershus</region>
+          <code>1366</code>
+          <country>Norway</country>
+        </postal>
+        <email>palmarti@cisco.com</email>
+      </address>
+    </author>
+        
+    <date/>
+
+    <workgroup>AEON</workgroup>
+
+    <abstract>
+      <t>
+        To make sure an clients mediastream is treated the best way
+        possible by the network it is necsesary for the agent to
+        provide hints. Such hints can be on individual packet level in
+        for example a video stream describing how important a packet
+        id for decoding the stream. Also with multiplexing
+        technologies like BUNDLE
+        <xref target="I-D.holmberg-mmusic-sdp-bundle-negotiation"/>
+        individual frame marking might help the network to provide a
+        better service to the client. This specification decribes how
+        a small shim packet can be used for such fram markings in
+        attition to how to make sure the remote client and the network
+        path also support the markings.
+      </t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>
+                
+      </t>
+    </section>
+
+  
+
+    <section title="MEMO overview">
+      <t>
+        More text to be added here..
+      </t>
+    </section>
+
+    <section title="MEMO message structure">
+      <t>
+        STUN messages are encoded in binary using network-oriented
+        format (most significant byte or octet first, also commonly
+        known as big- endian).  The transmission order is described in
+        detail in Appendix B of <xref target="RFC0791">RFC 791</xref>.
+        Unless otherwise noted, numeric constants are in decimal (base
+        10).
+      </t>
+      
+      <t>
+        The MEMO header fields are using the same machensisms defined
+        in STUN <xref target="RFC5389">RFC 5389</xref> to make it easy
+        to distinguish the shim packet in a stream. The Magic Cookie
+        is shorter, and is its most important function is to avoid the
+        shim packet to be wrongly reqognized as a STUN packet.
+      </t>
+      <t>
+        <figure anchor="MEMO_Header" title="MEMO Header">
+          <artwork align="right"><![CDATA[
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|0 0|   Type    |    sid    |TBD|         Message Length        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Magic Cookie                        |    
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Type Specific               |  Network feedback (TBD)       | 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            ]]></artwork>
+        </figure>
+      </t>
+      <t>
+        Description of the fields:
+        <list style="hanging">
+          <t hangText="Type:"> Generic (0x0), Audio(0x1),
+          Video(0x1)... </t>
+          
+          <t hangText="sid:"> Stream ID. User specific. Can for
+            example be medialine index in SDP. MUST be different for
+            each multiplexed mediastreams on the same 5-tuple</t>
+                    
+          <t hangText="Message Length:">The message length MUST
+            contain the size, in bytes, of the message not including
+            the 8-byte MEMO header. </t>
+          
+          <t hangText="Magic Cookie:">The magic cookie field MUST
+            contain the fixed value 0xADA0 in network byte order.</t>
+          
+        </list>
+      </t>
+      <section title="Generic Type Specific Field">  
+        <t>
+          If the type field in the header is Generic (0x0) the type
+          specific field will contain the infomation defined as
+          follows. (TODO: What can we do with a generic header?
+          Discardable? Discardable, but expect a retransmit? Other
+          smart stuff we can put in here?)
+          <figure anchor="MEMO_Header_Type_Generic" title="MEMO Header
+                                                         Type Generic Field">
+            <artwork align="right"><![CDATA[
+ 0                   1      
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                               |    
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            ]]></artwork>
+        </figure>
+      </t>
+      </section>
+        
+      <section title="Audio Type Specific Field">  
+        <t>
+          If the type field in the header is Audio (0x1) the type
+          specific field will contain the infomation defined as
+          follows.(Todo: Shold this contain information about audio
+          behaviour, static vs elastic? (Opus is elastic?))
+          <figure anchor="MEMO_Header_Type_Audio" title="MEMO Header
+                                                         Type Audio Field">
+            <artwork align="right"><![CDATA[
+ 0                   1      
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                               |    
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            ]]></artwork>
+        </figure>
+      </t>
+    </section>
+      <section title="Video Type Specific Field">  
+        <t>
+          If the type field in the header is Video (0x2) the type
+          specific field will contain the infomation defined as
+          follows. This field have also been fefined in
+          <xref target="I-D.avtext-berger-framemarking"/>.
+          <figure anchor="MEMO_Header_Type_video" title="MEMO Header
+                                                         Type Video Field">
+            <artwork align="right"><![CDATA[
+ 0                   1      
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|D|S| TID |FTYPE|      PAD      |    
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            ]]></artwork>
+        </figure>
+      </t>
+            <t>
+        Description of the fields:
+        <list style="hanging">
+          <t hangText="D:">Discardable - The flag must be true for
+              packets that can be dropped, and still provide a
+              decodable media stream.</t>
+            
+            <t hangText="S:">Switching point (1 bit) - The flag must
+              be true for RTP packets in a frame that can be used as a
+              switcing point.  A switching point is the first packet
+              where a new receiver can start decoding a video stream
+              without prior frames, e.g an IDR frame from
+              [RFC6184]. </t>
+
+            <t hangText="TID:">Temporal ID (3 bits) - The base
+              temporal quality starts with 0, and increases with 1 for
+              each temporal layer. </t>
+            
+            <t hangText="FTYPE:">frame Type (3 bits) - Abstract frame
+              type; P-frame=0, IDR=1, GDR=2.  The abstracted frame
+              types are:
+              <list style="symbols">
+                <t> P-frame - a frame depending on a previous frame
+                </t>
+                <t> IDR - a frame without references to other
+                frames </t>
+                <t>  GDR - a Gradual Decoder Refresh (GDR) packet includes both
+                  p-frame and frame information to allow a receiver to build of a
+                  IDR frame over a short period.</t>
+              </list>
+            </t>
+          </list>
+        
+        </t>    
+        </section>
+    </section>
+    
+    <section title="Detecting Remote agent and Network Path Support">
+      <t>
+        Before starting to use the shim packet remote agent support
+        MUST be verified. It is also usefull to probe the network for
+        any nodes that support processing the MEMO shim
+        packet. Verification that no network elements block traffic
+        containig the MEMO shim packet SHOULD also be done.
+      </t>
+      <t>
+        Remote agent and path support is detected by adding a STUN
+        attributes to the STUN connectivity cheks when ICE 
+        <xref target="RFC5245"/> probes the possible open network
+        paths. Validation of a unbloked network path for MEMO packets
+        is done by adding the MEMO shim packet to the STUN packets
+        sent when ICE is nominating a candidate. 
+      </t>
+      <section title="ICE Connecivity Checks">
+        <section title="Sending a Binding Request with MEMO attributes">
+
+        </section>
+
+        <section title="Sending a Binding Response with MEMO attributes">
+
+        </section>
+
+        <section title="Network Node processing of STUN packets with a
+        MEMO attribute">
+
+        </section>
+
+      </section>
+
+      <section title="ICE Nominations">
+        <t>
+          Add MEMO shim layer before the STUN Binding Request. All in
+          same UDP packet.
+        </t>
+      </section>
+
+
+    </section>
+
+    <section title="Usage with ICE">
+      <t>
+        All in paralell, just in responses (and then check oposite
+        direction when nominating?). Or can we expect the path to
+        support this if the STUN packet goes through. Could define a
+        STUN attribute that we can add after the integrity attribute
+        to learn about the path and support for MEMO.
+      </t>
+      <t>
+        Want to use ICE. As this is nice input to the ICE machinery.
+        Especially if we use the onfo attribute.
+      </t>
+    </section>
+
+    <section title="Sending Media or Other traffic">
+      <t>
+        Keep the packet as small as possible. Use attributes only when
+        it is smart (tm) to do so.
+      </t>
+    </section>
+
+    <section title="MEMO Attributes">
+
+      <section title="Specific Video Codec Information">
+        <t>
+          <figure anchor="MEMO_Attribute_video_codec" title="Video Codec">
+            <artwork align="right"><![CDATA[
+  0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  ID=2 |  L=2 |D|S|TID  |Type | video codec specific information |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            ]]></artwork>
+          </figure>
+        </t>
+      </section>
+
+       <section title="Path Information">
+         <t>
+           Network nodes can ask agents to pad the MEMO packets with
+           empty path attributes. If MEMO packets contains a Path
+           Information attribute it can be used by the network node to
+           covey useful information regarding packet loss and other
+           things to the agent. (Need to open up the agregated
+           discussion)
+         </t>
+        <t>
+          <figure anchor="MEMO_Attribute_Path_Information" title="Path
+                                                                  Information">
+            <artwork align="right"><![CDATA[
+  0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  typ  |  len  |  What do we do here?                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            ]]></artwork>
+          </figure>
+        </t>
+      </section>
+
+    </section>
+    
+    <section title="New STUN Attributes">
+      <t>
+        This specification definew two new attributes, MEMO-SUPPORT
+        and MEMO-INFO.
+      </t>
+      <section title="MEMO-SUPPORT">
+        <t>
+          The MEMO-SUPPORT attribute indicates that the agent sending
+          this connectivity check or response supports MEMO.  The
+          attribute has no content (the Length field of the attribute
+          is zero); it serves as a flag.  It has an attribute value of
+          0x00XX.
+        </t>
+      </section>
+      <section title="MEMO-INFO">
+        <t>
+         
+        </t>
+      </section>
+
+    </section>
+
+    <section title="Security Considerations">
+      <section title="STUN Inspection">
+        <t>
+          Probably lots of things that can go very wrong....
+        </t>
+      </section>
+    </section>
+      
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>
+        txt
+      </t>
+    </section>
+    <section anchor="ack" title="Acknowledgements">
+      <t>Authors would like to thank 
+        someone..
+        
+      </t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='reference.RFC.0791.xml' ?>
+      <?rfc include='reference.RFC.2119.xml' ?>
+      <!--<?rfc include='reference.RFC.2629.xml' ?> -->
+      <?rfc include='reference.RFC.5245.xml' ?>
+      <?rfc include='reference.RFC.5389.xml' ?>
+    </references>
+    <references title='Informative References'>
+      <?rfc include='reference.I-D.avtext-berger-framemarking' ?>
+      <?rfc include='reference.I-D.holmberg-mmusic-sdp-bundle-negotiation' ?>
+
+    </references>
+    
+  </back>
+</rfc>
+

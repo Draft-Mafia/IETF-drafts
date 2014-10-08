@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2205 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2205.xml">
+<!ENTITY RFC2475 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2475.xml">
+<!ENTITY RFC3416 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3416.xml">
+<!ENTITY RFC4594 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4594.xml">
+<!ENTITY RFC5245 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5245.xml">
+<!ENTITY RFC5389 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5389.xml">
+<!ENTITY RFC5766 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5766.xml">
+<!ENTITY RFC5978 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5978.xml">
+<!ENTITY RFC6241 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6241.xml">
+<!ENTITY RFC6601 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6601.xml">
+<!ENTITY RFC6887 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6887.xml">
+<!ENTITY RFC7011 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7011.xml">
+<!ENTITY I-D.ietf-rtcweb-use-cases-and-requirements SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-use-cases-and-requirements.xml">
+<!ENTITY I-D.ietf-netconf-restconf SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-netconf-restconf.xml">
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced.
+     An alternate method (rfc include) is described in the references. -->
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="info" docName="draft-eckel-aeon-problem-statement-latest"
+     ipr="trust200902">
+  <!--  category values: std, bcp
+, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN"
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
+         full title is longer than 39 characters -->
+
+    <title abbrev="AEON Problem Statement and Req">Application Enabled Open
+    Networking: Problem Statement and Requirements</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Charles Eckel" initials="C." surname="Eckel">
+      <organization>Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>170 West Tasman Drive</street>
+
+          <city>San Jose</city>
+
+          <region>CA</region>
+
+          <code>95134</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>eckelcu@cisco.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Tirumaleswar Reddy" initials="T." surname="Reddy">
+      <organization>Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park, Varthur Hobli</street>
+
+          <street>Sarjapur Marathalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>tireddy@cisco.com</email>
+      </address>
+    </author>
+
+    <date/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+         in the current day for you. If only the current year is specified, xml2rfc will fill
+	 in the current day and month for you. If the year is not the current one, it is
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+         IETF is fine for individual submissions.
+	 If this element is not present, the default is "Network Working Group",
+         which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <keyword>aeon visibility heuristics</keyword>
+
+    <abstract>
+      <t>Identification and treatment of application flows are important to
+      many application providers and network operators. They often rely on
+      these capabilities to deploy and/or support a wide range of
+      applications. These applications, and the packet flows they generate and
+      consume, may have specific connectivity requirements that can be met if
+      made known to the network. Historically, this functionality has been
+      implemented to the extent possible using heuristics, which inspect and
+      infer flow characteristics. Heuristics may be based on port ranges,
+      network separation (e.g. subnets or VLANS), or Deep Packet Inspection
+      (DPI). But many application flows in current usages are dynamic,
+      adaptive, time-bound, encrypted, peer-to-peer, asymmetric, used on
+      multipurpose devices, and have different priorities depending on
+      direction of flow, user preferences, and other factors. Any combination
+      of these properties renders heuristic based techniques less effective
+      and may result in compromises to application security or user
+      privacy.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>Networks today, whether public or private, are challenged with
+      demands to support rapidly increasing amounts of traffic. New channels
+      for creating and consuming rich media are deployed at a rapid pace.
+      Pervasive video and access on demand are becoming second nature to
+      consumers. Communication applications make extensive use of rich media,
+      placing unprecedented quality of experience expectation on the
+      underlying network. These trends present challenges for network forecast
+      and planning operations.</t>
+
+      <t>Now more so than ever before, identification and treatment of
+      application flows are critical for the successful deployment and
+      operation of a growing number of business and household applications.
+      These applications are based on wide range of signaling protocols and
+      deployed by a diverse set of application providers that is not
+      necessarily affiliated with the network providers across which the
+      applications are used.</t>
+
+      <t>Historically, identification of application flows has been
+      accomplished using heuristics, which inspect and infer flow
+      characteristics based on port ranges, network separation, or DPI. Each
+      of these techniques suffers from a set of limitations, particularly in
+      the face of challenges on the network outlined previously.</t>
+
+      <t>Heuristic-based approaches may not be efficient and require
+      continuous updates of application signatures. Port based solutions
+      suffer from port overloading and inconsistent port usage. Network
+      separation techniques like IP subnetting are error prone and increase
+      network management complexity. DPI is computationally expensive and
+      becomes a greater challenge with the wider adoption of encrypted
+      signaling and secured media. An additional drawback of DPI is that any
+      insights are not available, or need to be recomputed, at network nodes
+      further down the application flow path.</t>
+
+      <t>As the IETF establishes default behaviors that thwart pervasive
+      surveillance, it will be important to provide mechanisms for
+      applications to protect the contents of their flows, yet have the
+      ability to opt-in to information exchanges that provide a more precise
+      allocation of network resources and thus a better user experience.</t>
+    </section>
+
+    <section title="Definitions and Terminology">
+      <t/>
+
+      <t/>
+
+      <section title="Types of Signaling">
+        <t>The following terms describe the relationship between signaling and
+        the media to which it is associated.<list counter="" style="symbols">
+            <t>off-path: signaling along a different network path than the
+            media flow</t>
+
+            <t>on-path: signaling along the same network path as the media
+            flow<list style="symbols">
+                <t>in-band: signaling on the same port as the media flow</t>
+
+                <t>out-of-band: signaling on a different port than the media
+                flow</t>
+              </list></t>
+          </list></t>
+      </section>
+    </section>
+
+    <section title="Typical Workflows">
+      <t>Various heuristic based approaches are used prevalently and
+      successfully for two types of workflows:<list counter="1"
+          style="numbers">
+          <t>Provide network operators with visibility into traffic for
+          troubleshooting, capacity planning, accounting and billing, and
+          other off network workflows. This is done by exporting observed
+          traffic analysis via protocols such as IPFIX <xref
+          target="RFC7011"/> and SNMP <xref target="RFC3416"/>.</t>
+
+          <t>Provide differentiated network services for specific traffic
+          according to network operator defined policies, including traffic
+          classification, policing and shaping (e.g. <xref
+          target="RFC2475"/>), providing admission control (e.g. <xref
+          target="RFC6601"/>), impacting routing, and permitting passage of
+          specific traffic (e.g. firewall functions).</t>
+        </list></t>
+    </section>
+
+    <section title="Limitations of Heuristic Based Solutions">
+      <t>These typical workflows, visibility and differentiated network
+      services, are critical in many networks. However, their reliance on
+      inspection and observation limits the ability to enable these workflows
+      more widely. Reasons for this include the following:<list
+          style="symbols">
+          <t>Simple observation based classification based on TCP/UDP port
+          numbers often result in incorrect results due to port overloading
+          (i.e. ports used by applications other than those claiming the port
+          with IANA).</t>
+
+          <t>More and more traffic is encrypted, rendering DPI impossible,
+          inefficient, or much more complex, and sometimes at the expense of
+          privacy or security (e.g. need to share encryption keys with
+          intermediary proxy performing DPI).</t>
+
+          <t>Visibility generally requires inspecting the signaling traffic of
+          applications. This traffic may flow through a different network path
+          than the actual application data traffic. Impacting the traffic
+          behavior is ineffective in those scenarios.</t>
+
+          <t>Extensions to signaling protocols can result in false negatives
+          or false positives during inspection.</t>
+
+          <t>Network services leveraging DPI traffic classification impact the
+          application behavior by impacting its traffic, but they do not
+          provide explicit feedback to the application. This results in a lost
+          opportunity for the application to gain insight and adjust its
+          operation accordingly.</t>
+        </list></t>
+    </section>
+
+    <section title="Limitations of Existing Signaling Mechanisms">
+      <t>The IETF has standardized several mechanisms involving explicit
+      signaling between applications and the network that may be used to
+      support visibility and differentiated network services workflows.
+      Unfortunately, none of these has experienced widespread deployment
+      success, nor are they well suited for the applications usages described
+      previously. Existing signaling options include the following:<list
+          style="symbols">
+          <t>RSVP <xref target="RFC2205"/> is the original on-path signaling
+          protocol standardized by the IETF. It is transported out-of-band and
+          could be used to signal information about any transport protocol
+          traffic (it currently supports TCP and UDP). Its original goal was
+          to provide admission control. Its requirement for explicit
+          reservation of resources end to end proved too heavy for most
+          network environments. Its success was further impacted by its
+          reliance on router-alert, which often leads to RSVP packets being
+          filtered by intervening networks, and by its requirement for access
+          to a raw socket, something that is generally not available to
+          applications running in user space. To date, more lightweight
+          signaling workflows utilizing RSVP have not been standardized within
+          the IETF.</t>
+
+          <t>NSIS (next Steps in Signaling) <xref target="RFC5978"/> is the
+          next iteration of RSVP-like signaling defined by the IETF. It
+          focused on the same fundamental workflow as RSVP admission control
+          as its main driver, and because it did not provide significant
+          enough use-case benefits over RSVP, it has seen even less adoption
+          than RSVP.</t>
+
+          <t>DiffServ <xref target="RFC4594"/> and VAN Tagging <xref
+          target="IEEE-802.1Q"/> style packet marking can help provide QoS in
+          some environments, but such markings are often modified or removed
+          at various points in the network or when crossing network
+          boundaries. There are additional limitations when using DiffServ
+          with real-time communications applications, and the DART working
+          group has been chartered to write a document that explains the
+          limitations that exist with DiffServ when used with RTP in general
+          as well in the specific RTCWeb use cases <xref
+          target="I-D.ietf-rtcweb-use-cases-and-requirements"/>.</t>
+        </list></t>
+    </section>
+
+    <section title="Efforts in Progress">
+      <t>Not surprisingly, there are several evolving proposals that aim to
+      address the visibility and differentiated network services workflows
+      where existing approaches are not sufficient. Protocol specific
+      extensions are being defined, creating duplicate or inconsistent
+      information models. This results operational complexity and a need to
+      convert information between protocols to leverage the best protocol
+      option for each specific use case. Examples of evolving signaling
+      options include the following:<list style="symbols">
+          <t>STUN <xref target="RFC5389"/> is an on-path, in-band signaling
+          protocol that could be extended to provide signaling to on-path
+          network devices. It provides an easily inspected packet signature,
+          at least for transport protocols such as UDP. Through its extensions
+          TURN <xref target="RFC5766"/> and ICE <xref target="RFC5245"/>, it
+          is becoming prevalent in application signaling driven by the initial
+          use-case of providing NAT and firewall traversal capabilities and
+          detecting local and remote candidates for peer-to-peer media
+          sessions. The TRAM working group is chartered to update TURN and
+          STUN to make them more suitable for WebRTC.</t>
+
+          <t>Port Control Protocol (PCP) <xref target="RFC6887"/> provides a
+          mechanism to describe a flow to the network. The primary driver for
+          PCP is creating port mappings on NAT and firewall devices. When
+          doing this, PCP pushes flow information from the host into the
+          network (specifically to the network's NAT or firewall device), and
+          receives information back from the network (from the NAT or firewall
+          device). It is not meant to be used end-to-end but rather
+          independently on one "edge" of a flow. It is therefore an attractive
+          alternative because it allows the introduction of application to
+          network signaling without relying on the remote peer. This is
+          especially useful in multi-domain communications.</t>
+
+          <t>RESTCONF <xref target="I-D.ietf-netconf-restconf"/> is a
+          REST-like protocol that provides a programmatic interface over HTTP
+          for accessing data defined in YANG, using the datastores defined in
+          NETCONF <xref target="RFC6241"/>. It is meant to provide a standard
+          mechanism for web applications to access the configuration data,
+          operational data, data-model specific protocol operations, and
+          notification events within a networking device, in a modular and
+          extensible manner.</t>
+
+          <t>Interface to the Routing System (I2RS) is a working group
+          chartered to provide interfaces for management applications, network
+          controllers, and user applications to make specific demands on the
+          network.</t>
+
+          <t>Abstraction and Control of Transport Networks (ACTN) is a
+          non-working group mailing list intended to enable discussion of the
+          architecture, use-cases, and requirements that provide abstraction
+          and virtual control of transport networks to various
+          applications/clients.</t>
+
+          <t>Prefix coloring has been proposed for use in HOMENET and 6MAN
+          working groups to provide differentiated services to applications
+          based on IP address.</t>
+
+          <t>RTP Media Congestion Avoidance Techniques (RMCAT) has been
+          chartered to address the lack of generally accepted congestion
+          control mechanisms for interactive real-time media, which is often
+          carried via sets of flows using RTP over UDP. Explicit exchanges of
+          flow characteristics and congestion information between applications
+          and the network could play an important role in such mechanisms.</t>
+
+          <t>Transport Services (TAPS) is an effort to create a working group
+          to define transport services that are exposed to internet
+          applications. A TAP enabled application identifies its needs of the
+          locally available transports services via an API. Some of the
+          information provided is the same as what AEON proposes to have the
+          application communicate to the network. Furthermore, the transport
+          services of TAPS could benefit from this communication with the
+          network.</t>
+
+          <t>Service Function Chaining (SFC) is a working group chartered to
+          address issues associated with the deployment of service functions
+          (e.g. firewalls, load balancers) in large-scale environments.
+          Service function chaining is the definition and instantiation of an
+          ordered set of instances of such service functions, and the
+          subsequent "steering" of traffic flows through those service
+          functions. Flow characteristics communicated via AEON could be used
+          as input into an SFC classifier and it could be transported as SFC
+          metadata.</t>
+        </list></t>
+    </section>
+
+    <section title="Requirements">
+      <t>Rather than encourage independent, protocol specific solutions to
+      this problem, this document advocates a protocol and application
+      independent information model and individual data models that can be
+      applied in a consistent fashion across a variety of protocols to enable
+      explicit communication between applications and the networks on which
+      they are used. The requirements are:<list style="hanging">
+          <t hangText="Req-1:">Allow applications to explicitly signal their
+          flow characteristics to the network.</t>
+
+          <t hangText="Req-2:">Provide network nodes visibility to application
+          flow characteristics.</t>
+
+          <t hangText="Req-3:">Enable network nodes to contribute to
+          application flow descriptions.</t>
+
+          <t hangText="Req-4:">Allow applications to receive resulting flow
+          descriptions as feedback from the network.</t>
+
+          <t hangText="Req-5:">Complement existing heuristic based
+          mechanisms.</t>
+
+          <t hangText="Req-6:">Provide differentiated service for both
+          directions of a flow, including flows that cross administrative
+          boundaries.</t>
+
+          <t hangText="Req-7:">Provide mechanism to authenticate and authorize
+          endpoints/applications to signal flow characteristics, including 3rd
+          party authentication and authorization for over-the-top (OTT)
+          applications.</t>
+
+          <t hangText="Req-8:">Provide mechanism for integrity protection and
+          replay protection of messages exchanged between the application and
+          the network.</t>
+        </list></t>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>The authors thank Toerless Eckert, Reinaldo Penno, Dan Wing, Amine
+      Choukir, Paul Jones, Mohamed Boucadair, and Bill VerSteeg for their
+      contributions to this document.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Informative References">
+      &RFC2205;
+
+      &RFC2475;
+
+      &RFC3416;
+
+      &RFC4594;
+
+      &RFC5245;
+
+      &RFC5389;
+
+      &RFC5766;
+
+      &RFC5978;
+
+      &RFC6241;
+
+      &RFC6601;
+
+      &RFC6887;
+
+      &RFC7011;
+
+      &I-D.ietf-rtcweb-use-cases-and-requirements;
+
+      &I-D.ietf-netconf-restconf;
+
+      <reference anchor="IEEE-802.1Q"
+                 target="http://standards.ieee.org/getieee802/download/802.1Q-2005.pdf">
+        <front>
+          <title>IEEE Standards for Local and Metropolitan Area Networks:
+          Virtual Bridged Local Area Networks</title>
+
+          <author>
+            <organization/>
+          </author>
+
+          <date year="2005"/>
+        </front>
+
+        <seriesInfo name="IEEE" value="802.1Q"/>
+      </reference>
+    </references>
+  </back>
+</rfc>

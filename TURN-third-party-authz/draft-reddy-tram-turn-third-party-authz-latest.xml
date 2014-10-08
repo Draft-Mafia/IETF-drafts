@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-reddy-tram-turn-third-party-authz-latest"
+     ipr="trust200902">
+  <front>
+    <title abbrev="TURN for 3rd party Authorization ">TURN Extension for Third
+    Party Authorization</title>
+
+    <author fullname="Tirumaleswar Reddy" initials="T." surname="Reddy">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park, Varthur Hobli</street>
+
+          <street>Sarjapur Marathalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>tireddy@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Prashanth Patil" initials="P." surname="Patil">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <street></street>
+
+          <city>Bangalore</city>
+
+          <country>India</country>
+        </postal>
+
+        <email>praspati@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Ram Mohan Ravindranath" initials="R."
+            surname="Ravindranath">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>Cessna Business Park,</street>
+
+          <street>Kadabeesanahalli Village, Varthur Hobli,</street>
+
+          <street>Sarjapur-Marathahalli Outer Ring Road</street>
+
+          <city>Bangalore</city>
+
+          <region>Karnataka</region>
+
+          <code>560103</code>
+
+          <country>India</country>
+        </postal>
+
+        <email>rmohanr@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="Justin Uberti" initials="J." surname="Uberti">
+      <organization>Google</organization>
+
+      <address>
+        <postal>
+          <street>747 6th Ave S</street>
+
+          <street>Kirkland, WA</street>
+
+          <code>98033</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>justin@uberti.name</email>
+      </address>
+    </author>
+
+    <date />
+
+    <workgroup>TRAM</workgroup>
+
+    <abstract>
+      <t>This document proposes the use of OAuth to obtain and validate
+      ephemeral tokens that can be used for TURN authentication. The usage of
+      ephemeral tokens ensure that access to a TURN server can be controlled
+      even if the tokens are compromised, as is the case in WebRTC where TURN
+      credentials must be specified in Javascript.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="introduction" title="Introduction">
+      <t>Traversal Using Relay NAT (TURN) TURN <xref target="RFC5766"></xref>
+      is a protocol that is often used to improve the connectivity of P2P
+      applications. By providing a cloud-based relay service, TURN ensures
+      that a connection can be established even when one or both sides is
+      incapable of a direct P2P connection. However, as a relay service, it
+      imposes a nontrivial cost on the service provider. Therefore, access to
+      a TURN service is almost always access-controlled.</t>
+
+      <t>TURN provides a mechanism to control access via "long-term" username/
+      password credentials that are provided as part of the TURN protocol. It
+      is expected that these credentials will be kept secret; if the
+      credentials are discovered, the TURN server could be used by
+      unauthorized users or applications. However, in web applications,
+      ensuring this secrecy is typically impossible. To address this problem
+      and the ones described in <xref
+      target="I-D.ietf-tram-auth-problems"></xref>, this document proposes the
+      use of third party authorization using OAuth for TURN.</t>
+
+      <t>To achieve third party authorization, a resource owner e.g. WebRTC
+      server, authorizes a TURN client to access resources on the TURN
+      server.</t>
+
+      <t>Using OAuth, a client obtains an ephemeral token from an
+      authorization server e.g. WebRTC server, and the token is presented to
+      the TURN server instead of the traditional mechanism of presenting
+      username/password credentials. The TURN server validates the
+      authenticity of the token and provides required services.</t>
+    </section>
+
+    <section anchor="term" title="Terminology">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"></xref>.</t>
+
+      <t><list style="symbols">
+          <t>WebRTC Server: A web server that supports WebRTC <xref
+          target="I-D.ietf-rtcweb-overview"></xref>.</t>
+
+          <t>Access Token: OAuth 2.0 access token.</t>
+
+          <t>mac_key: The session key generated by the authorization server.
+          Note that the lifetime of the session key is equal to the lifetime
+          of the access token.</t>
+
+          <t>kid: An ephemeral and unique key identifier. The kid also allows
+          the resource server to select the appropriate keying material for
+          decryption.</t>
+        </list></t>
+    </section>
+
+    <section anchor="problem_stmt" title="Solution Overview">
+      <t>This specification uses the token type 'Assertion' (aka
+      self-contained token) described in <xref target="RFC6819"></xref> where
+      all the information necessary to authenticate the validity of the token
+      is contained within the token itself. This approach has the benefit of
+      avoiding a protocol between the TURN server and the authorization server
+      for token validation, thus reducing latency. The exact mechanism used by
+      a client to obtain a token from the OAuth authorization server is
+      outside the scope of this document. For example, a client could make an
+      HTTP request to an authorization server to obtain a token that can be
+      used to avail TURN services. The TURN token is returned in JSON, along
+      with other OAuth Parameters like token type, mac_key, kid, token
+      lifetime etc. The client is oblivious to the content of the token. The
+      token is embedded within a TURN request sent to the TURN server. Once
+      the TURN server has determined the token is valid, TURN services are
+      offered for a determined period of time.</t>
+
+      <t><figure anchor="figure1" title="TURN Third Party Authorization">
+          <artwork><![CDATA[
+
++-------------------+                         +--------+  +---------+  
+| .........  TURN   |                         |  TURN  |  |  WebRTC |
+| .WebRTC .  Client |                         |        |  |         | 
+| .Client .         |                         | Server |  |  Server |
+| .........         |                         |        |  |         | 
++-------------------+                         +--------+  +---------+
+  |       |           Allocate request                |         |
+  |       |------------------------------------------>|         |
+  |       |                                           |         |
+  |       |         Allocate error response           |         |
+  |       |<------------------------------------------|         |
+  |       |         THIRD-PARTY-AUTHORIZATION         |         |  
+  |       |                                           |         |                                      
+  |       |                                           |         | 
+  |       |      HTTP Request for token               |         |
+  |------------------------------------------------------------>|
+  |       |      HTTP Response with token parameters  |         |
+  |<------------------------------------------------------------|
+  |OAuth  |                                           |         |
+   Attributes                                         |         |
+  |------>|                                           |         |
+  |       |    Allocate request ACCESS-TOKEN          |         |
+  |       |------------------------------------------>|         |
+  |       |                                           |         |
+  |       |         Allocate success response         |         |
+  |       |<------------------------------------------|         |
+  |       |             TURN Messages                 |         |
+  |       |      ////// integrity protected //////    |         |
+  |       |      ////// integrity protected //////    |         |
+  |       |      ////// integrity protected //////    |         |
+       ]]></artwork>
+        </figure></t>
+
+      <t>Note : An implementation may choose to contact the WebRTC server to
+      obtain a token even before it makes an allocate request, if it knows the
+      server details before hand. For example, once a client has learnt that a
+      TURN server supports Third Party authorization from a WebRTC server, the
+      client can obtain the token before making subsequent allocate
+      requests.</t>
+
+      <t>For example, the client makes the following HTTP request for the
+      access token using transport-layer security (with extra line breaks for
+      display purposes only):</t>
+
+      <t><figure anchor="Example1" title="Request">
+          <preamble></preamble>
+
+          <artwork align="left"><![CDATA[
+     POST /o/oauth2/token HTTP/1.1 
+     Audience: turnserver1.example.com
+     Content-Type: application/x-www-form-urlencoded
+     timestamp=1361471629
+     grant_type=implicit
+              ]]></artwork>
+        </figure>If the client is authorized then the authorization server
+      issues an access token. An example of successful response:</t>
+
+      <figure anchor="Example2" title="Response">
+        <preamble></preamble>
+
+        <artwork align="left"><![CDATA[
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+     Cache-Control: no-store
+
+     {
+       "access_token":
+"U2FsdGVkX18qJK/kkWmRcnfHglrVTJSpS6yU32kmHmOrfGyI3m1gQj1jRPsr0uBb
+HctuycAgsfRX7nJW2BdukGyKMXSiNGNnBzigkAofP6+Z3vkJ1Q5pWbfSRroOkWBn",
+       "token_type":"mac",
+       "expires_in":1800,
+       "kid":"22BIjxU93h/IgwEb",
+       "mac_key":"v51N62OM65kyMvfTI08O"
+     }
+              ]]></artwork>
+      </figure>
+
+      <t>Access token and other attributes issued by the authorization server
+      are explained in <xref target="token"></xref>.</t>
+    </section>
+
+    <section anchor="oauth" title="Obtaining a Token Using OAuth">
+      <t>A TURN client should know the authentication capability of the TURN
+      server before deciding to use third party authorization with it. A TURN
+      client initially makes a request without any authorization. If the TURN
+      server supports or mandates third party authorization, it will return an
+      error message indicating support for third party authorization. The TURN
+      server includes an ERROR-CODE attribute with a value of 401
+      (Unauthorized), a nonce value in a NONCE attribute and a SOFTWARE
+      attribute that gives information about the TURN server's software. The
+      TURN servers also includes additional STUN attribute
+      THIRD-PARTY-AUTHORIZATION signaling the TURN client that the TURN server
+      supports third party authorization.</t>
+
+      <figure anchor="oauth_webrtc_terminology_map"
+              title="OAuth terminology mapped to WebRTC terminology">
+        <preamble>The following mapping of OAuth concepts to WebRTC is used
+        :</preamble>
+
+        <artwork align="left"><![CDATA[
+              +----------------------+----------------------------+
+              |         OAuth        |            WebRTC          |
+              +======================+============================+
+              | Client               | WebRTC client              |
+              +----------------------+----------------------------+
+              | Resource owner       | WebRTC server              |
+              +----------------------+----------------------------+
+              | Authorization server | Authorization server       |
+              +----------------------+----------------------------+
+              | Resource server      | TURN Server                |
+              +----------------------+----------------------------+
+              ]]></artwork>
+      </figure>
+
+      <t>Using the OAuth 2.0 authorization framework, a WebRTC client
+      (third-party application) obtains limited access to a TURN (resource
+      server) on behalf of the WebRTC server (resource owner or authorization
+      server). The WebRTC client requests access to resources controlled by
+      the resource owner (WebRTC server) and hosted by the resource server
+      (TURN server). The WebRTC client obtains access token, lifetime, session
+      key (in the mac_key parameter) and key id (kid). The TURN client conveys
+      the access token and other OAuth parameters learnt from the
+      authorization server to the resource server (TURN server). The TURN
+      server obtains the session key from the access token. The TURN server
+      validates the token, computes the message integrity of the request and
+      takes appropriate action i.e permits the TURN client to create
+      allocations. This is shown in an abstract way in <xref
+      target="interactions"></xref>.</t>
+
+      <figure anchor="interactions" title="Interactions">
+        <artwork align="left"><![CDATA[                        +---------------+
+                        |               +<******+
+         +------------->| Authorization |       *
+         |              | Server        |       *    
+         |   +----------|(WebRTC Server)|       *  AS-RS,  
+         |   |          |               |       *  AUTH keys    
+(2)      |   |           +---------------+      *   (1)
+Access   |   |  (3)                             *
+Token    |   | Access Token                     *
+Request  |   |    +                             *
+         |   | Session Key                      *
+         |   |                                  *
+         |   V                                  V
+     +-------+---+                       +-+----=-----+
+     |           |         (4)           |            |
+     |           | TURN Request + Access |            |
+     | WebRTC    | Token                 | TURN       |
+     | Client    |---------------------->| Server     |
+     | (Alice)   | Allocate Response     |            |
+     |           |<----------------------|            |
+     +-----------+                       +------------+
+                                                  
+User : Alice
+****: Out-of-Band Long-Term Key Establishment
+]]></artwork>
+      </figure>
+
+      <t></t>
+
+      <t>OAuth in <xref target="RFC6749"></xref> defines four grant types.
+      This specification uses the OAuth grant type "Implicit" explained in
+      section 1.3.2 of <xref target="RFC6749"></xref> where the WebRTC client
+      is issued an access token directly. The scope of the access token
+      explained in section 3.3 of <xref target="RFC6749"></xref> MUST be
+      TURN.</t>
+
+      <section title="Key Establishment">
+        <t>The TURN and authorization servers MUST establish a symmetric key
+        (K), using an out of band mechanism. Symmetric key MUST be chosen to
+        ensure that the size of encrypted token is not large because usage of
+        asymmetric keys will result in large encrypted tokens which may not
+        fit into a single STUN message. The AS-RS, AUTH keys will be derived
+        from K. AS-RS key is used for encrypting the self-contained token and
+        message integrity of the encrypted token is calculated using the AUTH
+        key. The TURN and authorization servers MUST establish the symmetric
+        key over an authenticated secure channel. The establishment of
+        symmetric key is outside the scope of this specification. For example,
+        implementations could use one of the following mechanisms in to
+        establish a symmetric key.</t>
+
+        <section anchor="DSKPP" title="DSKPP">
+          <t>The two servers could choose to use Dynamic Symmetric Key
+          Provisioning Protocol <xref target="RFC6063">(DSKPP)</xref> to
+          establish a symmetric key (K). The encryption and MAC algorithms
+          will be negotiated using the KeyProvClientHello, KeyProvServerHello
+          messages. A unique key identifier (referred to as KeyID) for the
+          symmetric key is generated by the DSKPP server (i.e. Authorization
+          server) and signalled to the DSKPP client (i.e TURN server) which is
+          equivalent to the kid defined in this specification. The AS-RS, AUTH
+          keys would be derived from the symmetric key using (HMAC)-based key
+          derivation function (HKDF) <xref target="RFC5869">(DSKPP)</xref> and
+          the default hash function is SHA-256. For example if the input
+          symmetric key (K) is 32 octets length, encryption algorithm is
+          AES_128_CBC and HMAC algorithm is HMAC-SHA-256-128 then the
+          secondary keys AS-RS, AUTH are generated from the input key K as
+          follows</t>
+
+          <t><list style="numbers">
+              <t>HKDF-Extract(zero, K) -&gt; PRK</t>
+
+              <t>HKDF-Expand(PRK, zero, 8) -&gt; AS-RS key</t>
+
+              <t>HKDF-Expand(PRK, zero, 16) -&gt; AUTH key</t>
+            </list></t>
+
+          <t>NOTE: If Authenticated Encryption with Associated Data (AEAD)
+          algorithms <xref target="RFC5116"></xref> specified in <xref
+          target="I-D.mcgrew-aead-aes-cbc-hmac-sha2"></xref> are used then
+          there is no need to generate the AUTH key.</t>
+        </section>
+
+        <section anchor="HTTP" title="HTTP interactions">
+          <t>The two servers could choose to use REST API to establish a
+          symmetric key. To retrieve a new symmetric key, the TURN server
+          makes an HTTP GET request to the authorization server, specifying
+          TURN as the service to allocate the symmetric keys for, and
+          specifying the name of the TURN server. The response is returned
+          with content-type "application/json", and consists of a JSON object
+          containing the symmetric key.</t>
+
+          <t><figure>
+              <artwork><![CDATA[Request
+-------
+
+service - specifies the desired service (turn)
+domain  -  TURN server name be associated with the key
+
+example: GET /?service=turn&domain=turnserver1.example.com
+
+
+Response
+--------
+
+key - Long-term key (K)
+ttl - the duration for which the key is valid, in seconds.
+
+example:
+{
+   "key" : 
+"ESIzRFVmd4iZABEiM0RVZgKn6WjLaTC1FXAghRMVTzkBGNaaN496523WIISKerLi",
+   "ttl" : 86400,
+   "kid" :"22BIjxU93h/IgwEb"
+  }]]></artwork>
+            </figure></t>
+
+          <t>The AS-RS, AUTH keys are derived from K using HKDF as discussed
+          in <xref target="DSKPP"></xref>. Authorization server must also
+          signal a unique key identifier (kid) to the TURN server which will
+          be used to select the appropriate keying material for decryption.
+          The default encryption algorithm to encrypt the self-contained token
+          could be Advanced Encryption Standard (AES) in Cipher Block Chaining
+          (CBC) mode (AES_128_CBC). The default HMAC algorithm to calculate
+          the integrity of the token could be HMAC-SHA-256-128. In this case
+          AS-RS key length must be 128-bit, AUTH key length must be 256-bit
+          (section 2.6 of <xref target="RFC4868"></xref>).</t>
+        </section>
+
+        <section anchor="Manual" title="Manual provisioning">
+          <t>TURN and authorization servers could be manually configured with
+          a symmetric key (K) and kid. The default encryption and HMAC
+          algorithms could be AES_256_CBC, HMAC-SHA-256-128.</t>
+
+          <t>Note : The mechanisms specified in <xref target="HTTP"></xref>
+          <xref target="Manual"></xref> are easy to implement and deploy
+          compared to DSKPP but lack encryption and HMAC algorithm
+          agility.</t>
+        </section>
+      </section>
+    </section>
+
+    <section anchor="Request" title="Forming a Request">
+      <t>When a TURN server responds that third party authorization is
+      required, a TURN client re-attempts the request, this time including
+      access token and kid values in ACCESS-TOKEN and USERNAME STUN
+      attributes. The TURN client includes a MESSAGE-INTEGRITY attribute as
+      the last attribute in the message over the contents of the TURN message.
+      The HMAC for the MESSAGE-INTEGRITY attribute is computed as described in
+      section 15.4 of <xref target="RFC5389"></xref> where the mac_key is used
+      as the input key for the HMAC computation. The TURN client and server
+      will use the mac_key to compute the message integrity and doesn't have
+      to perform MD5 hash on the credentials.</t>
+    </section>
+
+    <section title="STUN Attributes">
+      <t>The following new STUN attributes are introduced by this
+      specification to accomplish third party authorization.</t>
+
+      <section anchor="attribute" title="THIRD-PARTY-AUTHORIZATION">
+        <t>This attribute is used by the TURN server to inform the client that
+        it supports third party authorization. This attribute value contains
+        the TURN server name. The TURN server may have tie-up with multiple
+        authorization servers and vice versa, so the client MUST provide the
+        TURN server name to the authorization server so that it can select the
+        appropriate keying material to generate the self-contained token. The
+        THIRD-PARTY-AUTHORIZATION attribute is a comprehension-optional
+        attribute (see Section 15 from <xref target="RFC5389"></xref>).</t>
+      </section>
+
+      <section anchor="token" title="ACCESS-TOKEN">
+        <t>The access token is issued by the authorization server. OAuth does
+        not impose any limitation on the length of the access token but if
+        path MTU is unknown then STUN messages over IPv4 would need to be less
+        than 548 bytes (Section 7.1 of <xref target="RFC5389"></xref>), access
+        token length needs to be restricted to fit within the maximum STUN
+        message size. Note that the self-contained token is opaque to the
+        client and it MUST NOT examine the ticket. The ACCESS-TOKEN attribute
+        is a comprehension-optional attribute (see Section 15 from <xref
+        target="RFC5389"></xref>).</t>
+
+        <t>The token is structured as follows:</t>
+
+        <t><figure anchor="token1" title="Self-contained token format">
+            <artwork align="left"><![CDATA[      struct {
+          opaque {
+              ushort key_length;
+              opaque mac_key[key_length];
+              opaque timestamp[8];
+              long   lifetime;
+          } encrypted_block;
+          opaque mac[16];
+      } token;
+]]></artwork>
+          </figure></t>
+
+        <t>The fields are described below:</t>
+
+        <t><list style="hanging">
+            <t hangText="key_length:">Length of the session key. Key length of
+            160-bits MUST be supported (i.e only 160-bit key is used by
+            HMAC-SHA-1 for message integrity of STUN message). The key length
+            facilitates the hash agility plan discussed in section 16.3 of
+            <xref target="RFC5389"></xref>.</t>
+
+            <t hangText="mac_key:">The session key generated by the
+            authorization server.</t>
+
+            <t hangText="Timestamp:">64-bit unsigned integer field containing
+            a timestamp. The value indicates the time since January 1, 1970,
+            00:00 UTC, by using a fixed point format. In this format, the
+            integer number of seconds is contained in the first 48 bits of the
+            field, and the remaining 16 bits indicate the number of 1/64K
+            fractions of a second (Native format - Unix).</t>
+
+            <t hangText="Lifetime:">The lifetime of the access token, in
+            seconds. For example, the value 3600 indicates one hour. The
+            Lifetime value SHOULD be equal to the "expires_in" parameter
+            defined in section 4.2.2 of <xref target="RFC6749"></xref>.</t>
+
+            <t hangText="mac:">The Hashed Message Authentication Code (HMAC)
+            is calculated with AUTH key over the encrypted portion of the
+            token and the TURN server name (N) conveyed in the
+            THIRD-PARTY-AUTHORIZATION response . Encryption is applied before
+            authentication on the sender side and conversely on the receiver
+            side.</t>
+          </list></t>
+
+        <t>The encryption process can be illustrated as follows. Here C, N
+        denote the ciphertext and TURN server name.<list style="symbols">
+            <t>C = AES_128_CBC(AS-RS, encrypted_block)</t>
+
+            <t>mac = HMAC-SHA-256-128(AUTH, C | | N)</t>
+          </list></t>
+
+        <t></t>
+
+        <t>The token MUST be encoded as defined in Section 4 of <xref
+        target="RFC4648"></xref> and then encrypted using the symmetric
+        long-term key established between the resource server and the
+        authorization server, as shown in <xref target="interactions"></xref>
+        as AS-RS key. HMAC is computed using the encrypted portion of the
+        token and TURN server name to ensure that the client does not use the
+        same token to gain illegal access to other TURN servers provided by
+        the same administrative domain. This attack is possible when multiple
+        TURN servers in a single administrative domain share the same
+        symmetric key with the authorization server. Since the access token is
+        valid for a specific period of time the resource server MUST cache it
+        so that it need not to be provided in every request within an existing
+        allocation. The access token can be re-used for multiple Allocate
+        requests to the same TURN server.</t>
+
+        <t>The TURN client MUST include the ACCESS-TOKEN attribute only in
+        Allocate and Refresh requests.</t>
+
+        <t>Note : If Authenticated Encryption with Associated Data (AEAD)
+        algorithm specified in <xref
+        target="I-D.mcgrew-aead-aes-cbc-hmac-sha2"></xref> is used then there
+        is no need to explicitly compute HMAC. In this scenario the associated
+        data MUST be the TURN server name (N) and the mac field MUST carry the
+        initialization vector (IV).</t>
+      </section>
+    </section>
+
+    <section anchor="Response"
+             title="Receiving a request with ACCESS-TOKEN attribute">
+      <t>The TURN server, on receiving a request with ACCESS-TOKEN attribute,
+      performs checks listed in section 10.2.2 of <xref
+      target="RFC5389"></xref> in addition to the following steps to verify
+      that the access token is valid:</t>
+
+      <t><list style="symbols">
+          <t>TURN server selects the keying material based on kid signalled in
+          the USERNAME attribute.</t>
+
+          <t>It performs the verification of the token message integrity by
+          calculating HMAC over the encrypted portion in the self-contained
+          token and TURN server name using AUTH key and if the resulting value
+          does not match the mac field in the self-contained token then it
+          rejects the request with an error response 401 (Unauthorized). Note
+          : If AEAD algorithm is used then it has only a single output, either
+          a plaintext or a special symbol FAIL that indicates that the inputs
+          are not authentic.</t>
+
+          <t>TURN server obtains the mac_key by retrieving the content of the
+          access token (which requires decryption of the self-contained token
+          using the AS-RS key).</t>
+
+          <t>The TURN server verifies that no replay took place by performing
+          the following check: <list style="symbols">
+              <t>The access token is accepted if the timestamp field in the
+              self-contained token (TS) is recent enough to the reception time
+              of the TURN request (RDnew) using the following formula:
+              Lifetime + Delta &gt; abs(RDnew - TS). The RECOMMENDED value for
+              the allowed Delta is 5 seconds. If the timestamp is NOT within
+              the boundaries then the TURN server discards the request with
+              error response 401 (Unauthorized).</t>
+            </list></t>
+
+          <t>The TURN server uses the mac_key to compute the message integrity
+          over the request and if the resulting value does not match the
+          contents of the MESSAGE-INTEGRITY attribute then it rejects the
+          request with an error response 401 (Unauthorized).</t>
+
+          <t>If all the checks pass, the TURN server continues to process the
+          request. Any response generated by the server MUST include the
+          MESSAGE-INTEGRITY attribute, computed using the mac_key.</t>
+        </list></t>
+
+      <t>The lifetime provided by the TURN server in the Allocate and Refresh
+      responses MUST be less than or equal to the lifetime of the token.</t>
+    </section>
+
+    <section anchor="client" title="Changes to TURN Client">
+      <t><list style="symbols">
+          <t>A TURN response is discarded by the client if the value computed
+          for message integrity using mac_key does not match the contents of
+          the MESSAGE-INTEGRITY attribute.</t>
+
+          <t>If the access token expires then the client MUST obtain a new
+          token from the authorization server and use it for new allocations.
+          The client MUST also use the new token to refresh existing
+          allocations. This way client has to maintain only one token per TURN
+          server.</t>
+        </list></t>
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>When OAuth is used the interaction between the client and the
+      authorization server requires Transport Layer Security (TLS) with a
+      ciphersuite offering confidentiality protection. The session key MUST
+      NOT be transmitted in clear since this would completely destroy the
+      security benefits of the proposed scheme. If an attacker tries to replay
+      message with ACCESS-TOKEN attribute then the server can detect that the
+      transaction id was used for an old request and thus prevent the replay
+      attack.</t>
+
+      <t>Security considerations discussed in <xref
+      target="I-D.ietf-oauth-v2-http-mac"></xref> and <xref
+      target="RFC5766"></xref> are to be taken into account.</t>
+    </section>
+
+    <section anchor="iana" title="IANA Considerations">
+      <t>IANA is requested to add the following attributes to the <xref
+      target="iana-stun">STUN attribute registry</xref>, <list style="symbols">
+          <t>THIRD-PARTY-AUTHORIZATION</t>
+
+          <t>ACCESS-TOKEN</t>
+        </list></t>
+    </section>
+
+    <section anchor="ack" title="Acknowledgements">
+      <t>Authors would like to thank Dan Wing, Pal Martinsen and Oleg
+      Moskalenko for comments and review. The authors would like to give
+      special thanks to Brandon Williams for his help.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+
+      <?rfc include="reference.RFC.5389"?>
+
+      <?rfc include="reference.RFC.6749"?>
+
+      <?rfc include="reference.RFC.4648"
+include="reference.RFC.6063"?>
+
+      <?rfc include="reference.RFC.4868"?>
+
+      <reference anchor="iana-stun"
+                 target="http://www.iana.org/assignments/stun-parameters/stun-pa rameters.xml">
+        <front>
+          <title>IANA: STUN Attributes</title>
+
+          <author fullname="IANA" surname="IANA">
+            <organization></organization>
+          </author>
+
+          <date month="April" year="2011" />
+        </front>
+      </reference>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include='reference.I-D.ietf-rtcweb-overview' ?>
+
+      <?rfc include='reference.I-D.ietf-tram-auth-problems'?>
+
+      <?rfc include='reference.I-D.ietf-oauth-v2-http-mac'?>
+
+      <?rfc include='reference.I-D.mcgrew-aead-aes-cbc-hmac-sha2'?>
+
+      <?rfc include="reference.RFC.5766"?>
+
+      <?rfc include="reference.RFC.6819"?>
+
+      <?rfc include="reference.RFC.6063"?>
+
+      <?rfc include="reference.RFC.5116"?>
+
+      <?rfc include="reference.RFC.5869"?>
+
+      <!---->
+    </references>
+  </back>
+</rfc>

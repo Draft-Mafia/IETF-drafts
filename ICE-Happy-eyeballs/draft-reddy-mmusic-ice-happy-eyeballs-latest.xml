@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-reddy-mmusic-ice-happy-eyeballs-latest"
+     ipr="trust200902">
+  <front>
+    <title abbrev="Happy Eyeballs for ICE ">Happy Eyeballs Extension
+    for ICE</title>
+    <author fullname="Paal-Erik Martinsen" initials="P.E" surname="Martinsen">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street>Philip Pedersens Vei 22</street>
+          <city>Lysaker</city>
+          <region>Akershus</region>
+          <code>1325</code>
+          <country>Norway</country>
+        </postal>
+        <email>palmarti@cisco.com</email>
+      </address>
+    </author>
+    <author fullname="Tirumaleswar Reddy" initials="T." surname="Reddy">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street>Cessna Business Park, Varthur Hobli</street>
+          <street>Sarjapur Marathalli Outer Ring Road</street>
+          <city>Bangalore</city>
+          <region>Karnataka</region>
+          <code>560103</code>
+          <country>India</country>
+        </postal>
+        <email>tireddy@cisco.com</email>
+      </address>
+    </author>
+    <author fullname="Prashanth Patil" initials="P." surname="Patil">
+      <organization abbrev="Cisco">Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street/>
+          <city>Bangalore</city>
+          <country>India</country>
+        </postal>
+        <email>praspati@cisco.com</email>
+      </address>
+    </author>
+    
+    <date/>
+
+    <workgroup>MMUSIC</workgroup>
+
+    <abstract>
+      <t>
+        This document provides guidelines on how to make Interactive
+        Connectivity Establishment (ICE) conclude faster in IPv4/IPv6
+        dual-stack scenarios where broken paths exist. The provided
+        guidelines are backwards compatible with the original ICE
+        specification.
+      </t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="introduction" title="Introduction">
+      <t>
+        There is a need to introduce more fairness in the handling of
+        connectivity checks for different IP address families in
+        dual-stack IPv4/IPv6 ICE scenarios. Section 4.1.2.1 of ICE
+        <xref target="RFC5245"/> points to <xref target="RFC3484"/>
+        for prioritizing among the different IP families. <xref
+        target="RFC3484"/> is obsoleted by <xref target="RFC6724"/>
+        but following the recommendations from the updated RFC will
+        lead to prioritization of IPv6 over IPv4 for the same
+        candidate type. Due to this, connectivity checks for
+        candidates of the same type (host, reflexive or relay) are
+        sent such that an IP address family is completely depleted
+        before checks from the other address family are started. This
+        results in user noticeable setup delays if the path for the
+        prioritized address family is broken.
+      </t>
+
+      <t>
+        To avoid such user noticeable delays when either IPv6 or IPv4
+        path is broken or excessive slow, this specification
+        encourages intermingling the different address families when
+        connectivity checks are performed. Introducing IP address
+        family fairness into ICE connectivity checks will lead to more
+        sustained dual-stack IPv4/IPv6 deployment as users will no
+        longer have an incentive to disable IPv6. The cost is a small
+        penalty to the address type that otherwise would have been
+        prioritized.
+      </t>
+      
+      <t>
+        The guidelines outlined in this specification are backward
+        compatible with a standard ICE implementation. This
+        specification only alters the values used to create the
+        resulting checklists in such a way that the core mechanisms
+        from ICE <xref target="RFC5245" /> are still in effect.  The
+        introduced fairness might be better, but not worse than what
+        exists today.
+      </t>
+      
+
+    </section>
+
+    <section anchor="notation" title="Notational Conventions">
+      <t>
+        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described
+        in <xref target="RFC2119"/>.
+      </t>
+      
+      <t>
+        This document uses terminology defined in <xref
+        target="RFC5245"/>.
+      </t>
+    </section>
+
+    <section title="Improving ICE Dual-stack Fairness">
+      <t>
+        Candidates SHOULD be prioritized such that a long sequence of
+        candidates belonging to the same address family will be
+        intermingled with candidates from an alternate IP family. For
+        example, promoting IPv4 candidates in the presence of many
+        IPv6 candidates such that an IPv4 address candidate is always
+        present after a small sequence of IPv6 candidates, i.e.,
+        reordering candidates such that both IPv6 and IPv4 candidates
+        get a fair chance during the connectivity check phase. This
+        makes ICE connectivity checks more responsive to broken path
+        failures of an address family.
+      </t>
+
+      <t>
+        An ICE agent can choose an algorithm or a technique of its
+        choice to ensure that the resulting check lists have a fair
+        intermingled mix of IPv4 and IPv6 address families. However,
+        modifying the check list directly can lead to uncoordinated
+        local and remote check lists that result in ICE taking longer
+        to complete or in the worst case scenario fail. The best
+        approach is to modify the formula for calculating the
+        candidate priority value described in ICE <xref
+        target="RFC5245"/> section 4.1.2.1.
+      </t>
+    </section>
+
+    <section anchor="compability" title="Compatibility">
+      <t>
+        ICE <xref target="RFC5245"/> section 4.1.2 states that the
+        formula in section 4.1.2.1 SHOULD be used to calculate the
+        candidate priority. The formula is as follows:
+      </t>
+
+      <t><figure>
+        <artwork align="left"><![CDATA[
+     priority = (2^24)*(type preference) + 
+                (2^8)*(local preference) + 
+                (2^0)*(256 - component ID)
+          ]]></artwork>
+        </figure>
+      </t>
+
+      <t>
+        ICE <xref target="RFC5245"/> section 4.1.2.2 has guidelines
+        for how the type preference and local preference value should
+        be chosen.  Instead of having a static local preference value
+        for IPv4 and IPv6 addresses, it is possible to choose this
+        value dynamically in such a way that IPv4 and IPv6 address
+        candidate priorities ends up intermingled within the same
+        candidate type.
+      </t>
+
+      <t>
+        It is also possible to dynamically change the type preference
+        in such a way that IPv4 and IPv6 address candidates end up
+        intermingled regardless of candidate type.  This is useful if
+        there are a lot of IPv6 host candidates effectively blocking
+        connectivity checks for IPv4 server reflexive candidates.
+      </t>
+
+      <t>
+        The list below shows a sorted local candidate list where the
+        priority is calculated in such a way that the IPv4 and IPv6
+        candidates are intermingled. To allow for earlier connectivity
+        checks for the IPv4 server reflexive candidates, some of the
+        IPv6 host candidates are demoted. This is just an example of
+        how a candidate priorities can be calculated to provide better
+        fairness between IPv4 and IPv6 candidates without breaking any
+        of the ICE connectivity checks.
+      </t>
+
+      <t><figure>
+          <artwork align="left"><![CDATA[
+
+                  Candidate   Address Component
+                    Type       Type      ID     Priority
+               -------------------------------------------
+               (1)  HOST       IPv6      (1)    2129289471
+               (2)  HOST       IPv6      (2)    2129289470
+               (3)  HOST       IPv4      (1)    2129033471
+               (4)  HOST       IPv4      (2)    2129033470
+               (5)  HOST       IPv6      (1)    2128777471
+               (6)  HOST       IPv6      (2)    2128777470
+               (7)  HOST       IPv4      (1)    2128521471
+               (8)  HOST       IPv4      (2)    2128521470
+               (9)  HOST       IPv6      (1)    2127753471
+               (10) HOST       IPv6      (2)    2127753470
+               (11) SRFLX      IPv6      (1)    1693081855
+               (12) SRFLX      IPv6      (2)    1693081854
+               (13) SRFLX      IPv4      (1)    1692825855
+               (14) SRFLX      IPv4      (2)    1692825854
+               (15) HOST       IPv6      (1)    1692057855
+               (16) HOST       IPv6      (2)    1692057854
+               (17) RELAY      IPv6      (1)    15360255  
+               (18) RELAY      IPv6      (2)    15360254  
+               (19) RELAY      IPv4      (1)    15104255  
+               (20) RELAY      IPv4      (2)    15104254
+
+                SRFLX = server reflexive
+  
+          ]]></artwork>
+        </figure>
+      </t>
+      
+      <t>
+        Note that the list does not alter the component ID part of the
+        formula. This keeps the different components (RTP and RTCP)
+        close in the list.  What matters is the ordering of the
+        candidates with component ID 1. Once the checklist is formed
+        for a media stream the candidate pair with component ID 1 will
+        be tested first. If ICE connectivity check is successful then
+        other candidate pairs with the same foundation will be
+        unfrozen (<xref target="RFC5245"/> section 5.7.4. Computing
+        States).
+      </t>
+                  
+      <t>
+        The local and remote agent can have different algorithms for
+        choosing the local preference and type preference values
+        without impacting the synchronization between the local and
+        remote check lists.
+      </t>
+
+      <t>
+        The check list is made up by candidate pairs. A candidate pair
+        is two candidates paired up and given a candidate pair
+        priority as described in <xref target="RFC5245"/> section
+        5.7.2. Using the pair priority formula:
+      </t>
+
+      <t>
+        <figure>
+          <artwork align="left"><![CDATA[
+     pair priority = 2^32*MIN(G,D) + 2*MAX(G,D) + (G>D?1:0)
+          ]]></artwork>
+        </figure>
+      </t>
+
+      <t>
+        Where G is the candidate priority provided by the controlling
+        agent and D the candidate priority provided by the controlled
+        agent. This ensures that the local and remote check lists are
+        coordinated.
+      </t>
+
+      <t>
+        Even if the two agents have different algorithms for choosing
+        the candidate priority value to get an intermingled set of
+        IPv4 and IPv6 candidates, the resulting checklist, that is a
+        list sorted by the pair priority value, will be identical on
+        the two agents.
+      </t>
+
+      <t>
+        The agent that has promoted IPv4 cautiously i.e. lower IPv4
+        candidate priority values compared to the other agent, will
+        influence the check list the most due to (2^32*MIN(G,D)) in
+        the formula.
+      </t>
+
+      <t>
+        These recommendations are backward compatible with a standard
+        ICE implementation. The resulting local and remote checklist
+        will still be synchronized. The introduced fairness might be
+        better, but not worse than what exists today
+      </t>
+    </section>
+
+    
+    <section title="IANA Considerations">
+      <t>
+        None.
+      </t>
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>
+        STUN connectivity check using MAC computed during key
+        exchanged in the signaling channel provides message integrity
+        and data origin authentication as described in section 2.5 of
+        <xref target="RFC5245"/> apply to this use.
+      </t>
+    </section>
+
+    <section anchor="ack" title="Acknowledgements">
+      <t>
+        Authors would like to thank Dan Wing, Ari Keranen, Bernard
+        Aboba, Martin Thomson, Jonathan Lennox and Balint Menyhart for
+        their comments and review.
+      </t>
+    </section>
+    
+  </middle>
+  
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+      <?rfc include="reference.RFC.3484"?>
+      <?rfc include="reference.RFC.5245"?>
+      <?rfc include="reference.RFC.6724"?>
+    </references>
+    
+    <section title="Example Algorithm for Choosing the Local Preference">
+      <t>
+        The value space for the local preference is from 0 to 65535
+        inclusive. This value space can be divided up in chunks for
+        each IP address family.
+      </t>
+      
+      <t>
+        An IPv6 and IPv4 start priority must be given. In this example
+        IPv6 starts at 60000 and IPv4 at 59000. This leaves enough
+        address space to further play with the values if different
+        interface priorities needs to be added. The highest value
+        should be given to the address family that should be
+        prioritized.
+      </t>
+      <t>
+        <figure>
+          <artwork align="left"><![CDATA[
+       IPv6    IPv4 
+       Start   Start 
+65535  60k     59k    58k    57k    56k    55k                    0
++--------+------+------+------+------+------+---------------------+
+|        | IPv6 | IPv4 | IPv6 | IPv4 | IPv6 |                     |
+|        | (1)  |  (1) |  (2) |  (2) |  (3) |                     |
++--------+------+------+------+------+------+---------------------+
+          <- N->
+          ]]></artwork>
+        </figure>
+      </t>
+      <t>
+        The local preference can be calculated by the given formula:
+      </t>
+      <t>
+        <figure>
+          <artwork align="left"><![CDATA[
+          local_preference = S - N*2*(Cn/Cmax)
+          ]]></artwork>
+        </figure>
+      </t>
+      <t>
+        <list style="hanging">
+          <t hangText="S:"> Address Type specific start value (IPv4 or
+          IPv6 Start)</t>
+          
+          <t hangText="N:"> Absolute value of
+          IPv6_start-IPv4_start. This ensures a positive number even
+          if IPv4 is the highest priority.
+          </t>
+          
+          <t hangText="Cn:"> Number of current candidates of a
+          specific IP address type and candidate type (host, server
+          reflexive or relay).
+          </t>
+          
+          <t hangText="Cmax:"> Number of allowed consecutive
+          candidates of the same IP address type.
+          </t>
+        </list>
+      </t>
+      <t>
+        Using the values N=abs(60000-59000) and Cmax = 2 yields the
+        following sorted local candidate list:
+      <figure>
+        <artwork align="left"><![CDATA[
+ (1)  HOST  IPv6 (1) Priority: 2129289471
+ (2)  HOST  IPv6 (2) Priority: 2129289470
+ (3)  HOST  IPv4 (1) Priority: 2129033471
+ (4)  HOST  IPv4 (2) Priority: 2129033470
+ (5)  HOST  IPv6 (1) Priority: 2128777471
+ (6)  HOST  IPv6 (2) Priority: 2128777470
+ (7)  HOST  IPv4 (1) Priority: 2128521471
+ (8)  HOST  IPv4 (2) Priority: 2128521470
+ (9)  HOST  IPv6 (1) Priority: 2128265471
+ (10) HOST  IPv6 (2) Priority: 2128265470
+ (11) SRFLX IPv6 (1) Priority: 1693081855
+ (12) SRFLX IPv6 (2) Priority: 1693081854
+ (13) SRFLX IPv4 (1) Priority: 1692825855
+ (14) SRFLX IPv4 (2) Priority: 1692825854
+ (15) RELAY IPv6 (1) Priority: 15360255
+ (16) RELAY IPv6 (2) Priority: 15360254
+ (17) RELAY IPv4 (1) Priority: 15104255
+ (18) RELAY IPv4 (2) Priority: 15104254
+          ]]></artwork>
+      </figure>
+      
+        The result is an even spread of IPv6 and IPv4 candidates among
+        the different candidate types (host, server reflexive, relay). The
+        local preference value is calculated separately for each
+        candidate type.
+      </t>
+    </section>
+  </back>
+</rfc>
