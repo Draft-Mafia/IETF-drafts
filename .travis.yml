@@ -1,12 +1,26 @@
-language: c
-compiler:
-- gcc
+language: python
 before_install:
-- sudo pip install lxml==3.2.4
+- sudo apt-get update -qq
+- sudo apt-get install -y python-lxml python-pip
+install:
+- deactivate
+- gem install kramdown-rfc2629
 - sudo pip install xml2rfc
-script:
-- ./createdrafts.sh
-after_success: ./update_pages.sh
+script: make ghpages
 env:
   global:
-    secure: N/H2IibbK31A4artQvQ2Xr/VQ+TdfxT0CIUzKD1uWvb3KgTTJe/zn8ooAKIv3q5gD1UfLGRtVbN8srWX9GLq24ON6QPXnHyhwhJGpBUHWrKr+UBHgz4VE9ckM8G1uvy5gjGz8lDzV1G9cnI187DUlcp1YKp17EBD2P8JZBiay3Q=
+  - secure: z/377N6N1/RNN35NWbJjjoDgCMrf3MT6q420BFuXregjgtKMsiwh6sKNmd2GG3e9XqqDe10+JyuEHRFw+zpdBCefw7Kks8zrCB2xmpOQfxjlm0Uwv4owPGaJ8lMd3Yen6tp1goZK7stA6uW1/FG99z3zgeY0XaNbyMvpGi7dUKU=
+before_deploy: make submit
+deploy:
+  provider: releases
+  api-key:
+  - secure: z/377N6N1/RNN35NWbJjjoDgCMrf3MT6q420BFuXregjgtKMsiwh6sKNmd2GG3e9XqqDe10+JyuEHRFw+zpdBCefw7Kks8zrCB2xmpOQfxjlm0Uwv4owPGaJ8lMd3Yen6tp1goZK7stA6uW1/FG99z3zgeY0XaNbyMvpGi7dUKU=
+    
+  file:
+  - $TRAVIS_TAG.txt
+  - $TRAVIS_TAG.html
+  - $TRAVIS_TAG.xml
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: true
