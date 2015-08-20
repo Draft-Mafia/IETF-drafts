@@ -320,11 +320,11 @@
           In addition to inspecting the RTP and RTCP headers, a media-aware relay may also 
            modify them.  In order to modify headers a B2BUA needs to act as a DTLS endpoint and 
            terminate the DTLS connection and decrypt/re- encrypt RTP packets.  This would
-           breaks end-to-end security and hence a  B2BUA MUST NOT terminate DTLS-SRTP 
+           break end-to-end security and hence a  B2BUA MUST NOT terminate DTLS-SRTP 
            sessions.  This security and privacy problem can be addressed by having separate 
            keys for encrypting the RTP header and media payload as discussed in  
            <xref target="I-D.jones-perc-private-media-reqts"></xref>.
-           With such an approach the B2BUA will not not aware of the keys used to decrypt 
+           In such case the B2BUA is not aware of the keys used to decrypt 
            the media payload.
            </t>
         </section>
