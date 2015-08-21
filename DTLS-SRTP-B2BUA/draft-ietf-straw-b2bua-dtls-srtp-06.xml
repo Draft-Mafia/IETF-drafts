@@ -354,7 +354,7 @@
       with each answerer.</t>
 
       <figure anchor="Figure2"
-            title="B2BUA handling multiple answers">>
+            title="B2BUA handling multiple answers">
         <artwork><![CDATA[
                                           Bob (192.0.2.1:6666)
                                          /
@@ -372,7 +372,8 @@ Alice (192.0.2.0:5555)             B2BUA
                                        \ 
                                         \
                                          \
-                                          Charlie (192.0.2.2:6666)]]></artwork>
+                                          Charlie (192.0.2.2:6666)
+        ]]></artwork>
       </figure>
 
       <t></t>
