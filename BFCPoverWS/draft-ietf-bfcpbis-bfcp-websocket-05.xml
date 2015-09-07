@@ -222,9 +222,9 @@
     <section anchor="introduction" title="Introduction">
       <t>The WebSocket <xref target="RFC6455"/> protocol enables
       two-way message exchange between clients and servers on top of a
-      persistent TCP connection (optionally secured with TLS <xref
-      target="RFC5246"/>). The initial protocol handshake makes use of
-      HTTP <xref target="RFC2616"/> semantics, allowing the WebSocket
+      persistent TCP connection, optionally secured with Transport Layer Security (TLS) <xref
+      target="RFC5246"/>. The initial protocol handshake makes use of
+      Hypertext Transfer Protocol (HTTP) <xref target="RFC2616"/> semantics, allowing the WebSocket
       protocol to reuse existing HTTP infrastructure.</t>
 
       <t>The Binary Floor Control Protocol (BFCP) is a protocol to
@@ -253,21 +253,13 @@
       for BFCP: TCP and UDP. This specification defines a new
       WebSocket sub-protocol (as defined in section 1.9 in <xref
       target="RFC6455"/>) for transporting BFCP messages between a
-      WebSocket client and server. This sub-protocol provides a reliable and boundary preserving transport for BFCP when run on top of TCP. Since WebSocket is a reliable transport, the extensions defined in <xref
+      WebSocket client and server. This sub-protocol provides a reliable and boundary preserving transport for BFCP when run on top of TCP. Since WebSocket provides a reliable transport, the extensions defined in <xref
           target="I-D.ietf-bfcpbis-rfc4582bis"/> for sending BFCP over unreliable transports are not applicable. This document normatively updates
       <xref
           target="I-D.ietf-bfcpbis-rfc4582bis"/> and
       <xref
           target="I-D.ietf-bfcpbis-rfc4583bis"/>.</t>
 
-      <t>This document does not restrict the selection nor prevent the
-      usage of other transport mechanisms for the BFCP protocol.
-      Transport selection is entirely at the discretion of the
-      application. As an example, an RTCWeb applications may choose to
-      use either DataChannel or WebSocket transport for BFCP, while
-      non-RTCWeb applications could still benefit from the ubiquity of
-      the WebSocket protocol and make use of the transport for BFCP
-      defined in this document.</t>
     </section>
 
     <section anchor="terminology" title="Terminology">
@@ -404,9 +396,9 @@
 
     <section anchor="bfcp_websocket_transport"
              title="Transport Reliability">
-      <t>WebSocket <xref target="RFC6455"/> is a reliable protocol and
+      <t>WebSocket <xref target="RFC6455"/> provides a reliable transport and
       therefore the BFCP WebSocket sub-protocol defined by this
-      document is a reliable BFCP transport. Thus, client and server
+      document also provides reliable BFCP transport. Thus, client and server
       transactions using WebSocket for transport MUST follow the
       procedures for reliable transports as defined in <xref
       target="I-D.ietf-bfcpbis-rfc4582bis"/> and <xref
@@ -427,7 +419,7 @@
     title="SDP Considerations">
     
     <section anchor="updates_to_rfc_4583bis"
-        title="'TCP/WS/BFCP' and 'TCP/WSS/BFCP' SDP 'proto' Values">
+        title="Updates to RFC4583bis">
       <t>Rules to generate an 'm' line for a BFCP stream are described
       in <xref target="I-D.ietf-bfcpbis-rfc4583bis"/>, Section 3</t>
 
@@ -439,13 +431,15 @@
           <t>TCP/WSS/BFCP is used when BFCP runs on top of WSS, which
           in turn runs on top of TLS and TCP.</t>
         </list></t>
-
+      </section>
+      <section anchor="updates_tp_rfc_4582bis" 
+         title="Updates to RFC4582bis">
       <t>When TCP is used as the transport, the port field is set
       following the rules in Section 7 of <xref
       target="I-D.ietf-bfcpbis-rfc4582bis"/>. Depending on the value
-      of the 'setup' attribute, the port field contains the port to
-      which the remote endpoint will direct BFCP messages or is
-      irrelevant (i.e., the endpoint will initiate the connection
+      of the SDP 'setup' attribute defined in <xref target="RFC4145"/>, 
+      the port field contains the port to which the remote endpoint will 
+      direct BFCP messages or is irrelevant (i.e., the endpoint will initiate the connection
       towards the remote endpoint) and should be set to a value of 9,
       which is the discard port. Connection attribute and port MUST
       follow the rules of <xref target="RFC4145"/></t>
