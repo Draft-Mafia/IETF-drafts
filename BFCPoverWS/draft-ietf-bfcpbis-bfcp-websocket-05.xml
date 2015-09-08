@@ -86,7 +86,7 @@
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
 <?rfc tocappendix="yes" ?>
-<rfc category="std" docName="draft-ietf-bfcpbis-bfcp-websocket-04"
+<rfc category="std" docName="draft-ietf-bfcpbis-bfcp-websocket-05"
      ipr="trust200902" updates="rfc4582bis, rfc4583bis">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -246,19 +246,20 @@
 
       <t>The transport over which BFCP entities exchange messages
       depends on how the clients obtain information to contact the
-      floor control server (e.g. using an SDP offer/answer exchange
-      per <xref target="I-D.ietf-bfcpbis-rfc4583bis"/> or the
+      floor control server (e.g. using an Session Description Protocol (SDP)
+      offer/answer exchange per <xref target="I-D.ietf-bfcpbis-rfc4583bis"/> or the
       procedure described in RFC5018 <xref target="RFC5018"/>). <xref
       target="I-D.ietf-bfcpbis-rfc4582bis"/> defines two transports
       for BFCP: TCP and UDP. This specification defines a new
       WebSocket sub-protocol (as defined in section 1.9 in <xref
       target="RFC6455"/>) for transporting BFCP messages between a
-      WebSocket client and server. This sub-protocol provides a reliable and boundary preserving transport for BFCP when run on top of TCP. Since WebSocket provides a reliable transport, the extensions defined in <xref
-          target="I-D.ietf-bfcpbis-rfc4582bis"/> for sending BFCP over unreliable transports are not applicable. This document normatively updates
-      <xref
-          target="I-D.ietf-bfcpbis-rfc4582bis"/> and
-      <xref
-          target="I-D.ietf-bfcpbis-rfc4583bis"/>.</t>
+      WebSocket client and server. This sub-protocol provides a reliable and boundary 
+      preserving transport for BFCP when run on top of TCP. Since WebSocket provides 
+      a reliable transport, the extensions defined in <xref
+          target="I-D.ietf-bfcpbis-rfc4582bis"/> for sending BFCP over unreliable 
+          transports are not applicable. This document normatively updates
+          <xref target="I-D.ietf-bfcpbis-rfc4582bis"/> and 
+          <xref target="I-D.ietf-bfcpbis-rfc4583bis"/>.</t>
 
     </section>
 
@@ -452,14 +453,15 @@
       <section anchor="attribute"
           title="SDP Media Attributes">
       <t><xref target="I-D.ram-bfcpbis-sdp-ws-uri"/> defines  a new SDP attributes 
-      to indicate the connection URI for the WebSocket Client. 
-      The SDP attribute 'ws-uri' defined in section 3.1 of <xref target="I-D.ram-bfcpbis-sdp-ws-uri"/> MUST be used when BFCP runs on top of WS, which in
-       turn runs on top of TCP. The SDP attribute 'wss-uri' defined in section 3.2 of 
-       <xref target="I-D.ram-bfcpbis-sdp-ws-uri"/> MUST be used when BFCP runs on top of 
-       WSS, which in turn runs on top of TLS and TCP. When the 'ws-uri' or 'wss-uri' attribute
-        is present in the media section of the SDP, the IP and port information provided 
-        in the 'c' lines SHALL be ignored and the full URI SHALL be used instead to open
-      the WebSocket connection. The port provided in the 'm' line SHALL be ignored too, 
+      to indicate the connection Uniform Resource Identifier (URI) for the WebSocket Client. 
+      The SDP attribute 'ws-uri' defined in section 3.1 of <xref target="I-D.ram-bfcpbis-sdp-ws-uri"/> 
+      MUST be used when BFCP runs on top of WS, which in  turn runs on top of TCP. The 
+      SDP attribute 'wss-uri' defined in section 3.2 of  <xref target="I-D.ram-bfcpbis-sdp-ws-uri"/> 
+      MUST be used when BFCP runs on top of  WSS, which in turn runs on top of TLS and TCP. 
+      When the 'ws-uri' or 'wss-uri' attribute  is present in the media section of the SDP, 
+      the IP and port information provided in the 'c' lines SHALL be ignored and the full URI 
+      SHALL be used instead to open the WebSocket connection. The port provided in the 'm' 
+      line SHALL be ignored too, 
       as the a=ws-uri or a=wss-uri SHALL provide port number when needed.</t>
 
     </section>
