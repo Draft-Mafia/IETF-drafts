@@ -174,7 +174,7 @@
             but it does not modify the payload of RTP/RTCP.</t>
           </list></t>
 
-        <t>The following sections describe the behavior B2BUAs can follow
+        <t>The following sections describe the behavior B2BUAs MUST follow
         in order to avoid any impact to end-to-end DTLS-SRTP streams.</t>
       </section>
     </section>
@@ -308,10 +308,10 @@
         <t>Unlike the media relay discussed in Section 3.1.1, a media-aware relay as defined 
         in Section 3.2.2 of <xref target="RFC7092"/>, is aware of the type of media traffic it is
         receiving.  There are two types of media-aware relay, those that merely inspect the RTP headers and RTCP 
-        packets, and those that inspect and modify the RTP and RTCP packets.</t>
+        packets, and those that inspect and modify the RTP headers and RTCP packets.</t>
 
         <section title="RTP header and RTCP packets Inspection">
-          <t>This kind of media aware relay does not modify the RTP and RTCP packets but
+          <t>This kind of media aware relay does not modify the RTP headers and RTCP packets but
           only inspects the header values. It MUST NOT terminate the
           DTLS-SRTP connection on which the packets are received.</t>
         </section> 
@@ -395,7 +395,7 @@ Alice (192.0.2.0:5555)             B2BUA
       <t>This document describes the behavior media plane B2BUAs (media-aware
       and media-unaware) MUST follow when acting on the media plane that
       uses SRTP security context setup with the DTLS protocol. Attempting to cover
-       media-aware relay and media termination scenarios involving secure sessions
+       media-aware relay modifying RTP headers and media termination scenarios involving secure sessions
        (like DTLS-SRTP) will inevitably lead to the B2BUA acting as a man-in-the-middle, 
        and hence a B2BUA MUST NOT terminate DTLS-SRTP session. This document does not
       introduce any specific security considerations beyond those detailed in
@@ -403,9 +403,9 @@ Alice (192.0.2.0:5555)             B2BUA
       do not impact the security and integrity of a DTLS-SRTP connection or
       the data exchanged over it. A malicious B2BUA MAY try to break into the
       DTLS connection, but such an attack can be prevented using the identity
-      validation mechanism discussed in <xref
+      validation mechanism discussed in <xref target="RFC4474"/> and getting updated in <xref
       target="I-D.ietf-stir-rfc4474bis"></xref>. Endpoints MUST support the identity
-      validation mechanisms discussed in <xref target="I-D.ietf-stir-rfc4474bis"></xref> which in 
+      validation mechanisms discussed in <xref target="RFC4474"/> which in 
       turn can help them validate the identity of peers.
       </t>
     </section>
@@ -440,6 +440,8 @@ Alice (192.0.2.0:5555)             B2BUA
       <?rfc include="reference.RFC.5764"?>
 
       <?rfc include="reference.RFC.6347"?>
+     <?rfc include="reference.RFC.4474"?>
+
     </references>
 
     <references title="Informative References">
