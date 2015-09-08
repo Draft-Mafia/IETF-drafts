@@ -284,8 +284,8 @@
         DTLS, STUN and media on the ports it advertised to Bob in the INVITE request. Since a media
         relay B2BUA does not differentiate between a DTLS message, RTP or any packet
         it receives, it only changes the transport layer (UDP/TCP) and IP headers 
-        and forwards the packet towards the other endpoint. Since DTLS connection is setup 
-        between Alice and Bob, the B2BUA cannot inspect or modify the transport layer payload.</t>
+        and forwards the packet towards the other endpoint. B2BUA cannot decrypt the RTP payload 
+        encrypted using the SRTP keys derived from the DTLS connection setup between Alice and Bob.</t>
 
         <t><xref target="I-D.ietf-stir-rfc4474bis"></xref> provides a means
         for signing portions of SIP requests in order to provide identity
@@ -307,8 +307,8 @@
       <section title="RTP/RTCP-aware Media Aware B2BUA">
         <t>Unlike the media relay discussed in Section 3.1.1, a media-aware relay as defined 
         in Section 3.2.2 of <xref target="RFC7092"/>, is aware of the type of media traffic it is
-        receiving.  There are two types of media-aware relay, those the merely inspect the RTP and RTCP 
-        headers, and those that inspect and modify the RTP and RTCP headers.</t>
+        receiving.  There are two types of media-aware relay, those that merely inspect the RTP headers and RTCP 
+        packets, and those that inspect and modify the RTP and RTCP packets.</t>
 
         <section title="RTP header and RTCP packets Inspection">
           <t>This kind of media aware relay does not modify the RTP and RTCP packets but
@@ -318,8 +318,7 @@
 
         <section title="RTP header and RTCP packet Modification">
           <t>
-          In addition to inspecting the RTP header and RTCP packet, a media-aware relay can also 
-           modify them.  In order to modify headers a B2BUA needs to act as a DTLS endpoint and 
+           In order to modify headers a B2BUA needs to act as a DTLS endpoint and 
            terminate the DTLS connection and decrypt/re-encrypt RTP packets.  This would
            break end-to-end security and hence a  B2BUA MUST NOT terminate DTLS-SRTP 
            sessions.  This security and privacy problem can be mitigated by having separate 
@@ -394,7 +393,7 @@ Alice (192.0.2.0:5555)             B2BUA
 
     <section title="Security Considerations">
       <t>This document describes the behavior media plane B2BUAs (media-aware
-      and media-unaware) can follow when acting on the media plane that
+      and media-unaware) MUST follow when acting on the media plane that
       uses SRTP security context setup with the DTLS protocol. Attempting to cover
        media-aware relay and media termination scenarios involving secure sessions
        (like DTLS-SRTP) will inevitably lead to the B2BUA acting as a man-in-the-middle, 
@@ -405,7 +404,9 @@ Alice (192.0.2.0:5555)             B2BUA
       the data exchanged over it. A malicious B2BUA MAY try to break into the
       DTLS connection, but such an attack can be prevented using the identity
       validation mechanism discussed in <xref
-      target="I-D.ietf-stir-rfc4474bis"></xref>. 
+      target="I-D.ietf-stir-rfc4474bis"></xref>. Endpoints MUST support the identity
+      validation mechanisms discussed in <xref target="I-D.ietf-stir-rfc4474bis"></xref> which in 
+      turn can help them validate the identity of peers.
       </t>
     </section>
 
