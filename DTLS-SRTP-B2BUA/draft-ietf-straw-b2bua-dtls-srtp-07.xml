@@ -309,22 +309,23 @@
         in Section 3.2.2 of <xref target="RFC7092"/>, is aware of the type of media traffic it is
         receiving.  There are two types of media-aware relay, those that merely inspect the RTP headers and RTCP 
         packets, and those that inspect and modify the RTP headers and RTCP packets. The mechanism 
-        described in Security Considerations section MUST be used by endpoint to detect malicious B2BUA's that may
+        described in Security Considerations section MUST be used by endpoint to detect malicious B2BUA's that MAY
         attempt to terminate the DTLS-SRTP session.</t>
 
         <section title="RTP header and RTCP packets Inspection">
           <t>This kind of media aware relay does not modify the RTP headers and RTCP packets but
           only inspects the packets. It MUST NOT terminate the
-          DTLS-SRTP connection on which the packets are received.</t>
+          DTLS-SRTP session on which the packets are received.</t>
         </section> 
 
         <section title="RTP header and RTCP packet Modification">
           <t>
            In order to modify headers a B2BUA needs to act as a DTLS endpoint and 
-           terminate the DTLS-SRTP session and decrypt/re-encrypt RTP packets.  This would
+           terminate the DTLS-SRTP session and decrypt/re-encrypt RTP payload.  This would
            break end-to-end security and hence a  B2BUA MUST NOT terminate DTLS-SRTP session.
-           This security and privacy problem can be mitigated by having separate 
-           keys for encrypting the RTP header and media payload. For example, the approach discussed in  
+           This security and privacy problem can be mitigated by having different keys 
+           for protecting RTP header integrity and encrypting the RTP payload. 
+           For example, the approach discussed in  
            <xref target="I-D.jones-perc-private-media-reqts"></xref> can be used.
            With such an approach, the B2BUA is not aware of the keys used to decrypt 
            the media payload.
@@ -406,7 +407,7 @@ Alice (192.0.2.0:5555)             B2BUA
       the data exchanged over it. A malicious B2BUA MAY try to break into the
       DTLS connection, but such an attack can be prevented using the identity
       validation mechanism discussed in <xref target="RFC4474"/> and getting updated in 
-      <xref target="I-D.ietf-stir-rfc4474bis"/>. Either the Endpoints or authentication service 
+      <xref target="I-D.ietf-stir-rfc4474bis"/>. Either the endpoints or authentication service 
       proxies involved in the call MUST use the identity validation mechanisms discussed in 
       <xref target="RFC4474"/> to validate the identity of peers and detect malicious B2BUA's 
       that can attempt to terminate the DTLS connection to decrypt the RTP payload.
