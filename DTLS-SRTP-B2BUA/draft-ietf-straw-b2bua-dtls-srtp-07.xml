@@ -308,7 +308,7 @@
         <t>Unlike the media relay discussed in Section 3.1.1, a media-aware relay as defined 
         in Section 3.2.2 of <xref target="RFC7092"/>, is aware of the type of media traffic it is
         receiving.  There are two types of media-aware relay, those that merely inspect the RTP headers and RTCP 
-        packets, and those that inspect and modify the RTP headers and RTCP packets. The mechanisms 
+        packets, and those that inspect and modify the RTP headers and RTCP packets. The mechanism 
         described in Security Considerations section MUST be used by endpoint to detect malicious B2BUA's that may
         attempt to terminate the DTLS connection.</t>
 
@@ -406,9 +406,10 @@ Alice (192.0.2.0:5555)             B2BUA
       the data exchanged over it. A malicious B2BUA MAY try to break into the
       DTLS connection, but such an attack can be prevented using the identity
       validation mechanism discussed in <xref target="RFC4474"/> and getting updated in 
-      <xref target="I-D.ietf-stir-rfc4474bis"/>. Endpoints MUST support the identity
-      validation mechanisms discussed in <xref target="RFC4474"/> which in 
-      turn can help them validate the identity of peers.
+      <xref target="I-D.ietf-stir-rfc4474bis"/>. Either the Endpoints or authentication service 
+      proxies involved in the call MUST use the identity validation mechanisms discussed in 
+      <xref target="RFC4474"/> to validate the identity of peers and detect malicious B2BUA's 
+      that can attempt to terminate the DTLS connection to decrypt the RTP payload.
       </t>
     </section>
 
