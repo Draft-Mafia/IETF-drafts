@@ -169,8 +169,9 @@
             </t>
           </list></t>
 
-        <t>The following sections describe the behavior B2BUAs MUST follow
-        in order to avoid any impact to end-to-end DTLS-SRTP sessions. The DTLS-SRTP 
+        <t>The following sections describe the behavior B2BUAs can follow to avoid
+breaking end-to-end DTLS-SRTP sessions. B2BUAs terminating DTLS-SRTP
+session are outside the scope of this document. The DTLS-SRTP 
          framework <xref target="RFC5763"/> recommends that endpoints or proxy server in the endpoint domain use 
          <xref target="RFC4474"/> to integrity protect the fingerprint attributes.
          Thus, under most circumstances, B2BUAs cannot terminate the DTLS-SRTP
@@ -283,7 +284,7 @@
          the establishment of a DTLS connection. Note that the DTLS handshake and the 
          sending of INVITE response can happen in parallel; thus, the B2BUA MUST be 
          prepared to receive DTLS, STUN and media on the ports it advertised to Bob in the
-          SIP offer before it receives a SIP answer from Bob. Since a media relay B2BUA
+          SDP offer before it receives a SDP answer from Bob. Since a media relay B2BUA
            does not differentiate between a DTLS message, RTP or any packet it receives, 
            it only changes the transport layer (UDP/TCP) and IP headers and forwards the 
            packet towards the other endpoint. The B2BUA cannot decrypt the RTP payload as 
@@ -313,7 +314,7 @@
         that merely inspect the RTP headers and unencrypted portions of RTCP packets, and
          those that inspect and modify the RTP headers and unencrypted portions of RTCP
           packets. The identity integrity protection procedures described in Security 
-          Considerations section MUST be used by the endpoint or the proxy server in the 
+          Considerations section can be used by the endpoint or the proxy server in the 
           endpoints network to detect malicious B2BUAs that attempt to terminate the 
           DTLS-SRTP session.</t>
 
@@ -329,7 +330,7 @@
             to act as a DTLS endpoint, terminate the DTLS-SRTP session and 
             decrypt/re-encrypt RTP packet.  This would cause the identity and integrity 
             protection procedures discussed in  <xref target="RFC4474"/> 
-            to fail and hence a B2BUA MUST NOT terminate the DTLS-SRTP session.
+            to fail.
            This security and privacy problem can be mitigated by having different keys 
            for protecting RTP header integrity and encrypting the RTP payload. 
            For example, the approach discussed in  
